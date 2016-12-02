@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>pomodoro challenge</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta description="freecodecamp pomodoro clock">
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <link href="./node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="./node_modules/animate.css/animate.css" rel="stylesheet">
+    <!-- fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Bungee|Roboto+Condensed" rel="stylesheet">
+    <!---->
+    <style>
+      .jumbotron{
+          background-color:#00ECB9;
+      }
+      .voffset {
+          margin-top: 2px;
+      }
+      
+      .voffset1 {
+          margin-top: 5px;
+      }
+      
+      .voffset2 {
+          margin-top: 10px;
+      }
+      
+      .voffset3 {
+          margin-top: 15px;
+      }
+      
+      .voffset4 {
+          margin-top: 30px;
+      }
+      
+      .voffset5 {
+          margin-top: 40px;
+      }
+      
+      .voffset6 {
+          margin-top: 60px;
+      }
+      
+      .voffset7 {
+          margin-top: 80px;
+      }
+      
+      .voffset8 {
+          margin-top: 100px;
+      }
+      
+      .voffset9 {
+          margin-top: 150px;
+      }
+      #projectContainer{
+          text-align: center;
+          background:#00ECB9;
+          font-family:sans-serif;
+          font-weight:100;
+      }
+      
+      body{
+          text-align: center;
+          background:#00ECB9;
+          font-family:sans-serif;
+          font-weight:100;
+      
+      }
+      
+      .clockswag{
+          font-family:'Roboto Condensed',sans-serif;
+          color: #fff;
+          display: inline-block;
+          font-weight:100;
+          text-align:center;
+          font-size: 30px;
+      }
+      .clockswag >div{
+          padding:10px;
+          border-radius: 3px;
+          background: #00BF96;
+          display: inline-block;
+      }
+      .clockswag div >span {
+          padding:15px;
+          border-radius:3px;
+          background: #00816A;
+          display:inline-block;
+      
+      }
+      .smalltext{
+          font-family:'Roboto Condensed',sans-serif;
+          padding-top: 5px;
+          font-size:16px;
+      
+      }
+      .btn,btn-default{
+          background-color:#00816A;
+          color:#fff;
+      }
+      .pTitle{
+          font-family:'Bungee',cursive;
+          text-align:center;
+          font-size:34px;
+      
+      }
+      
+      
+      
+    </style>
+  </head>
+  <body>
+    <script>
+      var dummy;
+      
+      
+      
+      $(document).ready(function(){
+          dummy = setTimeout(onPreloadTimeOut, 5000);
+      })
+      /*
+      function to register all atributes(yeahh 2016 and using jquery cause i'm lazy....)
+      */
+      function registerElementProps(){
+           //hide all them pluses and minuses
+          $("#clockHours").hide();
+          $("#clockMinutes").hide();
+          $("#pomodoroHours").hide();
+          $("#pomodoroMinutes").hide();
+          //
+      
+          //check div hours is visible and act accordingly
+          $("#hContainer").click(function(){
+              //check visibility
+              if($("#clockHours").is(":visible")){
+                  $("#clockHours").hide("slow");
+              }
+              else{
+                  $("#clockHours").hide().removeClass('hidden').fadeIn('slow');
+              }
+              //
+          });
+          //
+          // check if div minutes is visible and act accordingly
+          $("#mContainer").click(function(){
+              if($("#clockMinutes").is(":visible")){
+                  $("#clockMinutes").hide("slow");
+              }
+              else{
+                  $("#clockMinutes").hide().removeClass('hidden').fadeIn('slow');
+              }
+              
+              
+          });
+          //
+          //same as above this time for the break timmer
+          // hours break timer visibility checker
+          $("#pomHours").click(function(){
+              if ($("#pomodoroHours").is(":visible")){
+                  $("#pomodoroHours").hide("slow");
+              }
+              else{
+                  $("#pomodoroHours").hide().removeClass('hidden').fadeIn('slow');
+              }
+              
+          });
+          //
+          // minutes break timer visibility checker
+          $("#pomMin").click(function(){
+              if ($("#pomodoroMinutes").is(":visible")){
+                  $("#pomodoroMinutes").hide("slow");
+              }
+              else{
+                  $("#pomodoroMinutes").hide().removeClass('hidden').fadeIn('slow');
+              }
+              
+              
+          });
+          //
+      }
+      /**
+      function to handle the the clock startup
+       @param valueTimer item to to be counted down from
+       @param valueComponent item to be changed (either the timer or the break timer)
+      **/
+      function startClock(valueTimer,valueComponent){
+          if (valueComponent===""){
+              
+          }
+          else{
+      
+          }
+      }
+      
+      function onPreloadTimeOut(){
+          $("#preloaderdiv").hide();
+          $("#projectContainer").hide().removeClass('hide').fadeIn('slow');
+          registerElementProps();            
+      }
+      
+    </script>
+    <div class="loader" id="preloaderdiv"></div>
+    <div class="container-fluid" id="projectContainer" hidden>
+      <div class="jumbotron">
+        <div class="voffset3">
+          <div class="pTitle" id="projectTitle">Supercalifragilistic pomodoro Clock
+            <div class="voffset4">
+              <div class="clockswag" id="clockContainer">
+                <div><span class="hours"></span>
+                  <div class="hours" id="hContainer">Hours</div>
+                      <div id="clockHours">
+                        <div class="col-xs-6" id="pSignclockHours"><a class="btn btn-default" href="#" role="button">+</a></div>
+                        <div class="col-xs-6" id="mSignclockHours"><a class="btn btn-default" href="#" role="button">-</a></div>
+                      </div>
+                </div>
+                <div><span class="minutes"></span>
+                  <div class="minutes" id="mContainer">Minutes</div>
+                      <div id="clockMinutes">
+                        <div class="col-xs-6" id="pSignclockMinutes"><a class="btn btn-default" href="#" role="button">+</a></div>
+                        <div class="col-xs-6" id="mSignclockMinutes"><a class="btn btn-default" href="#" role="button">-</a></div>
+                      </div>
+                </div>
+                <div><span class="seconds"></span>
+                  <div class="seconds" id="sContainer">Seconds</div>
+                </div>
+              </div>
+            </div>
+            <div class="voffset4">
+              <div class="clockswag" id="pomodoroContainer">
+                <div><span class="hours"></span>
+                  <div class="hours" id="pomHours">Hours</div>
+                      <div id="pomodoroHours">
+                        <div class="col-xs-6" id="pSignpomodoroHours"><a class="btn btn-default" href="#" role="button">+</a></div>
+                        <div class="col-xs-6" id="mSignpomodoroHours"><a class="btn btn-default" href="#" role="button">-</a></div>
+                      </div>
+                </div>
+                <div><span class="minutes"></span>
+                  <div class="minutes" id="pomMin">Minutes</div>
+                      <div id="pomodoroMinutes">
+                        <div class="col-xs-6" id="pSignpomodoroMinutes"><a class="btn btn-default" href="#" role="button">+</a></div>
+                        <div class="col-xs-6" id="mSignpomodoroMinutes"><a class="btn btn-default" href="#" role="button">-</a></div>
+                      </div>
+                </div>
+                <div><span class="seconds"></span>
+                  <div class="seconds" id="pomSecs">Seconds</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <hr>
+  <div class="footer" style="text-align: center">Made by: <a href="http://codepen.io/jonniebigodes/" target="_blank">Jonniebigodes</a></div>
+  <!--
+  div(class="footer",style="text-align: center")
+  |Made by
+  a(href="http://codepen.io/jonniebigodes/" target="_blank")| :Jonniebigodes    
+  -->
+</html>

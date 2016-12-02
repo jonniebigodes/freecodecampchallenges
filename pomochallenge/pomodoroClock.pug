@@ -1,0 +1,261 @@
+doctype
+
+html(lang="en")
+    head
+        title="pomodoro challenge"
+        meta(charset='utf-8')
+        meta(http-equiv='X-UA-Compatible',content='IE=edge')
+        meta(name='viewport', content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no')
+        meta(description='freecodecamp pomodoro clock')
+        //-script to jquery
+        script(src='./node_modules/jquery/dist/jquery.js')
+        //- script to boostrap
+        script(src='./node_modules/bootstrap/dist/js/bootstrap.js')
+        //-
+        //-link boostrap css
+        link(href="./node_modules/bootstrap/dist/css/bootstrap.css",rel="stylesheet") 
+        //-
+        link(href="./node_modules/animate.css/animate.css",rel="stylesheet")
+        // fonts
+        link(href="https://fonts.googleapis.com/css?family=Bungee|Roboto+Condensed",rel="stylesheet")
+        //
+
+        style.
+            .jumbotron{
+                background-color:#00ECB9;
+            }
+            .voffset {
+                margin-top: 2px;
+            }
+        
+            .voffset1 {
+                margin-top: 5px;
+            }
+        
+            .voffset2 {
+                margin-top: 10px;
+            }
+        
+            .voffset3 {
+                margin-top: 15px;
+            }
+        
+            .voffset4 {
+                margin-top: 30px;
+            }
+        
+            .voffset5 {
+                margin-top: 40px;
+            }
+        
+            .voffset6 {
+                margin-top: 60px;
+            }
+        
+            .voffset7 {
+                margin-top: 80px;
+            }
+        
+            .voffset8 {
+                margin-top: 100px;
+            }
+        
+            .voffset9 {
+                margin-top: 150px;
+            }
+            #projectContainer{
+                text-align: center;
+                background:#00ECB9;
+                font-family:sans-serif;
+                font-weight:100;
+            }
+       
+            body{
+                text-align: center;
+                background:#00ECB9;
+                font-family:sans-serif;
+                font-weight:100;
+
+            }
+
+            .clockswag{
+                font-family:'Roboto Condensed',sans-serif;
+                color: #fff;
+                display: inline-block;
+                font-weight:100;
+                text-align:center;
+                font-size: 30px;
+            }
+            .clockswag >div{
+                padding:10px;
+                border-radius: 3px;
+                background: #00BF96;
+                display: inline-block;
+            }
+            .clockswag div >span {
+                padding:15px;
+                border-radius:3px;
+                background: #00816A;
+                display:inline-block;
+
+            }
+            .smalltext{
+                font-family:'Roboto Condensed',sans-serif;
+                padding-top: 5px;
+                font-size:16px;
+
+            }
+            .btn,btn-default{
+                background-color:#00816A;
+                color:#fff;
+            }
+            .pTitle{
+                font-family:'Bungee',cursive;
+                text-align:center;
+                font-size:34px;
+
+            }
+
+
+            
+    body
+         
+        script.
+            var dummy;
+            
+            
+
+            $(document).ready(function(){
+                dummy = setTimeout(onPreloadTimeOut, 5000);
+            })
+            /*
+            function to register all atributes(yeahh 2016 and using jquery cause i'm lazy....)
+            */
+            function registerElementProps(){
+                 //hide all them pluses and minuses
+                $("#clockHours").hide();
+                $("#clockMinutes").hide();
+                $("#pomodoroHours").hide();
+                $("#pomodoroMinutes").hide();
+                //
+
+                //check div hours is visible and act accordingly
+                $("#hContainer").click(function(){
+                    //check visibility
+                    if($("#clockHours").is(":visible")){
+                        $("#clockHours").hide("slow");
+                    }
+                    else{
+                        $("#clockHours").hide().removeClass('hidden').fadeIn('slow');
+                    }
+                    //
+                });
+                //
+                // check if div minutes is visible and act accordingly
+                $("#mContainer").click(function(){
+                    if($("#clockMinutes").is(":visible")){
+                        $("#clockMinutes").hide("slow");
+                    }
+                    else{
+                        $("#clockMinutes").hide().removeClass('hidden').fadeIn('slow');
+                    }
+                    
+                    
+                });
+                //
+                //same as above this time for the break timmer
+                // hours break timer visibility checker
+                $("#pomHours").click(function(){
+                    if ($("#pomodoroHours").is(":visible")){
+                        $("#pomodoroHours").hide("slow");
+                    }
+                    else{
+                        $("#pomodoroHours").hide().removeClass('hidden').fadeIn('slow');
+                    }
+                    
+                });
+                //
+                // minutes break timer visibility checker
+                $("#pomMin").click(function(){
+                    if ($("#pomodoroMinutes").is(":visible")){
+                        $("#pomodoroMinutes").hide("slow");
+                    }
+                    else{
+                        $("#pomodoroMinutes").hide().removeClass('hidden').fadeIn('slow');
+                    }
+                    
+                    
+                });
+                //
+            }
+            /**
+            function to handle the the clock startup
+             @param valueTimer item to to be counted down from
+             @param valueComponent item to be changed (either the timer or the break timer)
+            **/
+            function startClock(valueTimer,valueComponent){
+                if (valueComponent===""){
+                    
+                }
+                else{
+
+                }
+            }
+
+            function onPreloadTimeOut(){
+                $("#preloaderdiv").hide();
+                $("#projectContainer").hide().removeClass('hide').fadeIn('slow');
+                registerElementProps();            
+            }
+    
+        mixin timerConnector(itemId)
+            div(id=itemId)
+                div(id="pSign"+itemId,class="col-xs-6")
+                    a(href="#",class="btn btn-default",role="button")|+
+                div(id="mSign"+itemId,class="col-xs-6")
+                    a(href="#",class="btn btn-default",role="button")|-
+        div(class="loader",id="preloaderdiv")
+        .container-fluid(id="projectContainer" hidden)
+         .jumbotron
+             div.voffset3
+              div(id="projectTitle",class="pTitle")
+                |Supercalifragilistic pomodoro Clock
+                div.voffset4
+                 div(id="clockContainer" class="clockswag")
+                   div
+                    span.hours
+                    div(class="hours",id="hContainer") Hours
+                    +timerConnector("clockHours")    
+                   div
+                     span.minutes
+                     div(class="minutes",id="mContainer") Minutes
+                     +timerConnector("clockMinutes")
+                   div
+                     span.seconds
+                     div(class="seconds",id="sContainer") Seconds
+                      
+                        
+                div.voffset4
+                    div(id="pomodoroContainer",class="clockswag")
+                        div
+                            span.hours
+                            div(class="hours",id="pomHours") Hours
+                            +timerConnector("pomodoroHours")
+                        div
+                            span.minutes
+                            div(class="minutes",id="pomMin") Minutes
+                            +timerConnector("pomodoroMinutes")
+                        div
+                            span.seconds
+                            div(class="seconds",id="pomSecs") Seconds
+                            
+                        
+    
+    hr
+    div(class="footer",style="text-align: center") Made by: #{''}
+        a(href="http://codepen.io/jonniebigodes/" target="_blank") Jonniebigodes
+    //
+        div(class="footer",style="text-align: center")
+        |Made by
+        a(href="http://codepen.io/jonniebigodes/" target="_blank")| :Jonniebigodes    
+    

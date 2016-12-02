@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <script src=".././node_modules/jquery/dist/jquery.js"></script>
+    <link href=".././node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href=".././node_modules/animate.css/animate.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Dosis|Oxygen" rel="stylesheet">
+    <style>
+        /*
+        .rotatebox {
+            width: 200px;
+            height: 200px;
+            
+            -webkit-animation: spin 4s linear infinite;
+            -moz-animation: spin 4s linear infinite;
+            animation: spin 4s linear infinite;
+            padding-top: 20px;
+            
+            
+            
+        }
+        */
+        /*
+        quotes content css
+        */
+        
+        .col-centered {
+            float: none;
+            margin: 0 auto;
+        }
+        
+        .loader {
+            height: 450px;
+            width: 450px;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            max-width: 100%;
+            max-height: 100%;
+            overflow: auto;
+            /*
+            height:500px;
+            width:500px;
+            margin-left: -150px;
+            margin-top: -150px;
+            margin:auto;
+            position:absolute;
+
+            top:50%;
+            left:50%;
+             */
+            background: url(http://67.media.tumblr.com/572807d5098edad57e2ff3944088eeeb/tumblr_mje2ovRzeh1ryq0j3o1_500.gif) center no-repeat #fff;
+        }
+        
+        .jumbotron {
+            background: #ffffff;
+        }
+        
+        .btn-primary {
+            /*background: lightblue;
+
+            */
+            font-family: 'Dosis', sans-serif;
+            font-size: 14px;
+        }
+        .panel-heading{
+            font-family: 'Dosis', sans-serif;
+            font-size: 32px;
+            text-align: left;
+            background-color: lightskyblue;
+        }
+        .panel{
+            font-family: 'Dosis', sans-serif;
+            font-size: 18px;
+            text-align: justify;
+            font-style: italic;
+            background: lightsteelblue;
+        }
+        .voffset {
+            margin-top: 2px;
+        }
+        
+        .voffset1 {
+            margin-top: 5px;
+        }
+        
+        .voffset2 {
+            margin-top: 10px;
+        }
+        
+        .voffset3 {
+            margin-top: 15px;
+        }
+        
+        .voffset4 {
+            margin-top: 30px;
+        }
+        
+        .voffset5 {
+            margin-top: 40px;
+        }
+        
+        .voffset6 {
+            margin-top: 60px;
+        }
+        
+        .voffset7 {
+            margin-top: 80px;
+        }
+        
+        .voffset8 {
+            margin-top: 100px;
+        }
+        
+        .voffset9 {
+            margin-top: 150px;
+        }
+        
+        #quoteProjectTitle {
+            font-family: 'Oxygen', sans-serif;
+            font-size: 42px;
+            text-align: center;
+        }
+        
+        
+        /*
+        quotes content css
+        */
+    </style>
+</head>
+
+<body>
+    <script>
+       
+        var dummy;
+        const urlQuote="http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1";
+        //
+
+        $(document).ready(function(){
+           dummy = setTimeout(onPreloadTimeOut, 3000);
+        })
+
+
+        function GetQuote(){
+          
+          
+
+            $.ajax({
+                url:urlQuote,
+                success: function(data){
+                    
+                    $("#titleQuote").html(data[0].title+" said once:");
+                    $("#contentQuote").html(data[0].content);
+                },
+                cache:false
+
+            });
+            
+            
+        }
+        function QuoteContentAnimate(){
+            $("#QuoteContainer").addClass('animated rollOut');
+            dummy=setTimeout(onQuoteTimeOut, 1000);
+            
+            
+        }
+        function onQuoteTimeOut(){
+            $("#QuoteContainer").removeClass('animated rollOut');
+            $("#QuoteContainer").addClass('animated rollIn');
+            GetQuote();
+        }
+        function onPreloadTimeOut(){
+            //console.log("onPreloadTimeOut trigger");
+            $("#preloaderdiv").hide();
+            $("#conteudoquote").hide().removeClass('hide').fadeIn('slow');
+            //$("#conteudoquote").html("<h3>TADDAAAAAA</h3>");
+            //$("#boxtoRotate").hide().removeClass('hide').fadeIn('slow');
+            //$("#boxtoRotate").addClass("rotatebox");
+           // $("#titleQuote").addClass("titleQuote");
+            //$("#contentQuote").addClass("contentQuote");
+            GetQuote();
+        }
+    </script>
+    <div class="loader" id="preloaderdiv"></div>
+    <div class="jumbotron" id="conteudoquote" hidden>
+        <div class="container">
+            <div class="row voffset6">
+                <div class="col-md-offset-4"> 
+                    <h2 id="pTitle" class="quoteProjectTitle">Supercalifragilistic Quote Machine</h2>
+                </div>
+                <div class="col-lg-6 col-centered">
+                    <div class="panel panel-default panel-info" id="QuoteContainer">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" id="titleQuote"></h3>
+                        </div>
+                        <div class="panel-body" id="contentQuote">
+                            lore ipsum
+                        </div>
+                        
+                        <div class="row voffset1">
+                            <div class="btn btn-primary col-md-offset-5">
+                                <button name="btnQuote" class="btn btn-primary" onclick="QuoteContentAnimate();">Hit Me!</button>
+                            </div>
+                        </div>
+                        <div class="row voffset2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row voffset9">
+                <div class="col-sm-4 col-md-offset-5">
+                    Made by <a href="#" target="_blank">Jonniebigodes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

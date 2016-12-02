@@ -1,0 +1,18 @@
+{
+  "name": "freecodecampchallenges",
+  "version": "1.0.0",
+  "description": "implementation of the freecodecamp challenges",
+  "main": "index.js",
+  "dependencies": {
+    "animate.css": "^3.5.2",
+    "lite-server": "^2.2.2",
+    "mattboldt.typed.js": "^1.1.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "lite-server"
+  },
+  "author": "",
+  "license": "ISC"
+}

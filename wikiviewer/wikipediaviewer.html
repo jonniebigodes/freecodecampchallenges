@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <script src=".././node_modules/jquery/dist/jquery.js"></script>
+    <script src=".././node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <link href=".././node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href=".././node_modules/animate.css/animate.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Dosis|Oxygen" rel="stylesheet">
+    <style>
+        /*
+        quotes content css
+        */
+        
+        .col-centered {
+            float: none;
+            margin: 0 auto;
+        }
+        
+        .loader {
+            height: 450px;
+            width: 450px;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            max-width: 100%;
+            max-height: 100%;
+            overflow: auto;
+            background: url(http://i.giphy.com/ETmm0NwcS6aI.gif) center no-repeat #fff;
+        }
+        
+        .jumbotron {
+            background: #ffffff;
+        }
+        
+        .btn-primary {
+            /*background: lightblue;
+
+            */
+            font-family: 'Dosis', sans-serif;
+            font-size: 14px;
+        }
+        
+        .panel-heading {
+            font-family: 'Dosis', sans-serif;
+            font-size: 32px;
+            text-align: left;
+            background-color: lightskyblue;
+        }
+        
+        .panel {
+            font-family: 'Dosis', sans-serif;
+            font-size: 18px;
+            text-align: justify;
+            font-style: italic;
+            background: lightsteelblue;
+        }
+        
+        .voffset {
+            margin-top: 2px;
+        }
+        
+        .voffset1 {
+            margin-top: 5px;
+        }
+        
+        .voffset2 {
+            margin-top: 10px;
+        }
+        
+        .voffset3 {
+            margin-top: 15px;
+        }
+        
+        .voffset4 {
+            margin-top: 30px;
+        }
+        
+        .voffset5 {
+            margin-top: 40px;
+        }
+        
+        .voffset6 {
+            margin-top: 60px;
+        }
+        
+        .voffset7 {
+            margin-top: 80px;
+        }
+        
+        .voffset8 {
+            margin-top: 100px;
+        }
+        
+        .voffset9 {
+            margin-top: 150px;
+        }
+        
+        #quoteProjectTitle {
+            font-family: 'Oxygen', sans-serif;
+            font-size: 42px;
+            text-align: center;
+        }
+        /*
+        quotes content css
+        */
+    </style>
+</head>
+
+<body>
+    <script>
+       
+        var dummy;
+        const wikiUrl="https://en.wikipedia.org/wiki/";
+        const randomUrl="https://en.wikipedia.org/wiki/Special:Random";
+        const apiLocation="https://en.wikipedia.org/w/api.php?";
+        var itemsSearch=[];
+        var selectedItem;
+        //id page-->https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=sachin+tendulkar&format=jsonfm&prop=info&inprop=url|displaytitle
+        
+
+
+        $(document).ready(function(){
+           dummy = setTimeout(onPreloadTimeOut, 3000);
+        })
+        function CleanTrash(){
+            //console.log("CleanTrash"+itemsSearch.length);
+            if (itemsSearch.length){
+                while(itemsSearch.length){
+                    itemsSearch.pop();
+                }
+            }
+            $("#ConteudoWiki").empty();
+               
+        }
+
+        function addMediaSearchResults(){
+            for (var i=0;i<itemsSearch.length;i++){
+                   $("#ConteudoWiki").append("<div class=\"thumbnail animated fadeInUp\" id=\"wikiResult"+i+"\"> <div class=\"caption\"><h2>File name: "+itemsSearch[i].pageTitle+"</h2><a href=\""+itemsSearch[i].urlPage+itemsSearch[i].pageTitle+"\" class=\"btn btn-primary\" role=\"button\" target=\"blank\">View in Wikipedia</a></div></div>");
+               }
+        }
+
+ 
+        function getWikiMedia(){
+            $.ajax({
+                url:apiLocation,
+                data:{action:"query",
+                titles:searchBox.value,
+                prop:'images',
+                format:'json'
+                },
+                dataType:'jsonp',
+                success: function(x){
+                    
+                    for (var key in x.query.pages){
+                            if (x.query.pages.hasOwnProperty(key)){
+                                
+                                for (var i=0;i<x.query.pages[key].images.length;i++){
+                                    var item={pageTitle:x.query.pages[key].images[i].title,pageSnippet:"",idPage:0,urlPage:wikiUrl};
+                                   // console.log("getWikiMedia item:\n"+item.pageTitle+"\nsnippet:"+ item.pageSnippet);
+                                    itemsSearch.push(item);
+                                }
+                            }   
+                        }
+                addMediaSearchResults();
+                  
+                },
+                error:function(valuerequest,valuestatus,valueerror){
+                    $("#ConteudoWiki").append("<div class=\"animated swing\"><h3>Something went horribly wrong</h3></div>");
+                }
+            });
+            
+            
+        }
+
+        function WikiUrlGet(){
+            $.ajax({
+                url:apiLocation,
+                data:{action:"query",
+                generator:"search",
+                gsrsearch:searchBox.value,
+                format:'json',
+                prop:'info',
+                inprop:'url|displaytitle'
+                },
+                dataType:'jsonp',
+                success: function(x){
+                    console.log(x);
+                    for (var i=0;i<itemsSearch.length;i++){
+                        for (var key in x.query.pages){
+                            if (x.query.pages.hasOwnProperty(key)){
+                                if (itemsSearch[i].pageTitle===x.query.pages[key].displaytitle){
+                                    itemsSearch[i].idPage= x.query.pages[key].pageid;
+                                    itemsSearch[i].urlPage= x.query.pages[key].fullurl;
+                                }
+                                
+                            }   
+                        }
+                    }
+                   
+                   
+                     AddContentSearch();
+                },
+                error: function(valuerequest,valuestatus,valueerror){
+                    // add item to the array and show it(generic ups...something wrong happened)
+                    $("#ConteudoWiki").append("<div class=\"animated swing\"><h3>Something went horribly wrong</h3></div>");
+                    console.log(valuerequest.responseText);
+                }
+            });
+            
+        }
+        function WikipediaSearch(){
+            $.ajax({
+                url: apiLocation,
+                data: {action: "query", 
+                list: "search",
+                srsearch: searchBox.value, 
+                format: 'json'},
+                dataType: 'jsonp',
+                success: function (x) {
+
+                    //console.log(itemsSearch.query.search[i].title+"\n"+itemsSearch.query.search[i].snippet);
+                    //console.log(itemsSearch.query.search[i]);
+                    for (var i=0;i<x.query.search.length;i++){
+                        var item={pageTitle:x.query.search[i].title,pageSnippet:x.query.search[i].snippet,idPage:0,urlPage:"",};
+                        itemsSearch.push(item);
+                        
+                    }
+            
+                },
+                error: function (valRequest,valstatus,valueerror){
+                    $("#ConteudoWiki").append("<div class=\"animated swing\"><h3>Something went horribly wrong</h3></div>");
+                    console.log(valRequest.responseText);
+                }
+
+            
+            });
+            WikiUrlGet();
+            
+        }
+
+        function GetWikiData(){
+
+            //console.log("selected option:"+ selectedItem);
+            CleanTrash();
+            if (typeof selectedItem =="undefined"){
+                
+                 $("#ConteudoWiki").append("<div class=\"animated tada\"><h3>Select one option from the dropdown first</h3></div>");
+                // $("#ConteudoWiki").children().addClass("animated tada");
+            }
+            else{
+                if (selectedItem===" Media"){
+                    getWikiMedia();
+                }
+                else{
+                    WikipediaSearch();
+                }
+            }
+            
+        }
+
+       function AddContentSearch(){
+           
+           try{
+               for (var i=0;i<itemsSearch.length;i++){
+                   $("#ConteudoWiki").append("<div class=\"thumbnail animated fadeInUp\" id=\"wikiResult"+i+"\"> <div class=\"caption\"><h2>"+itemsSearch[i].pageTitle+"</h2><h3>"+itemsSearch[i].pageSnippet+"   </h3><a href=\""+itemsSearch[i].urlPage+"\" class=\"btn btn-primary\" role=\"button\" target=\"blank\">Page Link</a></div></div>");
+
+                  //$("#wikiResult"+i).hide().removeClass('hide');
+                  // $("#wikiResult"+i).addClass('animated fadeInUp');
+
+               }
+           }
+           catch(err){
+               $("#ConteudoWiki").append("<div class=\"animated swing\"><h3>Something went horribly wrong</h3></div>");
+               console.log(err);
+           }
+          // console.log("AddContentSearch");  
+        }
+        
+       function Randomize(){
+           window.open(randomUrl,"_blank");
+       }
+       
+        function onPreloadTimeOut(){
+            //console.log("onPreloadTimeOut trigger");
+            $("#preloaderdiv").hide();
+            $("#conteudoquote").hide().removeClass('hide').fadeIn('slow');
+            $(".dropdown-menu li a").click(function(e){
+                var selText = $(this).text();
+                
+                
+                selectedItem= selText;
+                $(this).parents('.input-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+            });
+           
+        }
+    </script>
+    <div class="loader" id="preloaderdiv"></div>
+    <div class="jumbotron" id="conteudoquote" hidden>
+        <div class="container">
+            
+            <div class="row voffset6">
+                <div class="col-md-offset-3">
+                    <h2 id="pTitle" class="quoteProjectTitle">Supercalifragilistic Wikipedia Search</h2>
+                </div>
+                <!-- search box here-->
+                <form class="form voffset6" role="search" onsubmit="return false;">
+                    <div class="input-group voffset6">
+                        <input type="text" class="form-control" placeholder="Search" id="searchBox">
+                        
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit" onclick="GetWikiData();">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                            
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" 
+                                aria-haspopup="true" aria-expanded="false">
+                                Options <span class="caret"></span>
+                            </button>
+                          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                            <li><a tabindex="-1" href="#"><i class="glyphicon glyphicon-book"> Articles</i></a></li>
+                            <li><a tabindex="-1" href="#"><i class="glyphicon glyphicon-picture"> Media</i></a></li>
+                            
+                         </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </form>
+                
+                <div class="row voffset3">
+                    <div class="col-md-4 col-md-offset-5">
+                        <button id="btnRandom" class="btn btn-default" onclick="Randomize();">Spin the bottle</button>
+                    </div>   
+                </div>
+                <div id="ConteudoWiki" class="row voffset4"></div>
+            </div>
+            <div class="row voffset9">
+                <div class="col-sm-4 col-md-offset-5">
+                    Made by <a href="http://codepen.io/jonniebigodes/" target="_blank">Jonniebigodes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

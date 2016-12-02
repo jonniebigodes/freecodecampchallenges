@@ -1,0 +1,784 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>freecodecamp challenge twitch</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src=".././node_modules/jquery/dist/jquery.js"></script>
+    <script src=".././node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <link href=".././node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <script src=".././node_modules/mattboldt.typed.js/js/typed.js"></script>
+    <link href=".././node_modules/animate.css/animate.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .panel,
+        .panel-default {
+            width: 250px;
+            height: 250px;
+        }
+        
+        .panel-heading {
+            font-family: 'Roboto-Condensed', sans-serif;
+            text-align: center;
+        }
+        
+        .panel-body {
+            font-family: 'Roboto-Condensed', sans-serif;
+            text-align: center;
+        }
+        
+        .containerInfo {
+            width: 325px;
+            height: auto;
+            padding: 2%;
+            text-align: left;
+        }
+        
+        .imgInfo {
+            width: 128;
+            height: 128px;
+        }
+        
+        .loader {
+            width: 100%;
+            height: 100%;
+            background-color: darkslateblue;
+            color: white;
+            font-size: 18px;
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+        
+        .voffset {
+            margin-top: 2px;
+        }
+        
+        .voffset1 {
+            margin-top: 5px;
+        }
+        
+        .voffset2 {
+            margin-top: 10px;
+        }
+        
+        .voffset3 {
+            margin-top: 15px;
+        }
+        
+        .voffset4 {
+            margin-top: 30px;
+        }
+        
+        .voffset5 {
+            margin-top: 40px;
+        }
+        
+        .voffset6 {
+            margin-top: 60px;
+        }
+        
+        .voffset7 {
+            margin-top: 80px;
+        }
+        
+        .voffset8 {
+            margin-top: 100px;
+        }
+        
+        .voffset9 {
+            margin-top: 150px;
+        }
+        
+        .pTitle {
+            text-align: center;
+            font-size: 32px;
+            font-family: 'Roboto-Condensed', sans-serif;
+            color: white;
+        }
+        
+        .skinnedPills {
+            color: white;
+        }
+        
+        #tabbedContainer .nav-pills>li>a {
+            border-radius: 4;
+        }
+        
+        #lblSearch {
+            color: white;
+        }
+        
+        #jumbProject {
+            background-color: darkslateblue;
+        }
+        
+        body {
+            background-color: darkslateblue;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+
+        var dummyUsers=["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas","brunofin","comster404"];
+        var streamDataResult=[];
+        var defObj=[];
+        var searchResults=[];
+        var searchResultObject={
+            username:"",
+            bio:"",
+            streaming:false,
+            url:urltwitch,
+            logo:"",
+            exists:false,
+            viewers:0,
+            fps:0,
+            game:""
+            
+        }; 
+        
+
+        var urlApi="https://wind-bow.hyperdev.space/twitch-api/";
+        var urltwitch="https://www.twitch.tv/";
+        var onlineItems=0;
+        var offlineItems=0;
+        var nonExistingItems=0;
+        var numItems=0;
+
+        /**
+        * function to process the search results provided via api request
+        *
+        **/
+        function addSearchResult(){
+            // check if user is exists and streaming
+            if (searchResultObject.exists && searchResultObject.streaming){
+
+                $("#tabOnlineStreams").append("<div class=\"col-md-4\" id=\"searchResultOnline"
+                +searchResultObject.username+"\"><div class=\"panel panel-default\" ><div class=\"panel-heading\">"
+                +searchResultObject.username+"</div><div class=\"panel-body\"><h4>Currently streaming: <p>"
+                +searchResultObject.game+"</p>@"+parseInt(searchResultObject.fps)+" frames<p>Current viewers: "
+                +searchResultObject.viewers+"</p></h4></div></div></div>");
+               
+                $("#tabAllStreams").append("<div class=\"col-md-4\" id=\"searchResult"
+                +searchResultObject.username+"\"><div class=\"panel panel-default\"><div class=\"panel-heading\">"
+                +searchResultObject.username+"</div><div class=\"panel-body\"><h4><p>Currently streaming: "
+                +searchResultObject.game+"</p>@"+parseInt(searchResultObject.fps)+" frames<p>Current viewers: "
+                +searchResultObject.viewers+"</p></h4></div></div></div>");
+                onlineItems++;
+                $("#scOnlineItems").text(onlineItems);
+
+                $("#searchResultOnline"+searchResultObject.username).popover({
+                    html:true,
+                    title:searchResultObject.username+" additional information" ,
+                    placement:"auto left",
+                    content:"<img class=\"imgInfo\" src=\""+
+                    searchResultObject.logo+"\"><p>biography:</p>"+ searchResultObject.bio+"<p><hr><a href=\""+searchResultObject.url+"\" target=\"_blank\">Twitch url page</a></p>"
+
+                });
+                $("#searchResultOnline"+searchResultObject.username).tooltip({
+                    title:"Click item for more information",
+                    delay:100,
+                    placement:"auto left",
+                    trigger:'hover focus'
+
+                });
+                $("#searchResult"+searchResultObject.username).popover({
+                    html:true,
+                    title:searchResultObject.username+" additional information" ,
+                    placement:"auto left",
+                    content:"<img class=\"imgInfo\" src=\""+
+                    searchResultObject.logo+"\"><p>biography:</p>"+ searchResultObject.bio+"<p><hr><a href=\""+searchResultObject.url+"\" target=\"_blank\">Twitch url page</a></p>"
+
+                });
+                $("#searchResult"+searchResultObject.username).tooltip({
+                    title:"Click item for more information",
+                    delay:100,
+                    placement:"auto left",
+                    trigger:'hover focus'
+                });
+
+            }
+            else{
+                if (searchResultObject.exists){
+                    $("#tabOfflineStreams").append("<div class=\"col-md-4\" id=\"searchResultOffline"
+                    +searchResultObject.username+"\"><div class=\"panel panel-default\"><div class=\"panel-heading\">"
+                    +searchResultObject.username+"</div><div class=\"panel-body\"><h4>Currently streaming: <p>"
+                    +searchResultObject.game+"</p>@"
+                    +parseInt(searchResultObject.fps)+" frames<p>Current viewers: "
+                    +searchResultObject.viewers+"</p></h4></div></div></div>");
+
+                    $("#tabAllStreams").append("<div class=\"col-md-4\" id=\"searchResult"
+                    +searchResultObject.username+"\"><div class=\"panel panel-default\"><div class=\"panel-heading\">"
+                    +searchResultObject.username+"</div><div class=\"panel-body\"><h4>Currently streaming: <p>"
+                    +searchResultObject.game+"</p>@"
+                    +parseInt(searchResultObject.fps)+" frames<p>Current viewers: "
+                    +searchResultObject.viewers+"</p></h4></div></div></div>");
+
+
+                    $("#searchResultOffline"+searchResultObject.username).popover({
+                        html:true,
+                        title:searchResultObject.username+" additional information" ,
+                        placement:"auto left",
+                        content:"<img class=\"imgInfo\" src=\""+
+                        searchResultObject.logo+"\"><p>biography:</p>"+ searchResultObject.bio+"<p><hr><a href=\""+searchResultObject.url+"\" target=\"_blank\">Twitch url page</a></p>"
+
+                    });
+                    $("#searchResultOffline"+searchResultObject.username).tooltip({
+                        title: "Click item for further information",
+                        delay: 100,
+                        placement:"auto left",
+                        trigger:'hover focus'
+
+                    });
+                    $("#searchResult"+searchResultObject.username).popover({
+                        html:true,
+                        title:searchResultObject.username+" additional information" ,
+                        placement:"auto left",
+                        content:"<img class=\"imgInfo\" src=\""+
+                        searchResultObject.logo+"\"><p>biography:</p>"+ searchResultObject.bio+"<p><hr><a href=\""+searchResultObject.url+"\" target=\"_blank\">Twitch url page</a></p>"
+
+                });
+                $("#searchResult"+searchResultObject.username).tooltip({
+                    title: "Click item for further information",
+                    delay: 100,
+                    placement:"auto left",
+                    trigger:'hover focus'
+
+                });
+
+                }
+                else{
+                    $("#tabOfflineStreams").append("<div class=\"col-md-4\"><div class=\"panel panel-default\" id=\"searchResultOffline"
+                    +searchResultObject.username+"\"><div class=\"panel-heading\">"
+                    +searchResultObject.username+"</div><div class=\"panel-body\"><img class=\"imgInfo\" src=\""
+                    +searchResultObject.logo+"\"><h4><p>User does not exist</p></h3></div></div></div>");
+                     $("#tabAllStreams").append("<div class=\"col-md-4\"><div class=\"panel panel-default\" id=\"searchResult"
+                    +searchResultObject.username+"\"><div class=\"panel-heading\"><h4>"
+                    +searchResultObject.username+"</h4></div><div class=\"panel-body\"><img class=\"imgInfo\" src=\""
+                    +searchResultObject.logo+"\"><h4><p>User does not exist</p></h3></div></div></div>");
+                }
+
+                offlineItems++;
+                $("#scOffItems").text(offlineItems);
+            }
+            numItems++;
+            $("#scAllItems").text(numItems);
+            
+           
+
+        }
+
+
+
+        /**
+        function to make a request via api to get the information based on the argument given and process it
+        @param value item to be searched via api
+        **/
+        function searchTwitch(value){
+            
+            var requestStream,requestUser;
+           
+            if (value){
+                searchResultObject.username= value;
+                
+                requestStream= $.ajax({
+                    url:urlApi+"streams/"+ value,
+                    dataType:'jsonp',
+                    success:function(data){
+                        console.log("search ajax result: "+ JSON.stringify(data));
+                    }
+                });
+                requestUser= $.ajax({
+                    url: urlApi+"users/"+ value,
+                    dataType:'jsonp',
+                    success:function (data){
+                        console.log("users ajax result: "+ JSON.stringify(data));
+                    }
+                });
+                 $.when(requestStream,requestUser).done(function(valueO,valueT){
+                     console.log("f item resolved: "+JSON.stringify(valueO[0])+ "\ns item resolved"+ JSON.stringify(valueT[0]));
+                     
+                     streamDataResult.username= valueT[0].display_name;
+
+                     if (valueO[0].hasOwnProperty('status')){
+                         searchResultObject.streaming=false;
+                         searchResultObject.exists= false;
+                         searchResultObject.logo="http://norbertmaes.pixerang-galerij.be/assets/img/v3/sad-panda.png";
+                     }
+                     else{
+                         if (jQuery.isEmptyObject(valueT[0].logo)){
+                             searchResultObject.logo="http://norbertmaes.pixerang-galerij.be/assets/img/v3/sad-panda.png";
+                         }
+                         else{
+                             searchResultObject.logo=valueT[0].logo;
+                         }
+                         
+
+                         if (jQuery.isEmptyObject(valueO[0].stream)){
+                             searchResultObject.streaming=false;
+                             searchResultObject.url=urltwitch+valueT[0].name;
+                             searchResultObject.exists=true;
+
+                         }
+                         else{
+                             searchResultObject.streaming=true;
+                             searchResultObject.url=urltwitch+valueT[0].name;
+                             searchResultObject.exists=true;
+                             searchResultObject.viewers=valueO[0].stream.viewers;
+                             searchResultObject.fps= valueO[0].stream.average_fps;
+                             searchResultObject.game= valueO[0].stream.game;
+                         }
+                         if (!jQuery.isEmptyObject(valueT[0].bio)){
+                             searchResultObject.bio= valueT[0].bio;
+                         }
+                         else{
+                             searchResultObject.bio= "No biography about the streamer was given";
+                         }
+                     }
+                     searchResults.push(searchResultObject);
+                     addSearchResult();
+                     //console.log("user name: "+searchResultObject.username+" bio: "+searchResultObject.bio+" streaming: "+ searchResultObject.streaming+" exists: "+ searchResultObject.exists);
+
+                //to delete
+            } );
+            
+
+
+            }
+           
+        }
+        /**
+        * function to process the text of the input(make a new search or delete the search)
+        *@param value of the input
+        **/
+        function getDatafromTwitch(value){
+            var tmpSearch= $("#searchBox").val();
+            //console.log("search content: "+ tmpSearch+" len: "+ tmpSearch.length);
+            if (value.keyCode==8 ||value.keyCode==46){
+                //console.log("delete pressed");
+                if (!tmpSearch){
+                    //console.log("array searches len:"+ searchResults.length);
+
+                    if (searchResults.length){
+                        var tmpItem= searchResults.shift();
+                        //console.log("item user:"+ tmpItem.username);
+                        if (tmpItem.streaming){
+                            onlineItems--;
+                            $("#scOnlineItems").text(onlineItems);
+                            $("#searchResultOnline"+tmpItem.username).remove();
+                        }
+                        numItems--;
+                        $("#scAllItems").text(numItems);
+                        if (tmpItem.exists===false ||tmpItem.streaming===false){
+                            offlineItems--;
+                           $("#scOffItems").text(offlineItems);
+                           $("#searchResultOffline"+tmpItem.username).remove();
+                        }
+                        $("#searchResult"+ tmpItem.username).remove();
+
+                    }
+                  
+                }
+                
+            }
+            if (value.keyCode==13 && tmpSearch.length){
+                searchTwitch(tmpSearch);
+            }
+        }
+        /**
+        * function to iterate the dummy array and make the ajax requests to get the rest of the information needed(/users)
+        *
+        **/
+        function loadDefaultUserData(){
+            //console.log("defobj before: "+ defObj.length);
+            defObj.length=0;
+            //console.log("defobj after:"+ defObj.length+" len streamDataResult: "+streamDataResult.length );
+            dummyUsers.forEach(function(element){
+                defObj.push(
+                    $.ajax({
+                        url:urlApi+"users/"+element,
+                        dataType:'jsonp',
+                        success:function(value){
+                            
+                            for (var i=0;i<streamDataResult.length;i++){
+                               
+                                if (streamDataResult[i].exists && streamDataResult[i].username.toLowerCase()===element.toLowerCase()){
+                                    streamDataResult[i].logo=value.logo;
+                                    if (!jQuery.isEmptyObject(value.bio)){
+                                        streamDataResult[i].bio=value.bio;
+                                    }
+                                    else{
+                                        streamDataResult[i].bio="No biography about the streamer was given";
+                                    }
+                                    
+                                }
+
+                            }
+
+
+                            //dummyUsersInfo.push(value);
+                        }
+                    })
+                )
+            });
+
+            $.when.apply(null,defObj).done(function(){
+
+                //to delete
+                
+                
+
+            } )
+        }
+
+        /**
+        * function to iterate the dummy array and make the ajax requests to get the rest of the information needed(/streams)
+        *
+        **/
+        function LoadDefaultStreamersData(){
+            dummyUsers.forEach(function (element){
+               defObj.push(
+                    $.ajax({
+                    url:urlApi+"streams/"+element,
+                    dataType:'jsonp',
+                    success:function(data){
+                      
+                        if (data.hasOwnProperty('status')){
+                            //console.log("request response item non exist:"+ element);
+                            streamDataResult.push(
+                                {
+                                    username:element,
+                                    bio:"",
+                                    streaming:false,
+                                    url:urltwitch,
+                                    logo:"",
+                                    exists:false,
+                                    viewers:0,
+                                    fps:0,
+                                    game:""
+                                }
+                            );
+                        }
+                        else{
+                            if (jQuery.isEmptyObject(data.stream)){
+                            streamDataResult.push(
+                                {
+                                    username:element,
+                                    bio:"",
+                                    streaming:false,
+                                    url:urltwitch+element,
+                                    logo:"",
+                                    exists:true,
+                                    viewers:0,
+                                    fps:0,
+                                    game:""
+                                }
+                            );
+                        }
+                        else{
+                            streamDataResult.push(
+                                {
+                                    username:element,
+                                    bio:"",
+                                    streaming:true,
+                                    url:urltwitch+element,
+                                    logo:"",
+                                    exists:true,
+                                    viewers:data.stream.viewers,
+                                    fps:data.stream.average_fps,
+                                    game:data.stream.game
+                                }
+                            );
+                        }
+                        }
+                        
+                        
+                    }
+                })
+               )
+            });
+
+            $.when.apply(null,defObj).done(function(){
+               loadDefaultUserData();
+              
+
+            });
+            
+        }
+
+        /**
+        * function to handle the preloader(make text similar to console)
+        *
+        **/
+        function preloading(){
+            setTimeout(function (){
+                $("#ploader1").typed({
+                    strings:["Powering up generators"],
+                    typeSpeed:30,
+                    backDelay:750,
+                    showCursor:false,
+                    cursor:"|",
+                    loop:false,
+                    loopCount:false,
+                    callback:function(){}
+
+                });
+            },0);
+            setTimeout(function (){
+                $("#ploader2").typed({
+                    strings:["Initializing boot sequence"],
+                    typeSpeed:30,
+                    backDelay:750,
+                    showCursor:false,
+                    cursor:"|",
+                    loop:false,
+                    loopCount:false,
+                    callback:function(){}
+
+                });
+            },3000);
+
+            setTimeout(function (){
+                $("#ploader3").typed({
+                    strings:["Waking up Harembe"],
+                    typeSpeed:30,
+                    backDelay:750,
+                    showCursor:false,
+                    cursor:"|",
+                    loop:false,
+                    loopCount:false,
+                    callback:function(){}
+
+                });
+            },6000);
+            setTimeout(function (){
+                $("#ploader4").typed({
+                    strings:["Testing cattle prod"],
+                    typeSpeed:30,
+                    backDelay:750,
+                    showCursor:false,
+                    cursor:"|",
+                    loop:false,
+                    loopCount:false,
+                    callback:function(){}
+
+                });
+            },9000);
+
+             setTimeout(function (){
+                $("#ploader5").typed({
+                    strings:["Throwing banana at Harembe"],
+                    typeSpeed:30,
+                    backDelay:750,
+                    showCursor:false,
+                    cursor:"|",
+                    loop:false,
+                    loopCount:false,
+                    callback:function(){}
+
+                });
+            },12000);
+            setTimeout(function (){
+                $("#ploader6").typed({
+                    strings:["Watching the fireworks"],
+                    typeSpeed:30,
+                    backDelay:750,
+                    loop:false,
+                    showCursor:false,
+                    cursor:"|",
+                    loopCount:false,
+                    callback:function(){}
+
+                });
+            },15000);
+        }
+
+
+        $(document).ready(function(){
+            preloading();
+            LoadDefaultStreamersData();
+            dummy = setTimeout(onPreloadTimeOut, 17000);
+            
+           
+        });
+        /**
+        * function to iterate the results array and add it to the page
+        *
+        **/
+        function processDefaultInformation(){
+            numItems= dummyUsers.length;
+            $("#tabAllItems").append("<span class=\"badge\" id=\"scAllItems\">"+numItems+"</span>");
+            for (var i=0;i<streamDataResult.length;i++){
+                var tmpItem= streamDataResult[i];
+                if (tmpItem.streaming){
+                    onlineItems++;
+                   
+                    
+                    $("#tabOnlineStreams").append("<div class=\"col-md-4\"><div class=\"panel panel-default\" id=\"hOnline"
+                    +i+"\"><div class=\"panel-heading\">"
+                    +tmpItem.username+"</div><div class=\"panel-body\"><h4>Currently streaming: <p>"
+                    +tmpItem.game+"</p>@"
+                    +parseInt(tmpItem.fps)+" frames<p>Current viewers: "
+                    +tmpItem.viewers+"</h4></p></div></div></div>");
+
+                    $("#tabAllStreams").append("<div class=\"col-md-4\"><div class=\"panel panel-default\" id=\"pAll"
+                    +i+"\"><div class=\"panel-heading\">"
+                    +tmpItem.username+"</div><div class=\"panel-body\"><h4>Currently streaming: <p>"
+                    +tmpItem.game+"</p>@"
+                    +parseInt(tmpItem.fps)+" frames<p>Current viewers: "
+                    +tmpItem.viewers+"</h4></p></div></div></div>");
+
+                }
+                else{
+                    offlineItems++;
+                    if (tmpItem.exists){
+                        
+                        $("#tabOfflineStreams").append("<div class=\"col-md-4 \"><div class=\"panel panel-default\"id=\"pOff"
+                        +i+"\"><div class=\"panel-heading\">"
+                        +tmpItem.username+"</div><div class=\"panel-body\"><h4><p>Nothing streaming </p><p>@0 frames</p><p>Current viewers: 0</p></h4></div></div></div>");
+                        $("#tabAllStreams").append("<div class=\"col-md-4\"><div class=\"panel panel-default\" id=\"pAll"
+                        +i+"\"><div class=\"panel-heading\"><h4>"
+                        +tmpItem.username+"</h4></div><div class=\"panel-body\"><h4><p>Nothing streaming</p><p>@0 frames</p><p>Current viewers:0</p></h4></div></div></div>");
+                    }
+                    else{
+                        $("#tabOfflineStreams").append("<div class=\"col-md-4\"><div class=\"panel panel-default\"><div class=\"panel-heading\">"
+                        +tmpItem.username+"</div><div class=\"panel-body\"><img class=\"imgInfo\" src=\"http://norbertmaes.pixerang-galerij.be/assets/img/v3/sad-panda.png\"><h3><p>User does not exist</p></h3></div></div></div>");
+                        $("#tabAllStreams").append("<div class=\"col-md-4\"><div class=\"panel panel-default\"><div class=\"panel-heading\">"
+                        +tmpItem.username+"</div><div class=\"panel-body\"><img class=\"imgInfo\" src=\"http://norbertmaes.pixerang-galerij.be/assets/img/v3/sad-panda.png\"><h3><p>User does not exist</p></h3></div></div></div>");
+                    }
+                    
+                }
+
+
+                $("#hOnline"+i).popover({
+                        html:true,
+                        title:tmpItem.username+" additional information" ,
+                        placement:"auto left",
+                        content:"<img class=\"imgInfo\" src=\""+tmpItem.logo+"\"><p>biography:</p>"+ tmpItem.bio+"<p><hr><a href=\""+tmpItem.url+"\" target=\"_blank\">Twitch url page</a></p>"
+
+                });
+                $("#pAll"+i).popover({
+                        html:true,
+                        title:tmpItem.username+" additional information",
+                        placement:"auto left",
+                        content:"<img class=\"imgInfo\" src=\""+tmpItem.logo+"\"><p>biography:</p>"+ tmpItem.bio+"<p><hr><a href=\""+tmpItem.url+"\" target=\"_blank\">Twitch url page</a></p>"
+                });
+                $("#pOff"+i).popover({
+                        html:true,
+                        title:tmpItem.username+" additional information",
+                        placement:"auto left",
+                        content:"<img class=\"imgInfo\" src=\""+tmpItem.logo+"\"><p>biography:</p>"+ tmpItem.bio+"<p><hr><a href=\""+tmpItem.url+"\" target=\"_blank\">Twitch url page</a></p>"
+                });
+
+                $("#hOnline"+i).tooltip({
+                    title: "Click item for further information",
+                    delay: 100,
+                    placement:"auto left",
+                    trigger:'hover focus'
+                });
+                $("#pOff"+i).tooltip({
+                    title: "Click item for further information",
+                    delay: 100,
+                    placement:"auto left",
+                    trigger:'hover focus'
+
+                });
+                $("#pAll"+i).tooltip({
+                    title: "Click item for further information",
+                    delay: 100,
+                    placement:"auto left",
+                    trigger:'hover focus'
+                
+                });
+
+             
+            } 
+            onlineItems=(dummyUsers.length-offlineItems)-nonExistingItems;
+            $("#tabOfflineItems").append("<span class=\"badge\" id=\"scOffItems\">"+offlineItems+"</span>");
+            $("#tabOnlineItems").append("<span class=\"badge\" id=\"scOnlineItems\">"+onlineItems+"</span>");
+            
+        }
+
+
+
+        /**
+        * function to handle the preloader timeout
+        *
+        **/
+        function onPreloadTimeOut(){
+            $("#preloaderdiv").hide();
+            $("#projectContainer").hide().removeClass('hide').fadeIn('slow');
+            processDefaultInformation();
+        }
+    </script>
+    <!-- preloader-->
+    <div class="loader" id="preloaderdiv">
+        <div id="ploader1"></div>
+        <div id="ploader2"></div>
+        <div id="ploader3"></div>
+        <div id="ploader4"></div>
+        <div id="ploader5"></div>
+        <div id="ploader6"></div>
+    </div>
+    <!-- -->
+    <!--project container -->
+    <div class="container-fluid" id="projectContainer" hidden>
+        <div class="jumbotron" id="jumbProject">
+            <!--title -->
+            <div class="row voffset3">
+                <div class="pTitle">
+                    <h2>Supercalifragilistic Twitch Machine</h2>
+                </div>
+                <!-- -->
+                <!-- search box -->
+                <div class="voffset4">
+                    <label for="searchBox" id="lblSearch">Search twitch</label>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3">https://www.twitch.tv/</span>
+                        <input type="text" class="form-control" data-toggle="tooltip" data-placement="bottom" title="Search twitch username here"
+                            id="searchBox" aria-describedby="basic-addon3 sizing-addon2" onkeydown="getDatafromTwitch(event);">
+                    </div>
+                </div>
+                <!-- -->
+                <!-- tabs -->
+                <div class="row voffset7" id="tmpFeatured">
+                    <div id="tabbedContainer" class="container">
+                        <!-- tab header-->
+                        <ul class="nav nav-pills">
+                            <li><a href="#tabAllStreams" id="tabAllItems" data-toggle="tab" class="active skinnedPills">All</a></li>
+                            <li><a href="#tabOnlineStreams" data-toggle="tab" id="tabOnlineItems" class="skinnedPills">Online</a></li>
+                            <li class="skinnedPills"><a href="#tabOfflineStreams" data-toggle="tab" id="tabOfflineItems" class="skinnedPills">Offline</a></li>
+                        </ul>
+                        <!-- -->
+                        <!-- -->
+                        <!-- tab content-->
+                        <div class="tab-content clear-fix">
+                            <div class="tab-pane active fade in active" id="tabAllStreams">
+                            </div>
+                            <div class="tab-pane fade" id="tabOnlineStreams">
+                            </div>
+                            <div class="tab-pane fade" id="tabOfflineStreams">
+                            </div>
+                        </div>
+                        <!-- -->
+                    </div>
+                </div>
+                <!-- -->
+            </div>
+        </div>
+        <!--project container -->
+        <hr>
+        <div class="footer" style="text-align: center;color: white">
+            Made by <a href="http://codepen.io/jonniebigodes/" target="_blank" class="skinnedPills">Jonniebigodes</a>
+        </div>
+    </div>
+</body>
+
+</html>

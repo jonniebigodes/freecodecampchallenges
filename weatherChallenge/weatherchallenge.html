@@ -1,0 +1,608 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Weather Challenge</title>
+    <meta charset="utf-8" />
+    <script src=".././node_modules/jquery/dist/jquery.js"></script>
+    <script src=".././node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <link href=".././node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Dosis|Oxygen" rel="stylesheet">
+    <style>
+        .progress {
+            height: 35px;
+            text-align: center;
+        }
+        
+        .progress .skill {
+            font: normal 12px "Open Sans Web";
+            line-height: 35px;
+            padding: 0;
+            margin: 0 0 0 20px;
+            text-transform: uppercase;
+            color: white;
+        }
+        
+        .progress .skill .val {
+            float: right;
+            font-style: normal;
+            margin: 0 20px 0 0;
+        }
+        
+        .progress-bar {
+            text-align: center;
+            transition-duration: 3s;
+           /* background: darkslategray;*/
+        }
+        
+        body {
+            background: darkslategray;
+        }
+        
+        #infoCaroussel {
+            font-family: 'Oxygen', 'sans-serif';
+            font-size: 16px;
+            color: white;
+            text-align: center;
+        }
+        
+        #textTemp {
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            font-family: 'Oxygen', 'sans-serif';
+        }
+        
+        #locationinfo {
+            font-family: 'Oxygen', 'sans-serif';
+            font-size: 16px;
+            color: white;
+            text-align: center;
+        }
+        
+        #infoUserCountry {
+            font-family: 'Oxygen', 'sans-serif';
+            font-size: 14px;
+            color: white;
+            text-align: center;
+        }
+        
+        #pTitle {
+            font-family: 'Oxygen', 'sans-serif';
+            font-size: 36px;
+            color: white;
+            text-align: center;
+        }
+        
+        .jumbotron {
+            background-color: darkslategray;
+            margin: auto;
+        }
+        
+        .carousel {
+            height: 390px;
+            margin-bottom: 10px;
+        }
+        /* Since positioning the image, we need to help out the caption */
+        
+        .carousel-caption {
+            z-index: 10;
+        }
+        /* Declare heights because of positioning of img element */
+        
+        .carousel .item {
+            height: 390px;
+            background-color: darkslategray;
+        }
+        
+        .loader {
+            margin: 0 auto ;
+            position: absolute;
+            left: 35%;
+            top: 35%;
+            width: 600px;
+            height: 450px;
+            /*background: url(http://i.imgur.com/2QGf8cA.gif) center no-repeat #fff;*/
+        }
+        
+        .voffset {
+            margin-top: 2px;
+        }
+        
+        .voffset1 {
+            margin-top: 5px;
+        }
+        
+        .voffset2 {
+            margin-top: 10px;
+        }
+        
+        .voffset3 {
+            margin-top: 15px;
+        }
+        
+        .voffset4 {
+            margin-top: 30px;
+        }
+        
+        .voffset5 {
+            margin-top: 40px;
+        }
+        
+        .voffset6 {
+            margin-top: 60px;
+        }
+        
+        .voffset7 {
+            margin-top: 80px;
+        }
+        
+        .voffset8 {
+            margin-top: 100px;
+        }
+        
+        .voffset9 {
+            margin-top: 150px;
+        }
+        
+        .switch {
+            position: relative;
+            display: block;
+            vertical-align: top;
+            width: 120px;
+            height: 30px;
+            padding: 3px;
+            margin: 0 10px 10px 0;
+            background: linear-gradient(to bottom, #eeeeee, #FFFFFF 25px);
+            background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF 25px);
+            border-radius: 18px;
+            box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+        
+        .switch-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+        
+        .switch-label {
+            position: relative;
+            display: block;
+            height: inherit;
+            font-size: 10px;
+            text-transform: uppercase;
+            background: #eceeef;
+            border-radius: inherit;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
+        }
+        
+        .switch-label:before,
+        .switch-label:after {
+            position: absolute;
+            top: 50%;
+            margin-top: -.5em;
+            line-height: 1;
+            -webkit-transition: inherit;
+            -moz-transition: inherit;
+            -o-transition: inherit;
+            transition: inherit;
+        }
+        
+        .switch-label:before {
+            content: attr(data-off);
+            right: 11px;
+            color: #aaaaaa;
+            text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+        }
+        
+        .switch-label:after {
+            content: attr(data-on);
+            left: 11px;
+            color: #FFFFFF;
+            text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+        }
+        
+        .switch-input:checked~.switch-label {
+            /*background: #E1B42B;*/
+            background: darkslategray;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .switch-input:checked~.switch-label:before {
+            opacity: 0;
+        }
+        
+        .switch-input:checked~.switch-label:after {
+            opacity: 1;
+        }
+        
+        .switch-handle {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(to bottom, #FFFFFF 40%, #f0f0f0);
+            background-image: -webkit-linear-gradient(top, #FFFFFF 40%, #f0f0f0);
+            border-radius: 100%;
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .switch-handle:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -6px 0 0 -6px;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(to bottom, #eeeeee, #FFFFFF);
+            background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF);
+            border-radius: 6px;
+            box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
+        }
+        
+        .switch-input:checked~.switch-handle {
+            left: 84px;
+            box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .switch-label,
+        .switch-handle {
+            transition: All 0.3s ease;
+            -webkit-transition: All 0.3s ease;
+            -moz-transition: All 0.3s ease;
+            -o-transition: All 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        var dummy;
+        //location stuff
+        var urlLocation = "http://ipinfo.io/json";
+        
+        var  itemLocation={};
+        // openWeather content
+        var dataWeather =[];
+        var openWeatherApi = "59eece9dcf8a6a1be31eaf311f814d22";
+        var openWeatherUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?q="
+        //
+
+        $(document).ready(function(){
+           //dummy = setTimeout(onPreloadTimeOut, 3000);
+           getInfoLocation();
+           //console.log("doc ready before progress");
+
+           var tmpprogress=$('.progress');
+           var tmpbar= $('.progress-bar');
+
+           setTimeout(function(){
+               tmpbar.css('width','10%'); 
+               $("#pbText").text("Waking hammsters "+"10%" );
+               setTimeout(function(){
+                   $("#pbText").text("Feeding the hamsters "+"30%" );
+                   tmpbar.css('width','30%');
+                   setTimeout(function(){
+                       $("#pbText").text("Fetching necessary data "+"50%" );
+                       tmpbar.css('width','50%');
+                       setTimeout(function(){
+                           $("#pbText").text("Finalizing fetching the stuff needed "+"75%" );
+                           tmpbar.css('width','75%');
+                           setTimeout(function(){
+                               tmpbar.css('width','100%');
+                               $("#pbText").text("Freeing the hamsters " );
+                               dummy = setTimeout(onPreloadTimeOut, 3000);
+                           },1000);
+                       },2000);
+                   },1000);
+               },1000);
+           },500);
+           
+        })
+        
+        /*
+        function to get the data based on the location
+        */
+        function getInfoLocation(){
+
+            $.getJSON(urlLocation, function(data){
+              itemLocation = data;
+                // to delete
+                //console.log("itemlocation nsuccess:\n" + itemLocation.city+": " + itemLocation.postal);
+           })
+           .done(function(){
+               //console.log("request done");
+               getWeatherData();
+            })
+           .fail(function (){
+                $("#container").append("<div class=\"animated swing\"><h3>Something went horribly wrong</h3></div>");
+           })
+           .always(function(){
+               //console.log("request finally done");
+           });
+        }
+        /*
+        function to handle the content in the carousel using farheinheit
+        @param valor index of the array
+        */
+        function carouselItemsContentFar(valor){
+            var tmp= dataWeather[valor];
+            var result="";
+
+            switch(tmp.weatherCondition){
+                case "Rain":
+                    if (valor==0){
+                        result="<div class=\"item active\"><div class=\"carousel-caption\"><img  src=\"http://downloadicons.net/sites/default/files/rain-icon-46110.png\" height=\"128\" width=\"128\"><h3>Weather: Rain</h3><h5>Max Temperature: "+tmp.farMax+" &#8457;</h5><h5>Min Temperature: "+tmp.farMin+" &#8457;<p><h5> Wind Speed: "+tmp.windSpeed+" Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</p></h5></h5></div></div>";
+                    }
+                    else{
+                        result="<div class=\"item\"><div class=\"carousel-caption\"><img  src=\"http://downloadicons.net/sites/default/files/rain-icon-46110.png\" height=\"128\" width=\"128\"><h3>Weather: Rain</h3><h5>Max Temperature: "+tmp.farMax+" &#8457;</h5><h5>Min Temperature: "+tmp.farMin+" &#8457;<p><h5>Wind Speed: "+tmp.windSpeed+" Km/h</h5></p></h5><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    break;
+                case "Clouds":
+                    if (valor==0){
+                        result="<div class=\"item active\"><div class=\"carousel-caption\"><img  src=\"http://www.clipartbest.com/cliparts/4cb/KRM/4cbKRMXXi.png\" height=\"128\" width=\"128\"><h3>Weather: Clouds</h3><h5>Max Temperature: "+tmp.farMax+" &#8457;</h5><h5>Min Temperature: "+tmp.farMin+"&#8457;<p><h5> Wind Speed: "+tmp.windSpeed+" Km/h</h5></p></h5><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    else{
+                        result="<div class=\"item\"><div class=\"carousel-caption\"><img  src=\"http://www.clipartbest.com/cliparts/4cb/KRM/4cbKRMXXi.png\" height=\"128\" width=\"128\"><h3>Weather: Clouds</h3><h5>Max Temperature: "+tmp.farMax+" &#8457;</h5><h5>Min Temperature: "+tmp.farMin+" &#8457;<p><h5>Wind Speed: "+tmp.windSpeed+" Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>"; 
+                    }
+                    break;
+
+                case "Snow":
+                    if (valor==0){
+                        result="<div class=\"item active\"><div class=\"carousel-caption\"><img  src=\"http://downloadicons.net/sites/default/files/snow-icon-46069.png\"  height=\"128\" width=\"128\"><h3>Weather: Snow</h3><h5>Max Temperature: "+tmp.farMax+" &#8457;</h5><h5>Min Temperature: "+tmp.farMin+" &#8457;<p><h5> Wind Speed: "+tmp.windSpeed+" Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    else{
+                        result="<div class=\"item\"><div class=\"carousel-caption\"><img  src=\"http://downloadicons.net/sites/default/files/snow-icon-46069.png\" height=\"128\"  width=\"128\"><h3>Weather: Snow</h3><h5>Max Temperature: "+tmp.farMax+" &#8457;</h5><h5>Min Temperature: "+tmp.farMin+" &#8457;<p><h5> Wind Speed: "+tmp.windSpeed+" Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                 break;
+                case "Thunderstorm":
+                    if (valor==0){
+                        result="<div class=\"item active\"><div class=\"carousel-caption\"><img  src=\"http://downloadicons.net/sites/default/files/thunderstorm-wear-icons-46090.png\"  height=\"128\" width=\"128\"><h3>Weather: Thunderstorm</h3><h5>Max Temperature: "+tmp.farMax+" &#8457;</h5><h5>Min Temperature: "+tmp.farMin+" &#8457;<p><h5>wind speed: "+tmp.windSpeed+ "Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    else{
+                        result="<div class=\"item\"><div class=\"carousel-caption\"><img src=\"http://downloadicons.net/sites/default/files/thunderstorm-wear-icons-46090.png\" height=\"128\"width=\"128\"><h3>Weather: Thunderstorm</h3><h5>Max Temperature: "+tmp.farMax+" &#8457;</h5><h5>Min Temperature: "+tmp.farMin+" &#8457;<p><h5> wind speed: "+tmp.windSpeed+ "Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    break;
+                default:
+                    if (valor==0){
+                        result="<div class=\"item active\"><div class=\"carousel-caption\"><img id=\"weatherimg\" src=\"https://cdn1.iconfinder.com/data/icons/linear-weather-icons/100/meteo_sunny-256.png\" height=\"128\" width=\"128\"><h3>Weather: Clear</h3><h5>Max Temperature: "+tmp.farMax+" &#8457;</h5><h5>Min Temperature: "+tmp.farMin+" &#8457;<p><h5> Wind Speed: "+tmp.windSpeed+" Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    else{
+                        result="<div class=\"item\"><div class=\"carousel-caption\"><img src=\"https://cdn1.iconfinder.com/data/icons/linear-weather-icons/100/meteo_sunny-256.png\" height=\"128\"  width=\"128\"><h3>Weather: Clear</h3><h5>Max Temperature: "+tmp.farMax+" &#8457;</h5><h5>Min Temperature: "+tmp.farMin+" &#8457;<p><h5>Wind Speed:" +tmp.windSpeed+"Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    break;
+            }
+           return result;
+        }
+
+
+
+
+        /*
+        function to handle the content in the carousel using Celsius
+        @param valor index of the array
+        */
+
+        function carouselItemsContent(valor){
+            var tmp= dataWeather[valor];
+            var result="";
+
+            switch(tmp.weatherCondition){
+                case "Rain":
+                    if (valor==0){
+                        result="<div class=\"item active\"><div class=\"carousel-caption\"><img  src=\"http://downloadicons.net/sites/default/files/rain-icon-46110.png\" height=\"128\" width=\"128\"><h3>Weather: Rain</h3><h5>Max Temperature: "+tmp.maxTemperature+" &#8451;</h5><h5>Min Temperature: "+tmp.minTemperature+" &#8451;<p><h5> Wind Speed: "+tmp.windSpeed+" Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</p></h5></h5></div></div>";
+                    }
+                    else{
+                        result="<div class=\"item\"><div class=\"carousel-caption\"><img  src=\"http://downloadicons.net/sites/default/files/rain-icon-46110.png\" height=\"128\" width=\"128\"><h3>Weather: Rain</h3><h5>Max Temperature: "+tmp.maxTemperature+" &#8451;</h5><h5>Min Temperature: "+tmp.minTemperature+" &#8451;<p><h5>Wind Speed: "+tmp.windSpeed+" Km/h</h5></p></h5><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    break;
+                case "Clouds":
+                    if (valor==0){
+                        result="<div class=\"item active\"><div class=\"carousel-caption\"><img  src=\"http://www.clipartbest.com/cliparts/4cb/KRM/4cbKRMXXi.png\" height=\"128\" width=\"128\"><h3>Weather: Clouds</h3><h5>Max Temperature: "+tmp.maxTemperature+"  &#8451;</h5><h5>Min Temperature: "+tmp.minTemperature+" &#8451;<p><h5> Wind Speed: "+tmp.windSpeed+" Km/h</h5></p></h5><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    else{
+                        result="<div class=\"item\"><div class=\"carousel-caption\"><img  src=\"http://www.clipartbest.com/cliparts/4cb/KRM/4cbKRMXXi.png\" height=\"128\" width=\"128\"><h3>Weather: Clouds</h3><h5>Max Temperature: "+tmp.maxTemperature+"  &#8451;</h5><h5>Min Temperature: "+tmp.minTemperature+"  &#8451;<p><h5>Wind Speed: "+tmp.windSpeed+" Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>"; 
+                    }
+                    break;
+                case "Snow":
+                    if (valor==0){
+                        result="<div class=\"item active\"><div class=\"carousel-caption\"><img  src=\"http://downloadicons.net/sites/default/files/snow-icon-46069.png\"  height=\"128\" width=\"128\"><h3>Weather: Snow</h3><h5>Max Temperature: "+tmp.maxTemperature+" &#8451;</h5><h5>Min Temperature: "+tmp.minTemperature+" &#8451;<p><h5> Wind Speed: "+tmp.windSpeed+" Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    else{
+                        result="<div class=\"item\"><div class=\"carousel-caption\"><img  src=\"http://downloadicons.net/sites/default/files/snow-icon-46069.png\" height=\"128\"  width=\"128\"><h3>Weather: Snow</h3><h5>Max Temperature: "+tmp.maxTemperature+" &#8451;</h5><h5>Min Temperature: "+tmp.minTemperature+" &#8451;<p><h5> Wind Speed: "+tmp.windSpeed+" Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                 break;
+                case "Thunderstorm":
+                    if (valor==0){
+                        result="<div class=\"item active\"><div class=\"carousel-caption\"><img  src=\"http://downloadicons.net/sites/default/files/thunderstorm-wear-icons-46090.png\"  height=\"128\" width=\"128\"><h3>Weather: Thunderstorm</h3><h5>Max Temperature: "+tmp.maxTemperature+" &#8451;</h5><h5>Min Temperature: "+tmp.minTemperature+" &#8451;<p><h5>wind speed: "+tmp.windSpeed+ "Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    else{
+                        result="<div class=\"item\"><div class=\"carousel-caption\"><img src=\"http://downloadicons.net/sites/default/files/thunderstorm-wear-icons-46090.png\" height=\"128\"width=\"128\"><h3>Weather: Thunderstorm</h3><h5>Max Temperature: "+tmp.maxTemperature+" &#8451;</h5><h5>Min Temperature: "+tmp.minTemperature+" &#8451;<p><h5> wind speed: "+tmp.windSpeed+ "Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    break;
+                default:
+                    if (valor==0){
+                        result="<div class=\"item active\"><div class=\"carousel-caption\"><img id=\"weatherimg\" src=\"https://cdn1.iconfinder.com/data/icons/linear-weather-icons/100/meteo_sunny-256.png\" height=\"128\" width=\"128\"><h3>Weather: Clear</h3><h5>Max temperature: "+tmp.maxTemperature+" &#8451;</h5><h5>Min Temperature: "+tmp.minTemperature+" &#8451;<p><h5> Wind Speed: "+tmp.windSpeed+" Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    else{
+                        result="<div class=\"item\"><div class=\"carousel-caption\"><img src=\"https://cdn1.iconfinder.com/data/icons/linear-weather-icons/100/meteo_sunny-256.png\" height=\"128\"  width=\"128\"><h3>Weather: Clear</h3><h5>Max Temperature:"+tmp.maxTemperature+" &#8451;</h5><h5>Min Temperature:"+tmp.minTemperature+" &#8451;<p><h5>Wind Speed:" +tmp.windSpeed+"Km/h</h5></p><p><h5>Humidity: "+tmp.humidity+"</h5></p></div></div>";
+                    }
+                    break;
+            }
+           return result;
+        }
+        
+        /*
+        Function to inject data in the caroussel using farheinheit
+        */
+        function addWeatherDataFar(){
+            $("#carouselNavIcons").empty();
+            $("#innerCarousel").empty();
+            for (var i=0;i<dataWeather.length;i++){
+                //console.log("append weather item: "+i);
+                if (i==0){
+                   
+                    $("#carouselNavIcons").append("<li data-target=\"#weatherCarousel\" data-slide-to=\"0\" class=\"active\"></li>");
+                    //$("#innerCarousel").append("<div class=\"item active\"><div class=\"carousel-caption\"><p><h4>Active "+i+"</h4></p></div></div>");
+                    $("#innerCarousel").append(carouselItemsContentFar(i));
+                }
+                else{
+                    // id=\"wikiResult"+i+"\"
+                    $("#carouselNavIcons").append("<li data-target=\"#weatherCarousel\" data-slide-to=\""+i+"\"></li>");
+                    //$("#innerCarousel").append("<div class=\"item\"><div class=\"carousel-caption\"><p><h4>Dummy</h4></div></p></div>");
+                     $("#innerCarousel").append(carouselItemsContentFar(i));
+                }
+                
+            }
+        }
+
+
+        /*
+        Function to inject data in the caroussel using Celsius
+        */
+        function addWeatherData(){
+            $("#carouselNavIcons").empty();
+            $("#innerCarousel").empty();
+            for (var i=0;i<dataWeather.length;i++){
+                //console.log("append weather item: "+i);
+                if (i==0){
+                   
+                    $("#carouselNavIcons").append("<li data-target=\"#weatherCarousel\" data-slide-to=\"0\" class=\"active\"></li>");
+                    //$("#innerCarousel").append("<div class=\"item active\"><div class=\"carousel-caption\"><p><h4>Active "+i+"</h4></p></div></div>");
+                    $("#innerCarousel").append(carouselItemsContent(i));
+                }
+                else{
+                    // id=\"wikiResult"+i+"\"
+                    $("#carouselNavIcons").append("<li data-target=\"#weatherCarousel\" data-slide-to=\""+i+"\"></li>");
+                    //$("#innerCarousel").append("<div class=\"item\"><div class=\"carousel-caption\"><p><h4>Dummy</h4></div></p></div>");
+                     $("#innerCarousel").append(carouselItemsContent(i));
+                }
+                
+            }
+        }
+        /*
+        Function to handle the weather data got from async request
+        */
+        function getWeatherData(){
+            $.getJSON(openWeatherUrl+itemLocation.city+"&appid="+openWeatherApi+"&units=metric&mode=json&units=metric&cnt=5",function (data){
+                for (var i=0;i<data.list.length;i++){
+                    var item={maxTemperature:data.list[i].temp.max,minTemperature:data.list[i].temp.min
+                        ,humidity:data.list[i].humidity+"%",windSpeed:data.list[i].speed,weatherCondition:data.list[i].weather[0].main,
+                        farMax:Math.round((data.list[i].temp.max*(9/5)+32)),farMin:Math.round((data.list[i].temp.min*(9/5)+32))};
+                    //var item={maxTemperature:data.list[i].temp.max,minTemperature:data.list[i].temp.min
+                    //    ,humidity:data.list[i].humidity+"%",windSpeed:data.list[i].speed,weatherCondition:"Thunderstorm",farMax:0,farMin:0};
+                    dataWeather.push(item);
+                    //dataWeather[i].farMax= Math.round((data.list[i].temp.max*(9/5)+32));
+                    //dataWeather[i].farMax=Math.round((data.list[i].temp.max*9)/5*+32);
+                    //dataWeather[i].farMin=Math.round((data.list[i].temp.min*9)/5*+32);
+                    //dataWeather[i].farMin=Math.round((data.list[i].temp.min*(9/5)+32));
+                }
+                /*
+                for (var x=0;x<dataWeather.length;x++){
+                    console.log("Temperature max:"+ dataWeather[x].maxTemperature+"\nMin temperature: "+ dataWeather[x].minTemperature+"\ncondition: "+dataWeather[x].weatherCondition);
+                    console.log("HUMIDITY: "+dataWeather[x].humidity+" windSpeed"+dataWeather[x].windSpeed);
+                    console.log("far max: "+dataWeather[x].farMax+" far min: "+ dataWeather[x].farMin);
+                }
+                */
+                
+            })
+            .done(function(){
+                //console.log("request weather done:");
+                
+            })
+            .fail(function(){
+                $("#container").append("<div class=\"animated swing\"><h3>Something went horribly wrong</h3></div>");
+            })
+            .always(function(){
+            });
+        }
+
+        /*
+        function to handle the time out and load the content
+        */
+        function onPreloadTimeOut(){
+            //console.log("onPreloadTimeOut trigger");
+            $("#preloaderdiv").hide();
+            $("#conteudoWeather").hide().removeClass('hide').fadeIn('slow');
+            $("#locationinfo").append("<h3>You\'re currently at:</h3>");
+            $("#infoUserCountry").append("<h4 >"+itemLocation.city+","+itemLocation.country+"</h4>");
+           
+            
+            addWeatherData();
+
+            $("#chkToggle").change(function(){
+                if ($(this).is(':checked')){
+                    //console.log("toggle on");
+                    addWeatherData();
+                }
+                else{
+                    //console.log("toggle off");
+                    addWeatherDataFar();
+                }
+            })
+            
+        }
+    </script>
+    <div class="loader" id="preloaderdiv">
+        <div class="progress">
+            <div class="progress-bar progress-bar-success" id="preloaderBar" style="width:0%;">
+                <span id="pbText">0%</span>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron" id="conteudoWeather" hidden>
+        <div class="container">
+            <div class="row voffset6">
+                <h2 id="pTitle">Supercalifragilistic Weather Machine</h2>
+                <div class="col-md-offset-4">
+                </div>
+                <div class="row voffset5 " id="locationinfo">
+                </div>
+                <div class="voffset2 " id="infoUserCountry"></div>
+                <div>
+                    <h3 id="infoCaroussel">Forecast for the next 5 days</h3>
+                    <p></p>
+                    <h3 id="textTemp">
+                        <p>Temperatures shown in:</p>
+                    </h3>
+                    <div class="col-md-offset-5">
+                        <label class="switch">
+	                            <input id="chkToggle" class="switch-input" type="checkbox" checked />
+	                            <span class="switch-label" data-on="Celsius" data-off="Fahrenheit"></span> 
+	                            <span class="switch-handle"></span> 
+                            </label>
+                    </div>
+                    <!--<label class="switch">
+	                            <input class="switch-input" type="checkbox" />
+	                            <span class="switch-label" data-on="Fahrenheit" data-off="Celsius"></span> 
+	                            <span class="switch-handle"></span> 
+                        </label>-->
+                </div>
+                <div id="weatherCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+                    <ol id="carouselNavIcons" class="carousel-indicators"></ol>
+                    <div id="innerCarousel" class="carousel-inner" role="listbox"></div>
+                    <!--<a class="left carousel-control" href="#weatherCarousel" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#weatherCarousel" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>-->
+                </div>
+            </div>
+            <div class="row voffset9">
+                <div class="col-sm-4 col-md-offset-5" style="color:white">
+                    Made by <a href="http://codepen.io/jonniebigodes/" target="_blank">Jonniebigodes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

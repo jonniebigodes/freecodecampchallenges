@@ -1,0 +1,89 @@
+<!--rearrange
+    <div class="container-fluid" id="baseContainer">
+        <div class="row">
+        </div>
+        <div class="loader" id="preloaderdiv"></div>
+        <div id="conteudoquote" class="col-md-12" hidden>
+            <div class="row">
+                <div id="TitleContainer" class="col-sm-12">
+                    Supercalifragilistic quote machine
+                </div>
+                <div id="boxtoRotate" class="col-md-10" hidden>
+                    
+                    <div id="titleQuote" class="col-md-3"></div>
+                    <div id="contentQuote" class="col-sm-4"></div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button name="btnQuote" class="btn btn-primary" onclick="GetQuote();">Quote Me!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->
+
+
+    <!--<div class="row">
+        <div id="conteudoquote" hidden>
+            <div id="TitleContainer">
+                Supercalifragilistic quote machine
+            </div>
+            <div id="boxtoRotate" class="col-md-8 col-md-offset-4">
+                <div id="titleQuote" class="col-md-4"></div>
+                <div class="row">
+                    <div id="contentQuote" class="col-md-4"></div>
+                </div>
+                
+                
+            </div>
+            <div class="col-md-12 col-md-offset-5">
+                <button name="btnQuote" class="btn btn-primary" onclick="GetQuote();">Hit Me!</button>
+            </div>
+        </div>
+    </div>-->
+
+
+
+    #titleQuote {
+            font-family: 'Dosis', sans-serif;
+            font-size: 32px;
+            background: lightsteelblue;
+        }
+        
+        #contentQuote {
+            font-family: 'Dosis', sans-serif;
+            font-size: 18px;
+            text-align: justify;
+            font-style: italic;
+            background: lightsteelblue;
+        }
+
+
+
+         #TitleContainer {
+            font-family: 'Oxygen', sans-serif;
+            font-size: 36px;
+        }
+
+
+
+        async_requests.push($.ajax({
+                    url:apiLocation,
+                    data:{
+                        action:"query",
+                        titles:itemsSearch[i].pageTitle,
+                        prop:'imageinfo',
+                        iiprop:'url',
+                        format:'json'
+                    },
+                    dataType:'jsonp'
+                    //success: function(x){
+                        //console.log("getWikiMediaInfo result"+x);
+                   //     responses.push(x);
+                   // },
+                    //error:function(valuerequest,valuestatus,valueerror){
+
+                    //    $("#ConteudoWiki").append("<div class=\"animated swing\"><h3>Something went horribly wrong</h3></div>");
+                    //}
+               }));
