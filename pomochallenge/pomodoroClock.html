@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
     <meta description="freecodecamp pomodoro clock">
-    <script src="./node_modules/jquery/dist/jquery.js"></script>
-    <script src="./node_modules/bootstrap/dist/js/bootstrap.js"></script>
-    <link href="./node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-    <link href="./node_modules/animate.css/animate.css" rel="stylesheet">
+    <script src=".././node_modules/jquery/dist/jquery.js"></script>
+    <script src=".././node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <link href=".././node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href=".././node_modules/animate.css/animate.css" rel="stylesheet">
     <!-- fonts-->
     <link href="https://fonts.googleapis.com/css?family=Bungee|Roboto+Condensed" rel="stylesheet">
     <!---->
@@ -98,10 +98,13 @@
           font-size:16px;
       
       }
-      .btn,btn-default{
+      .btnswag{
           background-color:#00816A;
           color:#fff;
+          font-family:'Roboto Condensed',sans-serif;
+      
       }
+      
       .pTitle{
           font-family:'Bungee',cursive;
           text-align:center;
@@ -116,23 +119,55 @@
   <body>
     <script>
       var dummy;
+      var simRunning=false;
+      var timeToUse;
+      var pomoTimetoUse;
+      var pTimerObject={Hours:0,minutes:0,seconds: 0,breakHours:0,breakMinutes:0,breakSeconds:0};
       
       
+      $(function(){
+          dummy= setTimeout(onPreloadTimeOut,2000);
+      });
       
-      $(document).ready(function(){
-          dummy = setTimeout(onPreloadTimeOut, 5000);
-      })
+      /**
+      function to parse the time that is remaining on the clock
+      @param valueTimeRemaining argument to contain the value of time remaining on the clock
+      @return parsed date object to be handled on the frontend
+      **/
+      function timeRemaining(valueTimeRemaining){
+          var tmptime,tmpSeconds,tmpMinutes,tmpHours;
+          tmptime= Date.parse(valueTimeRemaining)-Date.parse(new Date());
+          tmpSeconds= Math.floor((tmptime/1000)%60);
+          tmpMinutes= Math.floor((tmptime/1000/60)%60);
+          tmpHours= Math.floor((tmptime/(1000*60*60))%24);
+          return {
+              'itemTime':tmptime,
+              'hours':tmpHours,
+              'minutes':tmpMinutes,
+              'seconds':tmpSeconds
+              };
+      
+      }
       /*
       function to register all atributes(yeahh 2016 and using jquery cause i'm lazy....)
       */
       function registerElementProps(){
-           //hide all them pluses and minuses
+          //hide all them pluses and minuses
           $("#clockHours").hide();
           $("#clockMinutes").hide();
           $("#pomodoroHours").hide();
           $("#pomodoroMinutes").hide();
           //
       
+      
+          //set all elements values
+          $("#SpHours").text("00");
+          $("#spMinutes").text("25");
+          $("#spSeconds").text("60");
+          $("#pomoHours").text("00");
+          $("#pomoMinutes").text("05");
+          $("#pomoSeconds").text("60");
+          //
           //check div hours is visible and act accordingly
           $("#hContainer").click(function(){
               //check visibility
@@ -153,8 +188,8 @@
               else{
                   $("#clockMinutes").hide().removeClass('hidden').fadeIn('slow');
               }
-              
-              
+      
+      
           });
           //
           //same as above this time for the break timmer
@@ -166,7 +201,7 @@
               else{
                   $("#pomodoroHours").hide().removeClass('hidden').fadeIn('slow');
               }
-              
+      
           });
           //
           // minutes break timer visibility checker
@@ -177,77 +212,306 @@
               else{
                   $("#pomodoroMinutes").hide().removeClass('hidden').fadeIn('slow');
               }
-              
-              
+      
+      
           });
           //
       }
+      
+      /**
+      function to initiate the pomodoro
+      **/
+      function initiatePomodoro(){
+          try{
+              if (simRunning){
+                  return;
+              }
+      
+              // don't like the new stuff but mehhhh go to take it
+              var thours= parseInt($("#SpHours").text());
+              var tmin= parseInt($("#spMinutes").text());
+              var tsecs= parseInt($("#spSeconds").text());
+              // hammering time( adds the current time to the object just to keep stuff simple)
+              pomoTimetoUse.Hours=thours;
+              pomoTimetoUse.minutes=tmin;
+              pomoTimetoUse.seconds=tsecs;
+              pomoTimetoUse.breakHours= parseInt($("#pomoHours").text());
+              pomoTimetoUse.breakMinutes= parseInt($("#pomoMinutes").text());
+              pomoTimetoUse.breakSeconds= parseInt($("#pomoSeconds").text);
+              //
+      
+              // numbskulls implementation of date objects and i too lazy to use moment.js
+              // check if hours is to be accounted
+              if (thours>0){
+                  timeToUse= new Date();
+                  timeToUse.setHours(timeToUse.getHours()+thours);
+                  timeToUse.setMinutes(timeToUse.getMinutes()+tmin);
+                  timeToUse.setSeconds(timeToUse.getSeconds()+tsecs);
+      
+              }
+              else{
+                  timeToUse=new Date(Date.parse(new Date()) + ( tmin * tsecs * 1000));
+              }
+              //
+              // to delete after
+              console.log(" time calc: " + timeToUse);
+              //
+      
+              startClock(timeToUse,'clockContainer');
+      
+          }
+          catch(ex)
+          {
+              console.log("erro initiatePomodoro: " + ex);
+          }
+      
+      
+      
+      }
       /**
       function to handle the the clock startup
-       @param valueTimer item to to be counted down from
-       @param valueComponent item to be changed (either the timer or the break timer)
+          @param valueTimer item to to be counted down from
+          @param valueComponent item to be changed (either the timer or the break timer)
       **/
       function startClock(valueTimer,valueComponent){
-          if (valueComponent===""){
+          function updateClock(){
+      
+                  var tmpTime= timeRemaining(valueTimer);
+      
+                  hoursItem.innerHTML=('0'+tmpTime.hours).slice(-2);
+                  minutesItem.innerHTML=('0'+tmpTime.minutes).slice(-2);
+                  secondsItem.innerHTML=('0'+tmpTime.seconds).slice(-2);
+      
+                  if (tmpTime.itemTime<=0||simRunning===false){
+                      clearInterval(valueInterval);
+      
+      
+                  }
+              }
+          try{
+              // to test if it works again with the break timer
+              if (simRunning){
+                  return;
+              }
+              //
+              simRunning=true;
+      
+              var tmpComponent= document.getElementById(valueComponent);
+              var hoursItem=tmpComponent.querySelector('.hours');
+              var minutesItem= tmpComponent.querySelector('.minutes');
+              var secondsItem= tmpComponent.querySelector('.seconds');
+      
               
-          }
-          else{
+              updateClock();
+              var valueInterval= setInterval(updateClock,1000);
       
           }
+          catch(ex){
+              console.log("ERRO startClock:" + ex);
+      
+          }
+      
+      
       }
-      
+      /**
+      function to handle the timeout from the preloader
+      **/
       function onPreloadTimeOut(){
           $("#preloaderdiv").hide();
+          
           $("#projectContainer").hide().removeClass('hide').fadeIn('slow');
+      
           registerElementProps();            
       }
       
+      /**
+      function to stop the pomodoro
+      **/
+      function stopPomodoro(){
+      
+          if (simRunning){
+              simRunning=false;
+          }
+      }
+      /**
+      function to reset the pomodoro
+      **/
+      function resetPomodoro(){
+          if (!simRunning){
+              //set all elements values
+              $("#SpHours").text("00");
+              $("#spMinutes").text("25");
+              $("#spSeconds").text("60");
+              $("#pomoHours").text("00");
+              $("#pomoMinutes").text("05");
+              $("#pomoSeconds").text("60");
+              //
+      
+          }
+      
+      }
+      /**
+      function to increase ammount
+      **/
+      function increaseValue(value){
+      
+          var tmpNumber=0;
+          if (value.id.startsWith('clock')){
+              if (value.id.endsWith('Hours')){
+                  tmpNumber= $("#SpHours").text();
+              }
+              else{
+                  tmpNumber= $("#spMinutes").text();
+              } 
+          }
+          else{
+              if (value.id.endsWith('Hours')){
+                  tmpNumber= $("#pomoHours").text();
+              }
+              else{
+                  tmpNumber= $("#pomoMinutes").text();
+              } 
+          }    
+          if (tmpNumber<59){
+              tmpNumber++;
+              if (value.id.startsWith('clock')){
+                  if (value.id.endsWith('Hours')){
+                      // cause i'm lazy as frack and it's raining outside
+                      if (tmpNumber>24){
+                          tmpNumber=24;
+                      }
+                      //
+                      $("#SpHours").text(tmpNumber);
+                  }
+                  else{
+                      $("#spMinutes").text(tmpNumber);
+                  }
+      
+              }
+              else{
+                  if (value.id.endsWith('Hours')){
+                      //once again cause i'm lazy as frack and it's saturday and i'm not in the mood to think
+                      if (tmpNumber>24){
+                          tmpNumber=24;
+                      }
+                      //
+                      $("#pomoHours").text(tmpNumber);
+                  }
+                  else{
+                      $("#pomoMinutes").text(tmpNumber);
+                  }
+              }
+      
+          }
+      } 
+      /**
+      function to decrease the ammount
+      **/
+      function decreaseValue(value){
+          var tmpNumber=0;
+          if (value.id.startsWith('clock')){
+              if (value.id.endsWith('Hours')){
+                  tmpNumber= $("#SpHours").text();
+              }
+              else{
+                  tmpNumber= $("#spMinutes").text();
+              } 
+          }
+          else{
+              if (value.id.endsWith('Hours')){
+                  tmpNumber= $("#pomoHours").text();
+              }
+              else{
+                  tmpNumber= $("#pomoMinutes").text();
+              } 
+          }    
+          if (tmpNumber>0){
+              tmpNumber--;
+              if (value.id.startsWith('clock')){
+                  if (value.id.endsWith('Hours')){
+                      $("#SpHours").text(tmpNumber);
+                  }
+                  else{
+                      $("#spMinutes").text(tmpNumber);
+                  }
+      
+              }
+              else{
+                  if (value.id.endsWith('Hours')){
+                      $("#pomoHours").text(tmpNumber);
+                  }
+                  else{
+                      $("#pomoMinutes").text(tmpNumber);
+                  }
+              }
+      
+          }
+      }
     </script>
     <div class="loader" id="preloaderdiv"></div>
     <div class="container-fluid" id="projectContainer" hidden>
       <div class="jumbotron">
         <div class="voffset3">
           <div class="pTitle" id="projectTitle">Supercalifragilistic pomodoro Clock
-            <div class="voffset4">
-              <div class="clockswag" id="clockContainer">
-                <div><span class="hours"></span>
-                  <div class="hours" id="hContainer">Hours</div>
-                      <div id="clockHours">
-                        <div class="col-xs-6" id="pSignclockHours"><a class="btn btn-default" href="#" role="button">+</a></div>
-                        <div class="col-xs-6" id="mSignclockHours"><a class="btn btn-default" href="#" role="button">-</a></div>
+            <div class="voffset4" id="containerControls">
+                  <div id="controlsContainer">
+                    <button class="btn btn-default col-xs-6 col-md-4 btn btn-default btnswag" onclick="initiatePomodoro();">Start</button>
+                    <button class="col-xs-6 col-md-4 btn btn-default btnswag" onclick="stopPomodoro();">Stop</button>
+                    <button class="col-xs-6 col-md-4 btn btn-default btnswag" onclick="resetPomodoro();">Reset</button>
+                  </div>
+            </div>
+            <div class="clockswag voffset4" id="clockContainer">
+              <div><span class="hours" id="SpHours"></span>
+                <div class="hours" id="hContainer">Hours</div>
+                    <div id="clockHours">
+                      <div class="col-xs-6" id="pSignclockHours">
+                        <button class="btn btn-default btnswag" onclick="increaseValue(clockHours);">+</button>
                       </div>
-                </div>
-                <div><span class="minutes"></span>
-                  <div class="minutes" id="mContainer">Minutes</div>
-                      <div id="clockMinutes">
-                        <div class="col-xs-6" id="pSignclockMinutes"><a class="btn btn-default" href="#" role="button">+</a></div>
-                        <div class="col-xs-6" id="mSignclockMinutes"><a class="btn btn-default" href="#" role="button">-</a></div>
+                      <div class="col-xs-6" id="mSignclockHours">
+                        <button class="btn btn-default btnswag" onclick="decreaseValue(clockHours);">-</button>
                       </div>
-                </div>
-                <div><span class="seconds"></span>
-                  <div class="seconds" id="sContainer">Seconds</div>
-                </div>
+                    </div>
+              </div>
+              <div><span class="minutes" id="spMinutes"></span>
+                <div class="minutes" id="mContainer">Minutes</div>
+                    <div id="clockMinutes">
+                      <div class="col-xs-6" id="pSignclockMinutes">
+                        <button class="btn btn-default btnswag" onclick="increaseValue(clockMinutes);">+</button>
+                      </div>
+                      <div class="col-xs-6" id="mSignclockMinutes">
+                        <button class="btn btn-default btnswag" onclick="decreaseValue(clockMinutes);">-</button>
+                      </div>
+                    </div>
+              </div>
+              <div><span class="seconds" id="spSeconds"></span>
+                <div class="seconds" id="sContainer">Seconds</div>
               </div>
             </div>
-            <div class="voffset4">
-              <div class="clockswag" id="pomodoroContainer">
-                <div><span class="hours"></span>
-                  <div class="hours" id="pomHours">Hours</div>
-                      <div id="pomodoroHours">
-                        <div class="col-xs-6" id="pSignpomodoroHours"><a class="btn btn-default" href="#" role="button">+</a></div>
-                        <div class="col-xs-6" id="mSignpomodoroHours"><a class="btn btn-default" href="#" role="button">-</a></div>
+            <div class="clockswag" id="pomodoroContainer">
+              <div><span class="hours" id="pomoHours"></span>
+                <div class="hours" id="pomHours">Hours</div>
+                    <div id="pomodoroHours">
+                      <div class="col-xs-6" id="pSignpomodoroHours">
+                        <button class="btn btn-default btnswag" onclick="increaseValue(pomodoroHours);">+</button>
                       </div>
-                </div>
-                <div><span class="minutes"></span>
-                  <div class="minutes" id="pomMin">Minutes</div>
-                      <div id="pomodoroMinutes">
-                        <div class="col-xs-6" id="pSignpomodoroMinutes"><a class="btn btn-default" href="#" role="button">+</a></div>
-                        <div class="col-xs-6" id="mSignpomodoroMinutes"><a class="btn btn-default" href="#" role="button">-</a></div>
+                      <div class="col-xs-6" id="mSignpomodoroHours">
+                        <button class="btn btn-default btnswag" onclick="decreaseValue(pomodoroHours);">-</button>
                       </div>
-                </div>
-                <div><span class="seconds"></span>
-                  <div class="seconds" id="pomSecs">Seconds</div>
-                </div>
+                    </div>
+              </div>
+              <div><span class="minutes" id="pomoMinutes"></span>
+                <div class="minutes" id="pomMin">Minutes</div>
+                    <div id="pomodoroMinutes">
+                      <div class="col-xs-6" id="pSignpomodoroMinutes">
+                        <button class="btn btn-default btnswag" onclick="increaseValue(pomodoroMinutes);">+</button>
+                      </div>
+                      <div class="col-xs-6" id="mSignpomodoroMinutes">
+                        <button class="btn btn-default btnswag" onclick="decreaseValue(pomodoroMinutes);">-</button>
+                      </div>
+                    </div>
+              </div>
+              <div><span class="seconds" id="pomoSeconds"></span>
+                <div class="seconds" id="pomSecs">Seconds</div>
               </div>
             </div>
           </div>
