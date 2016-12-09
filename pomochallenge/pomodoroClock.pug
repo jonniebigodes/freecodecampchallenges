@@ -201,7 +201,32 @@ html(lang="en")
                     showCursor:false,
                     cursor:"|",
                     loop:false,
-                    loopCount:false
+                    loopCount:false,
+                    
+                    onStringTyped: function(index) {
+                        //console.log("currentString: "+index );
+                        switch(index){
+                            case 2:
+                            case 3:
+                                $("#OneTomatoRunning").hide();
+                                $("#TwoTomatoesRunning").hide().removeClass('hidden').fadeIn();
+                                $("#TwoTomatoesRunning").addClass('animated bounce');
+                                break;
+                            case 4:
+                            case 5:
+                                $("#TwoTomatoesRunning").hide();
+                                $("#ThreeTomatoesRunning").hide().removeClass('hidden').fadeIn();
+                                $("#ThreeTomatoesRunning").addClass('animated bounce');
+                                break;
+                            case 6:
+                            case 7:
+                                $("#ThreeTomatoesRunning").hide();
+                                $("#FourTomatoesRunning").hide().removeClass('hidden').fadeIn();
+                                $("#FourTomatoesRunning").addClass('animated bounce');
+                                break;
+
+                        }
+                    }
                 });
                 
             }
@@ -295,10 +320,27 @@ html(lang="en")
                 });
                 //
             }
+            /**
+            function to initiate the break clock and hide the timer clock
+            **/
             function startBreakClock(){
                 try{
+                    $("#pomodoroContainer").removeClass("animated bounceOutDown");
+                    $("#pomoTextTimer").removeClass("animated bounceOutDown");
 
-                   
+                    $("#pomodoroContainer").hide().removeClass('hidden').fadeIn();
+                    $("#pomoTextTimer").hide().hide().removeClass('hidden').fadeIn();
+
+                    $("#clockContainer").addClass("animated bounceOutDown");
+                    $("#clockTextTimer").addClass("animated bounceOutDown");
+                    $("#clockContainer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                        $(this).hide();
+                    });
+                    
+                    $("#clockTextTimer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                        $(this).hide();
+                    });
+                    
                     // don't like the new stuff but mehhhh go to take it
                     var thours= pTimerObject.breakHours;
                     var tmin=pTimerObject.breakMinutes;
@@ -345,12 +387,24 @@ html(lang="en")
                 
                 stoppedClock= false;
                 simRunning=true;
+                // set object properties
                 pTimerObject.timerHours=parseInt($("#SpHours").text());
                 pTimerObject.timerMinutes=parseInt($("#spMinutes").text());
                 pTimerObject.timerSeconds=parseInt($("#spSeconds").text());;
                 pTimerObject.breakHours= parseInt($("#pomoHours").text());
                 pTimerObject.breakMinutes= parseInt($("#pomoMinutes").text());
                 pTimerObject.breakSeconds= parseInt($("#pomoSeconds").text());
+                //
+                $("#pomodoroContainer").addClass("animated bounceOutDown");
+                $("#pomoTextTimer").addClass("animated bounceOutDown");
+                $("#pomoTextTimer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                    $(this).hide();
+                });
+                $("#pomodoroContainer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                    $(this).hide();
+                });
+                //$("#pomodoroContainer").hide();
+                //$("#pomoTextTimer").hide();
                 initiatePomodoro();
             }
             /**
@@ -482,13 +536,43 @@ html(lang="en")
                 if (simRunning){
                     stoppedClock= true;
                     simRunning=false;
-                    //
+                    //roll back to before..get the text that was assigned not the defined when started
+                    /*
                     $("#SpHours").text(pTimerObject.timerHours);
                     $("#spMinutes").text(pTimerObject.timerMinutes);
                     $("#spSeconds").text(pTimerObject.timerSeconds);
                     $("#pomoHours").text(pTimerObject.breakHours);
                     $("#pomoMinutes").text(pTimerObject.breakMinutes);
                     $("#pomoSeconds").text(pTimerObject.breakSeconds);
+                    //
+
+                    */
+                    if ($("#clockContainer").is(":visible")){
+                        
+                        $("#pomodoroContainer").removeClass("animated bounceOutDown");
+                        $("#pomoTextTimer").removeClass("animated bounceOutDown");
+                        
+                        
+                        
+                        
+                        
+                        $("#pomodoroContainer").hide().removeClass('hidden').fadeIn('slow');
+                        $("#pomoTextTimer").hide().removeClass('hidden').fadeIn('slow');
+                        
+                        //$("#pomodoroContainer").hide().removeClass('hide').fadeIn('slow');
+                        //$("#pomoTextTimer").hide().removeClass('hide').fadeIn('slow');
+
+                    }
+                    else{
+                        $("#clockContainer").removeClass("animated bounceOutDown");
+                        $("#clockTextTimer").removeClass("animated bounceOutDown");
+
+                        $("#clockContainer").hide().removeClass('hidden').fadeIn('slow');
+                        $("#clockTextTimer").hide().removeClass('hidden').fadeIn('slow');
+                        //$("#clockContainer").hide().removeClass('hide').fadeIn('slow');
+                        //$("#clockTextTimer").hide().removeClass('hide').fadeIn('slow');
+                    }
+                    
                 }
                 
             }
@@ -505,7 +589,24 @@ html(lang="en")
                     $("#pomoMinutes").text("05");
                     $("#pomoSeconds").text("60");
                     //
+                    // check element visibility
+                    if ($("#clockContainer").is(":visible")){
+                        $("#pomodoroContainer").removeClass("animated bounceOutDown");
+                        $("#pomoTextTimer").removeClass("animated bounceOutDown")
+                        
+                        $("#pomodoroContainer").hide().removeClass('hide').fadeIn('slow');
+                        $("#pomoTextTimer").hide().removeClass('hide').fadeIn('slow');
 
+                    }
+                    else{
+                        
+                        $("#clockContainer").removeClass("animated bounceOutDown");
+                        $("#clockTextTimer").removeClass("animated bounceOutDown")
+                        
+                        $("#clockContainer").hide().removeClass('hide').fadeIn('slow');
+                        $("#clockTextTimer").hide().removeClass('hide').fadeIn('slow');
+                    }
+                    //
                 }
 
             }
@@ -622,9 +723,20 @@ html(lang="en")
 
         mixin LoaderContent(valueItem)
             div(id="TextLoader",class="loaderswag")
-            div(id="TomatoRunning")
+            div(id="OneTomatoRunning")
              img(src="https://openclipart.org/download/225413/mini-tomato.svg",width="200px",height="200px")
-             
+            div(id="TwoTomatoesRunning" hidden)
+             img(src="https://openclipart.org/download/225413/mini-tomato.svg",width="200px",height="200px")
+             img(src="https://openclipart.org/download/225413/mini-tomato.svg",width="200px",height="200px")
+            div(id="ThreeTomatoesRunning" hidden)
+             img(src="https://openclipart.org/download/225413/mini-tomato.svg",width="200px",height="200px")
+             img(src="https://openclipart.org/download/225413/mini-tomato.svg",width="200px",height="200px")
+             img(src="https://openclipart.org/download/225413/mini-tomato.svg",width="200px",height="200px")
+            div(id="FourTomatoesRunning" hidden)
+             img(src="https://openclipart.org/download/225413/mini-tomato.svg",width="200px",height="200px")
+             img(src="https://openclipart.org/download/225413/mini-tomato.svg",width="200px",height="200px")
+             img(src="https://openclipart.org/download/225413/mini-tomato.svg",width="200px",height="200px")
+             img(src="https://openclipart.org/download/225413/mini-tomato.svg",width="200px",height="200px") 
         div(class="loader",id="preloaderdiv")
             +LoaderContent("PreloadingContainer")
 
@@ -652,7 +764,7 @@ html(lang="en")
                                 div(class="seconds",id="sContainer") Seconds
 
                         div(class="row voffset3")
-                            div(class="clockswag")
+                            div(class="clockswag",id="clockTextTimer")
                                 |Timer
                         div(id="pomodoroContainer",class="clockswag voffset4")
                            
@@ -668,7 +780,7 @@ html(lang="en")
                                 span(class="seconds",id="pomoSeconds")
                                 div(class="seconds",id="pomSecs") Seconds
                         div(class="row voffset4")
-                            div(class="clockswag")
+                            div(class="clockswag",id="pomoTextTimer")
                                 |Break Timer
 
 
