@@ -324,6 +324,7 @@ html(lang="en")
             function to initiate the break clock and hide the timer clock
             **/
             function startBreakClock(){
+                
                 try{
                     $("#pomodoroContainer").removeClass("animated bounceOutDown");
                     $("#pomoTextTimer").removeClass("animated bounceOutDown");
@@ -395,6 +396,7 @@ html(lang="en")
                 pTimerObject.breakMinutes= parseInt($("#pomoMinutes").text());
                 pTimerObject.breakSeconds= parseInt($("#pomoSeconds").text());
                 //
+                
                 $("#pomodoroContainer").addClass("animated bounceOutDown");
                 $("#pomoTextTimer").addClass("animated bounceOutDown");
                 $("#pomoTextTimer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
@@ -412,7 +414,22 @@ html(lang="en")
             **/
             function initiatePomodoro(){
                 try{
-                    
+                    if (simRunning){
+                        $("#clockContainer").removeClass("animated bounceOutDown");
+                        $("#clockTextTimer").removeClass("animated bounceOutDown");
+
+                        $("#clockContainer").hide().removeClass('hidden').fadeIn('slow');
+                        $("#clockTextTimer").hide().removeClass('hidden').fadeIn('slow');
+
+                        $("#pomodoroContainer").addClass("animated bounceOutDown");
+                        $("#pomoTextTimer").addClass("animated bounceOutDown");
+                        $("#pomoTextTimer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                            $(this).hide();
+                        });
+                        $("#pomodoroContainer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                            $(this).hide();
+                        });
+                    }
 
                     // don't like the new stuff but mehhhh go to take it
                     var thours= pTimerObject.timerHours;
@@ -435,9 +452,7 @@ html(lang="en")
                         timeToUse=new Date(Date.parse(new Date()) + ( tmin * tsecs * 1000));
                     }
                     //
-                    // to delete after
-                    //console.log(" time calc: " + timeToUse);
-                    //
+                    
 
                     startClock(timeToUse,'clockContainer');
 
@@ -476,7 +491,8 @@ html(lang="en")
                                 
                             }
                             else{
-                               initiatePomodoro();
+                                
+                                initiatePomodoro();
                             }
 
                         }
@@ -536,25 +552,16 @@ html(lang="en")
                 if (simRunning){
                     stoppedClock= true;
                     simRunning=false;
-                    //roll back to before..get the text that was assigned not the defined when started
-                    /*
-                    $("#SpHours").text(pTimerObject.timerHours);
-                    $("#spMinutes").text(pTimerObject.timerMinutes);
-                    $("#spSeconds").text(pTimerObject.timerSeconds);
-                    $("#pomoHours").text(pTimerObject.breakHours);
-                    $("#pomoMinutes").text(pTimerObject.breakMinutes);
-                    $("#pomoSeconds").text(pTimerObject.breakSeconds);
+                   
+                    
+                    
                     //
 
-                    */
+                   
                     if ($("#clockContainer").is(":visible")){
                         
                         $("#pomodoroContainer").removeClass("animated bounceOutDown");
                         $("#pomoTextTimer").removeClass("animated bounceOutDown");
-                        
-                        
-                        
-                        
                         
                         $("#pomodoroContainer").hide().removeClass('hidden').fadeIn('slow');
                         $("#pomoTextTimer").hide().removeClass('hidden').fadeIn('slow');
@@ -572,6 +579,12 @@ html(lang="en")
                         //$("#clockContainer").hide().removeClass('hide').fadeIn('slow');
                         //$("#clockTextTimer").hide().removeClass('hide').fadeIn('slow');
                     }
+                    $("#SpHours").text(pTimerObject.timerHours);
+                    $("#spMinutes").text(pTimerObject.timerMinutes);
+                    $("#spSeconds").text(pTimerObject.timerSeconds);
+                    $("#pomoHours").text(pTimerObject.breakHours);
+                    $("#pomoMinutes").text(pTimerObject.breakMinutes);
+                    $("#pomoSeconds").text(pTimerObject.breakSeconds);
                     
                 }
                 
