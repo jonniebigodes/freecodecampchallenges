@@ -24,6 +24,37 @@ html(lang="en")
         //
 
         style.
+            .frameContentText{
+                top: 0;
+                left:0;
+                bottom:0;
+                right:0;
+                color: #33CCFF;
+            }
+            .frameContent{
+                max-width:640px;
+                max-height:480px;
+                overflow:auto;
+                margin:auto;
+                position:absolute;
+                top: 0;
+                left:0;
+                bottom:0;
+                right:0;
+                color: #33CCFF;
+                
+                
+                /*margin: auto;
+                left:50%;
+                top: 50%;
+                
+                left:50%;
+                top: 50%;
+                -webkit-transform: translate(50%,50%);
+                transform:translate(50%,50%);*/
+                
+
+            }
             .loaderswag{
                 
                 font-size:1.5em;
@@ -172,13 +203,15 @@ html(lang="en")
     body
 
         script.
+            // class vars for the project
+            var numIterations=0;
             var dummy;
             var simRunning=false;
             var stoppedClock= false;
             var timeToUse;
             var itemsLoaderArray=["One....","One tomato","Two....","Two tomatoes","Three....","Three Tomatoes","Four....","Four Tomatoes"];
             var pTimerObject={timerHours:0,timerMinutes:0,timerSeconds: 0,breakHours:0,breakMinutes:0,breakSeconds:0};
-           
+            //
             /**
             document ready function
             **/
@@ -320,12 +353,64 @@ html(lang="en")
                 });
                 //
             }
+
+            // cause i'm sick as hell and gonna put this on a separate function
+            /**
+            function to add the sound of sound notification
+            **/
+            function notifyBreakTime(){
+                $("#notification").hide().removeClass('hide').fadeIn();
+                $("#notification").append("<div class=\"frameContentText\" id=\"textContent\"></div>");
+                $("#notification").append("<iframe class=\"embed-responsive-item frameContent\" src=\"https://www.youtube.com/embed/b8m9zhNAgKs\?rel=0&autoplay=1&start=0&end=60\" frameborder=\"0\"></iframe>");
+                $("#textContent").typed({
+                    strings:["Shutdown Brain... ^5000","initiate mannequin mode... ^20000"],
+                    typeSpeed:40,
+                    backDelay:300,
+                    cursor:"|",
+                    loop:false,
+                    showCursor:false,
+                    loopCount:false
+
+                });
+                setTimeout(function(){
+                    
+                    $("#notification").empty();
+                    $("#notification").hide();    
+                },50000);
+                
+               
+                
+            }
+           /**
+            function to add the  sound notification of the timer
+            **/
+            function notifyPomoTimer(){
+                $("#notification").hide().removeClass('hide').fadeIn();
+                $("#notification").append("<div class=\"frameContentText\" id=\"textContent\"></div>");
+                $("#notification").append("<iframe class=\"embed-responsive-item frameContent\" src=\"https://www.youtube.com/embed/QgaRd4d8hOY\?rel=0&autoplay=1&start=12&end=45\" frameborder=\"0\"></iframe>");
+                $("#textContent").typed({
+                    strings:["Mush...^5000","Mush...Mush....^5000","Mush...Mush...Mush... ^5000"],
+                    typeSpeed:40,
+                    backDelay:300,
+                    cursor:"|",
+                    loop:false,
+                    showCursor:false,
+                    loopCount:false
+
+                });
+                setTimeout(function(){
+                    
+                    $("#notification").empty();
+                    $("#notification").hide();    
+                },50000);
+            }
             /**
             function to initiate the break clock and hide the timer clock
             **/
             function startBreakClock(){
                 
                 try{
+                    // sets selectors for props
                     $("#pomodoroContainer").removeClass("animated bounceOutDown");
                     $("#pomoTextTimer").removeClass("animated bounceOutDown");
 
@@ -341,7 +426,12 @@ html(lang="en")
                     $("#clockTextTimer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
                         $(this).hide();
                     });
-                    
+                    //
+
+                    // notify user that the timer ran out and it's break time...fo shizzle
+                    notifyBreakTime();
+                    //
+
                     // don't like the new stuff but mehhhh go to take it
                     var thours= pTimerObject.breakHours;
                     var tmin=pTimerObject.breakMinutes;
@@ -430,6 +520,13 @@ html(lang="en")
                             $(this).hide();
                         });
                     }
+                    // check if the timer has run at least once to show the notification
+                    if (numIterations>0){
+                        notifyPomoTimer();
+                    }
+                    //
+                   
+
 
                     // don't like the new stuff but mehhhh go to take it
                     var thours= pTimerObject.timerHours;
@@ -453,6 +550,9 @@ html(lang="en")
                     }
                     //
                     
+                    // increase the control var  for the notifications
+                    numIterations++;
+                    //
 
                     startClock(timeToUse,'clockContainer');
 
@@ -525,7 +625,7 @@ html(lang="en")
                 $("#preloaderdiv").hide();
                 
                 $("#projectContainer").hide().removeClass('hide').fadeIn('slow');
-
+                $("#notification").hide();
                 registerElementProps();
 
                 // add tooltips
@@ -548,16 +648,13 @@ html(lang="en")
             function to stop the pomodoro
             **/
             function stopPomodoro(){
-                
+                // check if is running
                 if (simRunning){
                     stoppedClock= true;
                     simRunning=false;
-                   
-                    
-                    
-                    //
-
-                   
+                    numIterations=0;
+                                      
+                    // check visibility      
                     if ($("#clockContainer").is(":visible")){
                         
                         $("#pomodoroContainer").removeClass("animated bounceOutDown");
@@ -579,13 +676,15 @@ html(lang="en")
                         //$("#clockContainer").hide().removeClass('hide').fadeIn('slow');
                         //$("#clockTextTimer").hide().removeClass('hide').fadeIn('slow');
                     }
+                    //
+                    // re assing text
                     $("#SpHours").text(pTimerObject.timerHours);
                     $("#spMinutes").text(pTimerObject.timerMinutes);
                     $("#spSeconds").text(pTimerObject.timerSeconds);
                     $("#pomoHours").text(pTimerObject.breakHours);
                     $("#pomoMinutes").text(pTimerObject.breakMinutes);
                     $("#pomoSeconds").text(pTimerObject.breakSeconds);
-                    
+                    //
                 }
                 
             }
@@ -797,7 +896,7 @@ html(lang="en")
                                 |Break Timer
 
 
-    
+            div(id="notification" class="embed-responsive embed-responsive-16by9" width="640" height="480")
     div(class="footer",style="text-align: center") Made by: #{''}
         a(href="http://codepen.io/jonniebigodes/" target="_blank") Jonniebigodes
     //

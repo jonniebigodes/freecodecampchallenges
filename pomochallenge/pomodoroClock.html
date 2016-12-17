@@ -15,6 +15,37 @@
     <link href="https://fonts.googleapis.com/css?family=Bungee|Roboto+Condensed|Orbitron" rel="stylesheet">
     <!---->
     <style>
+      .frameContentText{
+          top: 0;
+          left:0;
+          bottom:0;
+          right:0;
+          color: #33CCFF;
+      }
+      .frameContent{
+          max-width:640px;
+          max-height:480px;
+          overflow:auto;
+          margin:auto;
+          position:absolute;
+          top: 0;
+          left:0;
+          bottom:0;
+          right:0;
+          color: #33CCFF;
+          
+          
+          /*margin: auto;
+          left:50%;
+          top: 50%;
+          
+          left:50%;
+          top: 50%;
+          -webkit-transform: translate(50%,50%);
+          transform:translate(50%,50%);*/
+          
+      
+      }
       .loaderswag{
           
           font-size:1.5em;
@@ -164,556 +195,622 @@
   </head>
   <body>
     <script>
-      var dummy;
-      var simRunning=false;
-      var stoppedClock= false;
-      var timeToUse;
-      var itemsLoaderArray=["One....","One tomato","Two....","Two tomatoes","Three....","Three Tomatoes","Four....","Four Tomatoes"];
-      var pTimerObject={timerHours:0,timerMinutes:0,timerSeconds: 0,breakHours:0,breakMinutes:0,breakSeconds:0};
+       // class vars for the project
+       var numIterations=0;
+       var dummy;
+       var simRunning=false;
+       var stoppedClock= false;
+       var timeToUse;
+       var itemsLoaderArray=["One....","One tomato","Two....","Two tomatoes","Three....","Three Tomatoes","Four....","Four Tomatoes"];
+       var pTimerObject={timerHours:0,timerMinutes:0,timerSeconds: 0,breakHours:0,breakMinutes:0,breakSeconds:0};
+       //
+       /**
+       document ready function
+       **/
+       $(function(){
+           
+           loadItems();
+           dummy= setTimeout(onPreloadTimeOut,12000);
+           
+       });
+       /**
+       function to handle the items for the preloader
+       **/
+       function loadItems(){
       
+           
+           $("#TextLoader").typed({
+               strings:itemsLoaderArray,
+               typeSpeed:30,
+               backDelay:200,
+               showCursor:false,
+               cursor:"|",
+               loop:false,
+               loopCount:false,
+               
+               onStringTyped: function(index) {
+                   //console.log("currentString: "+index );
+                   switch(index){
+                       case 2:
+                       case 3:
+                           $("#OneTomatoRunning").hide();
+                           $("#TwoTomatoesRunning").hide().removeClass('hidden').fadeIn();
+                           $("#TwoTomatoesRunning").addClass('animated bounce');
+                           break;
+                       case 4:
+                       case 5:
+                           $("#TwoTomatoesRunning").hide();
+                           $("#ThreeTomatoesRunning").hide().removeClass('hidden').fadeIn();
+                           $("#ThreeTomatoesRunning").addClass('animated bounce');
+                           break;
+                       case 6:
+                       case 7:
+                           $("#ThreeTomatoesRunning").hide();
+                           $("#FourTomatoesRunning").hide().removeClass('hidden').fadeIn();
+                           $("#FourTomatoesRunning").addClass('animated bounce');
+                           break;
+      
+                   }
+               }
+           });
+           
+       }
+      
+      
+       /**
+       function to parse the time that is remaining on the clock
+       @param valueTimeRemaining argument to contain the value of time remaining on the clock
+       @return parsed date object to be handled on the frontend
+       **/
+       function timeRemaining(valueTimeRemaining){
+           var tmptime,tmpSeconds,tmpMinutes,tmpHours;
+           tmptime= Date.parse(valueTimeRemaining)-Date.parse(new Date());
+           tmpSeconds= Math.floor((tmptime/1000)%60);
+           tmpMinutes= Math.floor((tmptime/1000/60)%60);
+           tmpHours= Math.floor((tmptime/(1000*60*60))%24);
+           return {
+               'itemTime':tmptime,
+               'hours':tmpHours,
+               'minutes':tmpMinutes,
+               'seconds':tmpSeconds
+               };
+      
+       }
+       /*
+       function to register all atributes(yeahh 2016 and using jquery cause i'm lazy....)
+       */
+       function registerElementProps(){
+           //hide all them pluses and minuses
+           $("#clockHours").hide();
+           $("#clockMinutes").hide();
+           $("#pomodoroHours").hide();
+           $("#pomodoroMinutes").hide();
+           //
+      
+      
+           //set all elements values
+           $("#SpHours").text("00");
+           $("#spMinutes").text("25");
+           $("#spSeconds").text("60");
+           $("#pomoHours").text("00");
+           $("#pomoMinutes").text("05");
+           $("#pomoSeconds").text("60");
+           //
+           //check div hours is visible and act accordingly
+           $("#hContainer").click(function(){
+               //check visibility
+               if($("#clockHours").is(":visible")){
+                   $("#clockHours").hide("slow");
+               }
+               else{
+                   $("#clockHours").hide().removeClass('hidden').fadeIn('slow');
+               }
+               //
+           });
+           //
+           // check if div minutes is visible and act accordingly
+           $("#mContainer").click(function(){
+               if($("#clockMinutes").is(":visible")){
+                   $("#clockMinutes").hide("slow");
+               }
+               else{
+                   $("#clockMinutes").hide().removeClass('hidden').fadeIn('slow');
+               }
+      
+      
+           });
+           //
+           //same as above this time for the break timmer
+           // hours break timer visibility checker
+           $("#pomHours").click(function(){
+               if ($("#pomodoroHours").is(":visible")){
+                   $("#pomodoroHours").hide("slow");
+               }
+               else{
+                   $("#pomodoroHours").hide().removeClass('hidden').fadeIn('slow');
+               }
+      
+           });
+           //
+           // minutes break timer visibility checker
+           $("#pomMin").click(function(){
+               if ($("#pomodoroMinutes").is(":visible")){
+                   $("#pomodoroMinutes").hide("slow");
+               }
+               else{
+                   $("#pomodoroMinutes").hide().removeClass('hidden').fadeIn('slow');
+               }
+      
+      
+           });
+           //
+       }
+      
+       // cause i'm sick as hell and gonna put this on a separate function
+       /**
+       function to add the sound of sound notification
+       **/
+       function notifyBreakTime(){
+           $("#notification").hide().removeClass('hide').fadeIn();
+           $("#notification").append("<div class=\"frameContentText\" id=\"textContent\"></div>");
+           $("#notification").append("<iframe class=\"embed-responsive-item frameContent\" src=\"https://www.youtube.com/embed/b8m9zhNAgKs\?rel=0&autoplay=1&start=0&end=60\" frameborder=\"0\"></iframe>");
+           $("#textContent").typed({
+               strings:["Shutdown Brain... ^5000","initiate mannequin mode... ^20000"],
+               typeSpeed:40,
+               backDelay:300,
+               cursor:"|",
+               loop:false,
+               showCursor:false,
+               loopCount:false
+      
+           });
+           setTimeout(function(){
+               
+               $("#notification").empty();
+               $("#notification").hide();    
+           },50000);
+           
+          
+           
+       }
       /**
-      document ready function
-      **/
-      $(function(){
-          
-          loadItems();
-          dummy= setTimeout(onPreloadTimeOut,12000);
-          
-      });
-      /**
-      function to handle the items for the preloader
-      **/
-      function loadItems(){
+       function to add the  sound notification of the timer
+       **/
+       function notifyPomoTimer(){
+           $("#notification").hide().removeClass('hide').fadeIn();
+           $("#notification").append("<div class=\"frameContentText\" id=\"textContent\"></div>");
+           $("#notification").append("<iframe class=\"embed-responsive-item frameContent\" src=\"https://www.youtube.com/embed/QgaRd4d8hOY\?rel=0&autoplay=1&start=12&end=45\" frameborder=\"0\"></iframe>");
+           $("#textContent").typed({
+               strings:["Mush...^5000","Mush...Mush....^5000","Mush...Mush...Mush... ^5000"],
+               typeSpeed:40,
+               backDelay:300,
+               cursor:"|",
+               loop:false,
+               showCursor:false,
+               loopCount:false
       
-          
-          $("#TextLoader").typed({
-              strings:itemsLoaderArray,
-              typeSpeed:30,
-              backDelay:200,
-              showCursor:false,
-              cursor:"|",
-              loop:false,
-              loopCount:false,
-              
-              onStringTyped: function(index) {
-                  //console.log("currentString: "+index );
-                  switch(index){
-                      case 2:
-                      case 3:
-                          $("#OneTomatoRunning").hide();
-                          $("#TwoTomatoesRunning").hide().removeClass('hidden').fadeIn();
-                          $("#TwoTomatoesRunning").addClass('animated bounce');
-                          break;
-                      case 4:
-                      case 5:
-                          $("#TwoTomatoesRunning").hide();
-                          $("#ThreeTomatoesRunning").hide().removeClass('hidden').fadeIn();
-                          $("#ThreeTomatoesRunning").addClass('animated bounce');
-                          break;
-                      case 6:
-                      case 7:
-                          $("#ThreeTomatoesRunning").hide();
-                          $("#FourTomatoesRunning").hide().removeClass('hidden').fadeIn();
-                          $("#FourTomatoesRunning").addClass('animated bounce');
-                          break;
+           });
+           setTimeout(function(){
+               
+               $("#notification").empty();
+               $("#notification").hide();    
+           },50000);
+       }
+       /**
+       function to initiate the break clock and hide the timer clock
+       **/
+       function startBreakClock(){
+           
+           try{
+               // sets selectors for props
+               $("#pomodoroContainer").removeClass("animated bounceOutDown");
+               $("#pomoTextTimer").removeClass("animated bounceOutDown");
       
-                  }
-              }
-          });
-          
-      }
+               $("#pomodoroContainer").hide().removeClass('hidden').fadeIn();
+               $("#pomoTextTimer").hide().hide().removeClass('hidden').fadeIn();
       
+               $("#clockContainer").addClass("animated bounceOutDown");
+               $("#clockTextTimer").addClass("animated bounceOutDown");
+               $("#clockContainer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                   $(this).hide();
+               });
+               
+               $("#clockTextTimer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                   $(this).hide();
+               });
+               //
       
-      /**
-      function to parse the time that is remaining on the clock
-      @param valueTimeRemaining argument to contain the value of time remaining on the clock
-      @return parsed date object to be handled on the frontend
-      **/
-      function timeRemaining(valueTimeRemaining){
-          var tmptime,tmpSeconds,tmpMinutes,tmpHours;
-          tmptime= Date.parse(valueTimeRemaining)-Date.parse(new Date());
-          tmpSeconds= Math.floor((tmptime/1000)%60);
-          tmpMinutes= Math.floor((tmptime/1000/60)%60);
-          tmpHours= Math.floor((tmptime/(1000*60*60))%24);
-          return {
-              'itemTime':tmptime,
-              'hours':tmpHours,
-              'minutes':tmpMinutes,
-              'seconds':tmpSeconds
-              };
+               // notify user that the timer ran out and it's break time...fo shizzle
+               notifyBreakTime();
+               //
       
-      }
-      /*
-      function to register all atributes(yeahh 2016 and using jquery cause i'm lazy....)
-      */
-      function registerElementProps(){
-          //hide all them pluses and minuses
-          $("#clockHours").hide();
-          $("#clockMinutes").hide();
-          $("#pomodoroHours").hide();
-          $("#pomodoroMinutes").hide();
-          //
+               // don't like the new stuff but mehhhh go to take it
+               var thours= pTimerObject.breakHours;
+               var tmin=pTimerObject.breakMinutes;
+               var tsecs=  pTimerObject.breakSeconds;
+               // hammering time( adds the current time to the object just to keep stuff simple)
+               
+               //
       
+               // numbskulls implementation of date objects and i too lazy to use moment.js
+               // check if hours is to be accounted
+               if (thours>0){
+                   timeToUse= new Date();
+                   timeToUse.setHours(timeToUse.getHours()+thours);
+                   timeToUse.setMinutes(timeToUse.getMinutes()+tmin);
+                   timeToUse.setSeconds(timeToUse.getSeconds()+tsecs);
       
-          //set all elements values
-          $("#SpHours").text("00");
-          $("#spMinutes").text("25");
-          $("#spSeconds").text("60");
-          $("#pomoHours").text("00");
-          $("#pomoMinutes").text("05");
-          $("#pomoSeconds").text("60");
-          //
-          //check div hours is visible and act accordingly
-          $("#hContainer").click(function(){
-              //check visibility
-              if($("#clockHours").is(":visible")){
-                  $("#clockHours").hide("slow");
-              }
-              else{
-                  $("#clockHours").hide().removeClass('hidden').fadeIn('slow');
-              }
-              //
-          });
-          //
-          // check if div minutes is visible and act accordingly
-          $("#mContainer").click(function(){
-              if($("#clockMinutes").is(":visible")){
-                  $("#clockMinutes").hide("slow");
-              }
-              else{
-                  $("#clockMinutes").hide().removeClass('hidden').fadeIn('slow');
-              }
+               }
+               else{
+                   timeToUse=new Date(Date.parse(new Date()) + ( tmin * tsecs * 1000));
+               }
+               //
+               // to delete after
+               //console.log(" time calc: " + timeToUse);
+               //
       
+               startClock(timeToUse,'pomodoroContainer');
       
-          });
-          //
-          //same as above this time for the break timmer
-          // hours break timer visibility checker
-          $("#pomHours").click(function(){
-              if ($("#pomodoroHours").is(":visible")){
-                  $("#pomodoroHours").hide("slow");
-              }
-              else{
-                  $("#pomodoroHours").hide().removeClass('hidden').fadeIn('slow');
-              }
+           }
+           catch(ex)
+           {
+               console.log("erro startPomoClock: " + ex);
+           }
       
-          });
-          //
-          // minutes break timer visibility checker
-          $("#pomMin").click(function(){
-              if ($("#pomodoroMinutes").is(":visible")){
-                  $("#pomodoroMinutes").hide("slow");
-              }
-              else{
-                  $("#pomodoroMinutes").hide().removeClass('hidden').fadeIn('slow');
-              }
+       }
       
+       /**
+       function to set the information about the time to be reused
+       **/
+       function setInfoPomo(){
+           
+           if (simRunning){
+               return;
+           }
+           
+           stoppedClock= false;
+           simRunning=true;
+           // set object properties
+           pTimerObject.timerHours=parseInt($("#SpHours").text());
+           pTimerObject.timerMinutes=parseInt($("#spMinutes").text());
+           pTimerObject.timerSeconds=parseInt($("#spSeconds").text());;
+           pTimerObject.breakHours= parseInt($("#pomoHours").text());
+           pTimerObject.breakMinutes= parseInt($("#pomoMinutes").text());
+           pTimerObject.breakSeconds= parseInt($("#pomoSeconds").text());
+           //
+           
+           $("#pomodoroContainer").addClass("animated bounceOutDown");
+           $("#pomoTextTimer").addClass("animated bounceOutDown");
+           $("#pomoTextTimer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+               $(this).hide();
+           });
+           $("#pomodoroContainer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+               $(this).hide();
+           });
+           //$("#pomodoroContainer").hide();
+           //$("#pomoTextTimer").hide();
+           initiatePomodoro();
+       }
+       /**
+       function to initiate the pomodoro
+       **/
+       function initiatePomodoro(){
+           try{
+               if (simRunning){
+                   $("#clockContainer").removeClass("animated bounceOutDown");
+                   $("#clockTextTimer").removeClass("animated bounceOutDown");
       
-          });
-          //
-      }
-      /**
-      function to initiate the break clock and hide the timer clock
-      **/
-      function startBreakClock(){
-          
-          try{
-              $("#pomodoroContainer").removeClass("animated bounceOutDown");
-              $("#pomoTextTimer").removeClass("animated bounceOutDown");
+                   $("#clockContainer").hide().removeClass('hidden').fadeIn('slow');
+                   $("#clockTextTimer").hide().removeClass('hidden').fadeIn('slow');
       
-              $("#pomodoroContainer").hide().removeClass('hidden').fadeIn();
-              $("#pomoTextTimer").hide().hide().removeClass('hidden').fadeIn();
-      
-              $("#clockContainer").addClass("animated bounceOutDown");
-              $("#clockTextTimer").addClass("animated bounceOutDown");
-              $("#clockContainer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-                  $(this).hide();
-              });
-              
-              $("#clockTextTimer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-                  $(this).hide();
-              });
-              
-              // don't like the new stuff but mehhhh go to take it
-              var thours= pTimerObject.breakHours;
-              var tmin=pTimerObject.breakMinutes;
-              var tsecs=  pTimerObject.breakSeconds;
-              // hammering time( adds the current time to the object just to keep stuff simple)
-              
-              //
-      
-              // numbskulls implementation of date objects and i too lazy to use moment.js
-              // check if hours is to be accounted
-              if (thours>0){
-                  timeToUse= new Date();
-                  timeToUse.setHours(timeToUse.getHours()+thours);
-                  timeToUse.setMinutes(timeToUse.getMinutes()+tmin);
-                  timeToUse.setSeconds(timeToUse.getSeconds()+tsecs);
-      
-              }
-              else{
-                  timeToUse=new Date(Date.parse(new Date()) + ( tmin * tsecs * 1000));
-              }
-              //
-              // to delete after
-              //console.log(" time calc: " + timeToUse);
-              //
-      
-              startClock(timeToUse,'pomodoroContainer');
-      
-          }
-          catch(ex)
-          {
-              console.log("erro startPomoClock: " + ex);
-          }
-      
-      }
-      
-      /**
-      function to set the information about the time to be reused
-      **/
-      function setInfoPomo(){
-          
-          if (simRunning){
-              return;
-          }
-          
-          stoppedClock= false;
-          simRunning=true;
-          // set object properties
-          pTimerObject.timerHours=parseInt($("#SpHours").text());
-          pTimerObject.timerMinutes=parseInt($("#spMinutes").text());
-          pTimerObject.timerSeconds=parseInt($("#spSeconds").text());;
-          pTimerObject.breakHours= parseInt($("#pomoHours").text());
-          pTimerObject.breakMinutes= parseInt($("#pomoMinutes").text());
-          pTimerObject.breakSeconds= parseInt($("#pomoSeconds").text());
-          //
-          console.log("start pomo hours "+pTimerObject.timerHours+" minutes "+ pTimerObject.timerMinutes+" seconds: " +pTimerObject.timerSeconds);
-          console.log("start break hours "+pTimerObject.breakHours+" minutes "+ pTimerObject.breakMinutes+" seconds: " +pTimerObject.breakSeconds);
-          $("#pomodoroContainer").addClass("animated bounceOutDown");
-          $("#pomoTextTimer").addClass("animated bounceOutDown");
-          $("#pomoTextTimer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-              $(this).hide();
-          });
-          $("#pomodoroContainer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-              $(this).hide();
-          });
-          //$("#pomodoroContainer").hide();
-          //$("#pomoTextTimer").hide();
-          initiatePomodoro();
-      }
-      /**
-      function to initiate the pomodoro
-      **/
-      function initiatePomodoro(){
-          try{
-              if (simRunning){
-                  $("#clockContainer").removeClass("animated bounceOutDown");
-                  $("#clockTextTimer").removeClass("animated bounceOutDown");
-      
-                  $("#clockContainer").hide().removeClass('hidden').fadeIn('slow');
-                  $("#clockTextTimer").hide().removeClass('hidden').fadeIn('slow');
-      
-                  $("#pomodoroContainer").addClass("animated bounceOutDown");
-                  $("#pomoTextTimer").addClass("animated bounceOutDown");
-                  $("#pomoTextTimer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-                      $(this).hide();
-                  });
-                  $("#pomodoroContainer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-                      $(this).hide();
-                  });
-              }
-      
-              // don't like the new stuff but mehhhh go to take it
-              var thours= pTimerObject.timerHours;
-              var tmin=pTimerObject.timerMinutes;
-              var tsecs=  pTimerObject.timerSeconds;
-              // hammering time( adds the current time to the object just to keep stuff simple)
-              
-              //
-      
-              // numbskulls implementation of date objects and i too lazy to use moment.js
-              // check if hours is to be accounted
-              if (thours>0){
-                  timeToUse= new Date();
-                  timeToUse.setHours(timeToUse.getHours()+thours);
-                  timeToUse.setMinutes(timeToUse.getMinutes()+tmin);
-                  timeToUse.setSeconds(timeToUse.getSeconds()+tsecs);
-      
-              }
-              else{
-                  timeToUse=new Date(Date.parse(new Date()) + ( tmin * tsecs * 1000));
-              }
-              //
-              
-      
-              startClock(timeToUse,'clockContainer');
-      
-          }
-          catch(ex)
-          {
-              console.log("erro initiatePomodoro: " + ex);
-          }
-      
-      
-      
-      }
-      /**
-      function to handle the the clock startup
-          @param valueTimer item to to be counted down from
-          @param valueComponent item to be changed (either the timer or the break timer)
-      **/
-      function startClock(valueTimer,valueComponent){
-          
-          function updateClock(){
-      
-                  var tmpTime= timeRemaining(valueTimer);
-      
-                  hoursItem.innerHTML=('0'+tmpTime.hours).slice(-2);
-                  minutesItem.innerHTML=('0'+tmpTime.minutes).slice(-2);
-                  secondsItem.innerHTML=('0'+tmpTime.seconds).slice(-2);
-      
-                  if (tmpTime.itemTime<=0||simRunning===false){
-                      clearInterval(valueInterval);
-                      if (stoppedClock){
-                          return;
-                      }
-                      if(valueComponent==="clockContainer")
-                      {
-                           startBreakClock();
-                          
-                      }
-                      else{
-                          
-                          initiatePomodoro();
-                      }
-      
-                  }
-              }
-          try{
-             
+                   $("#pomodoroContainer").addClass("animated bounceOutDown");
+                   $("#pomoTextTimer").addClass("animated bounceOutDown");
+                   $("#pomoTextTimer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                       $(this).hide();
+                   });
+                   $("#pomodoroContainer").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                       $(this).hide();
+                   });
+               }
+               // check if the timer has run at least once to show the notification
+               if (numIterations>0){
+                   notifyPomoTimer();
+               }
+               //
               
       
-              var tmpComponent= document.getElementById(valueComponent);
-              var hoursItem=tmpComponent.querySelector('.hours');
-              var minutesItem= tmpComponent.querySelector('.minutes');
-              var secondsItem= tmpComponent.querySelector('.seconds');
       
+               // don't like the new stuff but mehhhh go to take it
+               var thours= pTimerObject.timerHours;
+               var tmin=pTimerObject.timerMinutes;
+               var tsecs=  pTimerObject.timerSeconds;
+               // hammering time( adds the current time to the object just to keep stuff simple)
+               
+               //
+      
+               // numbskulls implementation of date objects and i too lazy to use moment.js
+               // check if hours is to be accounted
+               if (thours>0){
+                   timeToUse= new Date();
+                   timeToUse.setHours(timeToUse.getHours()+thours);
+                   timeToUse.setMinutes(timeToUse.getMinutes()+tmin);
+                   timeToUse.setSeconds(timeToUse.getSeconds()+tsecs);
+      
+               }
+               else{
+                   timeToUse=new Date(Date.parse(new Date()) + ( tmin * tsecs * 1000));
+               }
+               //
+               
+               // increase the control var  for the notifications
+               numIterations++;
+               //
+      
+               startClock(timeToUse,'clockContainer');
+      
+           }
+           catch(ex)
+           {
+               console.log("erro initiatePomodoro: " + ex);
+           }
+      
+      
+      
+       }
+       /**
+       function to handle the the clock startup
+           @param valueTimer item to to be counted down from
+           @param valueComponent item to be changed (either the timer or the break timer)
+       **/
+       function startClock(valueTimer,valueComponent){
+           
+           function updateClock(){
+      
+                   var tmpTime= timeRemaining(valueTimer);
+      
+                   hoursItem.innerHTML=('0'+tmpTime.hours).slice(-2);
+                   minutesItem.innerHTML=('0'+tmpTime.minutes).slice(-2);
+                   secondsItem.innerHTML=('0'+tmpTime.seconds).slice(-2);
+      
+                   if (tmpTime.itemTime<=0||simRunning===false){
+                       clearInterval(valueInterval);
+                       if (stoppedClock){
+                           return;
+                       }
+                       if(valueComponent==="clockContainer")
+                       {
+                            startBreakClock();
+                           
+                       }
+                       else{
+                           
+                           initiatePomodoro();
+                       }
+      
+                   }
+               }
+           try{
               
-              updateClock();
-              var valueInterval= setInterval(updateClock,1000);
+               
       
-          }
-          catch(ex){
-              console.log("ERRO startClock:" + ex);
+               var tmpComponent= document.getElementById(valueComponent);
+               var hoursItem=tmpComponent.querySelector('.hours');
+               var minutesItem= tmpComponent.querySelector('.minutes');
+               var secondsItem= tmpComponent.querySelector('.seconds');
       
-          }
+               
+               updateClock();
+               var valueInterval= setInterval(updateClock,1000);
+      
+           }
+           catch(ex){
+               console.log("ERRO startClock:" + ex);
+      
+           }
       
       
-      }
-      /**
-      function to handle the timeout from the preloader
-      **/
-      function onPreloadTimeOut(){
-          $("#preloaderdiv").hide();
-          
-          $("#projectContainer").hide().removeClass('hide').fadeIn('slow');
+       }
+       /**
+       function to handle the timeout from the preloader
+       **/
+       function onPreloadTimeOut(){
+           $("#preloaderdiv").hide();
+           
+           $("#projectContainer").hide().removeClass('hide').fadeIn('slow');
+           $("#notification").hide();
+           registerElementProps();
       
-          registerElementProps();
+           // add tooltips
+           $("#clockContainer").tooltip({
+               title:"Click the time segment for changes for the timer",
+               delay:100,
+               placement:"auto top",
+               trigger:'hover focus'
+           });
+           $("#pomodoroContainer").tooltip({
+               title:"click the time segment for changes for the break timer",
+               delay:100,
+               placement:"auto top",
+               trigger:"hover focus"
+           });
+           //
+       }
       
-          // add tooltips
-          $("#clockContainer").tooltip({
-              title:"Click the time segment for changes for the timer",
-              delay:100,
-              placement:"auto top",
-              trigger:'hover focus'
-          });
-          $("#pomodoroContainer").tooltip({
-              title:"click the time segment for changes for the break timer",
-              delay:100,
-              placement:"auto top",
-              trigger:"hover focus"
-          });
-          //
-      }
+       /**
+       function to stop the pomodoro
+       **/
+       function stopPomodoro(){
+           // check if is running
+           if (simRunning){
+               stoppedClock= true;
+               simRunning=false;
+               numIterations=0;
+                                 
+               // check visibility      
+               if ($("#clockContainer").is(":visible")){
+                   
+                   $("#pomodoroContainer").removeClass("animated bounceOutDown");
+                   $("#pomoTextTimer").removeClass("animated bounceOutDown");
+                   
+                   $("#pomodoroContainer").hide().removeClass('hidden').fadeIn('slow');
+                   $("#pomoTextTimer").hide().removeClass('hidden').fadeIn('slow');
+                   
+                   //$("#pomodoroContainer").hide().removeClass('hide').fadeIn('slow');
+                   //$("#pomoTextTimer").hide().removeClass('hide').fadeIn('slow');
       
-      /**
-      function to stop the pomodoro
-      **/
-      function stopPomodoro(){
-          
-          if (simRunning){
-              stoppedClock= true;
-              simRunning=false;
-             
-              console.log("stop pomo hours "+pTimerObject.timerHours+" minutes "+ pTimerObject.timerMinutes+" seconds: " +pTimerObject.timerSeconds);
-              console.log("stop break hours "+pTimerObject.breakHours+" minutes "+ pTimerObject.breakMinutes+" seconds: " +pTimerObject.breakSeconds);
-              
-              //
+               }
+               else{
+                   $("#clockContainer").removeClass("animated bounceOutDown");
+                   $("#clockTextTimer").removeClass("animated bounceOutDown");
       
-             
-              if ($("#clockContainer").is(":visible")){
-                  
-                  $("#pomodoroContainer").removeClass("animated bounceOutDown");
-                  $("#pomoTextTimer").removeClass("animated bounceOutDown");
-                  
-                  $("#pomodoroContainer").hide().removeClass('hidden').fadeIn('slow');
-                  $("#pomoTextTimer").hide().removeClass('hidden').fadeIn('slow');
-                  
-                  //$("#pomodoroContainer").hide().removeClass('hide').fadeIn('slow');
-                  //$("#pomoTextTimer").hide().removeClass('hide').fadeIn('slow');
+                   $("#clockContainer").hide().removeClass('hidden').fadeIn('slow');
+                   $("#clockTextTimer").hide().removeClass('hidden').fadeIn('slow');
+                   //$("#clockContainer").hide().removeClass('hide').fadeIn('slow');
+                   //$("#clockTextTimer").hide().removeClass('hide').fadeIn('slow');
+               }
+               //
+               // re assing text
+               $("#SpHours").text(pTimerObject.timerHours);
+               $("#spMinutes").text(pTimerObject.timerMinutes);
+               $("#spSeconds").text(pTimerObject.timerSeconds);
+               $("#pomoHours").text(pTimerObject.breakHours);
+               $("#pomoMinutes").text(pTimerObject.breakMinutes);
+               $("#pomoSeconds").text(pTimerObject.breakSeconds);
+               //
+           }
+           
+       }
+       /**
+       function to reset the pomodoro
+       **/
+       function resetPomodoro(){
+           if (!simRunning){
+               //set all elements values
+               $("#SpHours").text("00");
+               $("#spMinutes").text("25");
+               $("#spSeconds").text("60");
+               $("#pomoHours").text("00");
+               $("#pomoMinutes").text("05");
+               $("#pomoSeconds").text("60");
+               //
+               // check element visibility
+               if ($("#clockContainer").is(":visible")){
+                   $("#pomodoroContainer").removeClass("animated bounceOutDown");
+                   $("#pomoTextTimer").removeClass("animated bounceOutDown")
+                   
+                   $("#pomodoroContainer").hide().removeClass('hide').fadeIn('slow');
+                   $("#pomoTextTimer").hide().removeClass('hide').fadeIn('slow');
       
-              }
-              else{
-                  $("#clockContainer").removeClass("animated bounceOutDown");
-                  $("#clockTextTimer").removeClass("animated bounceOutDown");
+               }
+               else{
+                   
+                   $("#clockContainer").removeClass("animated bounceOutDown");
+                   $("#clockTextTimer").removeClass("animated bounceOutDown")
+                   
+                   $("#clockContainer").hide().removeClass('hide').fadeIn('slow');
+                   $("#clockTextTimer").hide().removeClass('hide').fadeIn('slow');
+               }
+               //
+           }
       
-                  $("#clockContainer").hide().removeClass('hidden').fadeIn('slow');
-                  $("#clockTextTimer").hide().removeClass('hidden').fadeIn('slow');
-                  //$("#clockContainer").hide().removeClass('hide').fadeIn('slow');
-                  //$("#clockTextTimer").hide().removeClass('hide').fadeIn('slow');
-              }
-              $("#SpHours").text(pTimerObject.timerHours);
-              $("#spMinutes").text(pTimerObject.timerMinutes);
-              $("#spSeconds").text(pTimerObject.timerSeconds);
-              $("#pomoHours").text(pTimerObject.breakHours);
-              $("#pomoMinutes").text(pTimerObject.breakMinutes);
-              $("#pomoSeconds").text(pTimerObject.breakSeconds);
-              
-          }
-          
-      }
-      /**
-      function to reset the pomodoro
-      **/
-      function resetPomodoro(){
-          if (!simRunning){
-              //set all elements values
-              $("#SpHours").text("00");
-              $("#spMinutes").text("25");
-              $("#spSeconds").text("60");
-              $("#pomoHours").text("00");
-              $("#pomoMinutes").text("05");
-              $("#pomoSeconds").text("60");
-              //
-              // check element visibility
-              if ($("#clockContainer").is(":visible")){
-                  $("#pomodoroContainer").removeClass("animated bounceOutDown");
-                  $("#pomoTextTimer").removeClass("animated bounceOutDown")
-                  
-                  $("#pomodoroContainer").hide().removeClass('hide').fadeIn('slow');
-                  $("#pomoTextTimer").hide().removeClass('hide').fadeIn('slow');
+       }
+       /**
+       function to increase ammount
+       **/
+       function increaseValue(value){
       
-              }
-              else{
-                  
-                  $("#clockContainer").removeClass("animated bounceOutDown");
-                  $("#clockTextTimer").removeClass("animated bounceOutDown")
-                  
-                  $("#clockContainer").hide().removeClass('hide').fadeIn('slow');
-                  $("#clockTextTimer").hide().removeClass('hide').fadeIn('slow');
-              }
-              //
-          }
+           var tmpNumber=0;
+           if (value.id.startsWith('clock')){
+               if (value.id.endsWith('Hours')){
+                   tmpNumber= $("#SpHours").text();
+               }
+               else{
+                   tmpNumber= $("#spMinutes").text();
+               } 
+           }
+           else{
+               if (value.id.endsWith('Hours')){
+                   tmpNumber= $("#pomoHours").text();
+               }
+               else{
+                   tmpNumber= $("#pomoMinutes").text();
+               } 
+           }    
+           if (tmpNumber<59){
+               tmpNumber++;
+               if (value.id.startsWith('clock')){
+                   if (value.id.endsWith('Hours')){
+                       // cause i'm lazy as frack and it's raining outside
+                       if (tmpNumber>24){
+                           tmpNumber=24;
+                       }
+                       //
+                       $("#SpHours").text(tmpNumber);
+                   }
+                   else{
+                       $("#spMinutes").text(tmpNumber);
+                   }
       
-      }
-      /**
-      function to increase ammount
-      **/
-      function increaseValue(value){
+               }
+               else{
+                   if (value.id.endsWith('Hours')){
+                       //once again cause i'm lazy as frack and it's saturday and i'm not in the mood to think
+                       if (tmpNumber>24){
+                           tmpNumber=24;
+                       }
+                       //
+                       $("#pomoHours").text(tmpNumber);
+                   }
+                   else{
+                       $("#pomoMinutes").text(tmpNumber);
+                   }
+               }
       
-          var tmpNumber=0;
-          if (value.id.startsWith('clock')){
-              if (value.id.endsWith('Hours')){
-                  tmpNumber= $("#SpHours").text();
-              }
-              else{
-                  tmpNumber= $("#spMinutes").text();
-              } 
-          }
-          else{
-              if (value.id.endsWith('Hours')){
-                  tmpNumber= $("#pomoHours").text();
-              }
-              else{
-                  tmpNumber= $("#pomoMinutes").text();
-              } 
-          }    
-          if (tmpNumber<59){
-              tmpNumber++;
-              if (value.id.startsWith('clock')){
-                  if (value.id.endsWith('Hours')){
-                      // cause i'm lazy as frack and it's raining outside
-                      if (tmpNumber>24){
-                          tmpNumber=24;
-                      }
-                      //
-                      $("#SpHours").text(tmpNumber);
-                  }
-                  else{
-                      $("#spMinutes").text(tmpNumber);
-                  }
+           }
+       } 
+       /**
+       function to decrease the ammount
+       **/
+       function decreaseValue(value){
+           var tmpNumber=0;
+           if (value.id.startsWith('clock')){
+               if (value.id.endsWith('Hours')){
+                   tmpNumber= $("#SpHours").text();
+               }
+               else{
+                   tmpNumber= $("#spMinutes").text();
+               } 
+           }
+           else{
+               if (value.id.endsWith('Hours')){
+                   tmpNumber= $("#pomoHours").text();
+               }
+               else{
+                   tmpNumber= $("#pomoMinutes").text();
+               } 
+           }    
+           if (tmpNumber>0){
+               tmpNumber--;
+               if (value.id.startsWith('clock')){
+                   if (value.id.endsWith('Hours')){
+                       $("#SpHours").text(tmpNumber);
+                   }
+                   else{
+                       $("#spMinutes").text(tmpNumber);
+                   }
       
-              }
-              else{
-                  if (value.id.endsWith('Hours')){
-                      //once again cause i'm lazy as frack and it's saturday and i'm not in the mood to think
-                      if (tmpNumber>24){
-                          tmpNumber=24;
-                      }
-                      //
-                      $("#pomoHours").text(tmpNumber);
-                  }
-                  else{
-                      $("#pomoMinutes").text(tmpNumber);
-                  }
-              }
+               }
+               else{
+                   if (value.id.endsWith('Hours')){
+                       $("#pomoHours").text(tmpNumber);
+                   }
+                   else{
+                       $("#pomoMinutes").text(tmpNumber);
+                   }
+               }
       
-          }
-      } 
-      /**
-      function to decrease the ammount
-      **/
-      function decreaseValue(value){
-          var tmpNumber=0;
-          if (value.id.startsWith('clock')){
-              if (value.id.endsWith('Hours')){
-                  tmpNumber= $("#SpHours").text();
-              }
-              else{
-                  tmpNumber= $("#spMinutes").text();
-              } 
-          }
-          else{
-              if (value.id.endsWith('Hours')){
-                  tmpNumber= $("#pomoHours").text();
-              }
-              else{
-                  tmpNumber= $("#pomoMinutes").text();
-              } 
-          }    
-          if (tmpNumber>0){
-              tmpNumber--;
-              if (value.id.startsWith('clock')){
-                  if (value.id.endsWith('Hours')){
-                      $("#SpHours").text(tmpNumber);
-                  }
-                  else{
-                      $("#spMinutes").text(tmpNumber);
-                  }
-      
-              }
-              else{
-                  if (value.id.endsWith('Hours')){
-                      $("#pomoHours").text(tmpNumber);
-                  }
-                  else{
-                      $("#pomoMinutes").text(tmpNumber);
-                  }
-              }
-      
-          }
-      }
+           }
+       }
     </script>
     <div class="loader" id="preloaderdiv">
           <div class="loaderswag" id="TextLoader"></div>
@@ -796,6 +893,7 @@
           </div>
         </div>
       </div>
+      <div class="embed-responsive embed-responsive-16by9" id="notification" width="640" height="480"></div>
     </div>
   </body>
   <div class="footer" style="text-align: center">Made by: <a href="http://codepen.io/jonniebigodes/" target="_blank">Jonniebigodes</a></div>
