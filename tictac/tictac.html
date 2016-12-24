@@ -97,7 +97,7 @@
                 console.log(this.id);
                 handleClick(this.id);
             });
-            MockWinMoves();
+            //MockWinMoves();
         });
         /**
         function to check if content of the cell is empty
@@ -110,6 +110,7 @@
 
         /**
         auxiliary function to check the board for winning conditions (check horizontal lines)
+        @return if the content of the cells is empty
         */
         function winHorizontal(){
              if ($("#r0c0").text()===currentPlayer.Marker&&$("#r0c1").text()===currentPlayer.Marker&& $("#r0c2").text()===currentPlayer.Marker){
@@ -128,6 +129,7 @@
 
         /**
         auxiliary function to check the board for winning conditions (checks vertical lines)
+        @return if the content of the cells is empty
         */
         function winVertical(){
             if ($("#r0c0").text()===currentPlayer.Marker && $("#r1c0").text()===currentPlayer.Marker && $("#r2c0").text()===currentPlayer.Marker){
@@ -145,6 +147,7 @@
         }
         /**
         auxiliary function to check the board for winning conditions (check diagonal lines)
+        @return if the content of the cells is empty
         */
         function winDiagonal(){
             if ($("#r0c0").text()===currentPlayer.Marker&&$("#r1c1").text()===currentPlayer.Marker&& $("#r2c2").text()===currentPlayer.Marker){
@@ -158,6 +161,7 @@
         }
         /**
         function to check if the player won the game
+        @return the result of the cell verifications according with the rules of the game
         */
         function checkWin() {
             if (winHorizontal()){
@@ -268,7 +272,7 @@
                         </div>
 
                         <div class="col-xs-6 col-sm-4 gameInputOptions" onclick="getMainMenu();">
-                            <span><- Back</span>
+                            <span>&lt;- Back</span>
                         </div>
                     </div>
                     <div id="textBi" hidden>
