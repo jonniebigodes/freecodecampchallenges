@@ -1,5 +1,6 @@
 {
     "eslint.enable": true,
     "eslint.run": "onType",
-    "git.allowLargeRepositories": true
+    "git.allowLargeRepositories": true,
+    "vsicons.presets.angular": false
 }

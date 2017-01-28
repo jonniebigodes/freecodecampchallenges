@@ -14,16 +14,59 @@
     <link href=".././node_modules/animate.css/animate.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <style>
+        .voffset {
+            margin-top: 2px;
+        }
+        
+        .voffset1 {
+            margin-top: 5px;
+        }
+        
+        .voffset2 {
+            margin-top: 10px;
+        }
+        
+        .voffset3 {
+            margin-top: 15px;
+        }
+        
+        .voffset4 {
+            margin-top: 30px;
+        }
+        
+        .voffset5 {
+            margin-top: 40px;
+        }
+        
+        .voffset6 {
+            margin-top: 60px;
+        }
+        
+        .voffset7 {
+            margin-top: 80px;
+        }
+        
+        .voffset8 {
+            margin-top: 100px;
+        }
+        
+        .voffset9 {
+            margin-top: 150px;
+        }
+        
         .cell:hover {
             background: #f9f9f9;
         }
         
         .cell {
+            display: flex;
             width: 150px;
             height: 150px;
             border: 1px solid darkslateblue;
             text-align: center;
             font-size: 32px;
+            align-items: center;
+            justify-content: center;
         }
         
         .gameMenu {
@@ -37,25 +80,45 @@
             font-size: 14px;
             text-align: center;
         }
-        .gameInputOptions:hover{
-            color:darkslateblue;
+        
+        .gameInputOptions:hover {
+            color: darkslateblue;
             border: 1px solid darkslateblue;
-            background-color:papayawhip;
-
+            background-color: papayawhip;
         }
-        .footerInfo{
-            font-family: 'Press Start 2P',cursive;
+        
+        .footerInfo {
+            font-family: 'Press Start 2P', cursive;
             font-size: 11px;
             text-align: center;
         }
         
+        .textCell {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+        }
+        div.vertical-line{
+            width: 1px;
+            background-color: indianred;
+            height: 500px;
+            float: left;
+            border: 2px ridge indianred ;
+            border-radius: 2px;
+            z-index: 1;
+            
+            position: fixed;
+            top: 80px;
+            
+        }
     </style>
 </head>
 
 <body>
     <script>
-
         var gameType;
+        var preferedPlays=['r1c1','r0c0','r0c2','r2c0','r2c2','r0c1','r1c0','r1c2','r2c1'];
         var winningMoves = [{
             orientation: "horizontal",
             coordinates: ['r0c0', 'r0c1', 'r0c2', 'r1c0', 'r1c1', 'r1c2', 'r2c0', 'r2c1', 'r2c2']
@@ -87,6 +150,20 @@
 
             });
         }
+
+
+        /**
+        function to reset the game board and show the main menu
+        */
+        function gameReset(){
+            for (var i=0;i<3;i++){
+                for (var x=0;x<3;x++){
+                    $("#r"+i+"c"+x).text('');
+                }
+            }
+
+
+        }
         /**
         function to handle the document load
         */
@@ -102,75 +179,85 @@
         /**
         function to check if content of the cell is empty
         @param value id of the cell
-        @return if the cell is empty
+        @return the cell is empty
         **/
         function canPlayHouse(value) {
-            console.log("value cell has content:" + $("#" + value).text().trim() !== '');
+            //console.log("value cell has content:" + $("#" + value).text().trim() !== '');
+            console.log("value cell has content:" + $("#" + value).text().trim() === '');
+            return $("#"+value).text().trim()==='';
         }
 
         /**
         auxiliary function to check the board for winning conditions (check horizontal lines)
         @return if the content of the cells is empty
         */
-        function winHorizontal(){
-             if ($("#r0c0").text()===currentPlayer.Marker&&$("#r0c1").text()===currentPlayer.Marker&& $("#r0c2").text()===currentPlayer.Marker){
-                 return true;
-             }
+        function winHorizontal() {
+            if ($("#r0c0").text() === currentPlayer.Marker && $("#r0c1").text() === currentPlayer.Marker && $("#r0c2").text() ===
+                currentPlayer.Marker) {
+                return true;
+            }
 
-             if ($("#r1c0").text()===currentPlayer.Marker&&$("#r1c1").text()===currentPlayer.Marker&& $("#r1c2").text()===currentPlayer.Marker){
-                 return true;
-             }
+            if ($("#r1c0").text() === currentPlayer.Marker && $("#r1c1").text() === currentPlayer.Marker && $("#r1c2").text() ===
+                currentPlayer.Marker) {
+                return true;
+            }
 
-             if ($("#r2c0").text()===currentPlayer.Marker&&$("#r2c1").text()===currentPlayer.Marker&& $("#r2c2").text()===currentPlayer.Marker){
-                 return true;
-             }
-             return false;
+            if ($("#r2c0").text() === currentPlayer.Marker && $("#r2c1").text() === currentPlayer.Marker && $("#r2c2").text() ===
+                currentPlayer.Marker) {
+                return true;
+            }
+            return false;
         }
 
         /**
         auxiliary function to check the board for winning conditions (checks vertical lines)
         @return if the content of the cells is empty
         */
-        function winVertical(){
-            if ($("#r0c0").text()===currentPlayer.Marker && $("#r1c0").text()===currentPlayer.Marker && $("#r2c0").text()===currentPlayer.Marker){
-                 return true;
-             }
+        function winVertical() {
+            if ($("#r0c0").text() === currentPlayer.Marker && $("#r1c0").text() === currentPlayer.Marker && $("#r2c0").text() ===
+                currentPlayer.Marker) {
+                return true;
+            }
 
-             if ($("#r0c1").text()===currentPlayer.Marker&&$("#r1c1").text()===currentPlayer.Marker&& $("#r2c1").text()===currentPlayer.Marker){
-                 return true;
-             }
+            if ($("#r0c1").text() === currentPlayer.Marker && $("#r1c1").text() === currentPlayer.Marker && $("#r2c1").text() ===
+                currentPlayer.Marker) {
+                return true;
+            }
 
-             if ($("#r0c2").text()===currentPlayer.Marker&&$("#r1c2").text()===currentPlayer.Marker&& $("#r2c2").text()===currentPlayer.Marker){
-                 return true;
-             }
-             return false;
+            if ($("#r0c2").text() === currentPlayer.Marker && $("#r1c2").text() === currentPlayer.Marker && $("#r2c2").text() ===
+                currentPlayer.Marker) {
+                return true;
+            }
+            return false;
         }
         /**
         auxiliary function to check the board for winning conditions (check diagonal lines)
         @return if the content of the cells is empty
         */
-        function winDiagonal(){
-            if ($("#r0c0").text()===currentPlayer.Marker&&$("#r1c1").text()===currentPlayer.Marker&& $("#r2c2").text()===currentPlayer.Marker){
-                 return true;
-             }
+        function winDiagonal() {
+            if ($("#r0c0").text() === currentPlayer.Marker && $("#r1c1").text() === currentPlayer.Marker && $("#r2c2").text() ===
+                currentPlayer.Marker) {
+                return true;
+            }
 
-             if ($("#r0c2").text()===currentPlayer.Marker&&$("#r1c1").text()===currentPlayer.Marker&& $("#r2c0").text()===currentPlayer.Marker){
-                 return true;
-             }
-             return false;
+            if ($("#r0c2").text() === currentPlayer.Marker && $("#r1c1").text() === currentPlayer.Marker && $("#r2c0").text() ===
+                currentPlayer.Marker) {
+                return true;
+            }
+            return false;
         }
         /**
         function to check if the player won the game
         @return the result of the cell verifications according with the rules of the game
         */
         function checkWin() {
-            if (winHorizontal()){
+            if (winHorizontal()) {
                 return true;
             }
-            if(winVertical()){
+            if (winVertical()) {
                 return true;
             }
-            if (winDiagonal()){
+            if (winDiagonal()) {
                 return true;
             }
             return false;
@@ -180,67 +267,147 @@
         function to select the type of game
         @param value type of game
         */
-        function gameSelect(value){
-            
-            gameType= value;
-            console.log("gameType value: "+ gameType);
+        function gameSelect(value) {
+
+            gameType = value;
+            console.log("gameType value: " + gameType);
 
             $("#gameTypeSelector").addClass("animated rotateOutUpRight");
-            setTimeout(function(){
-                
+            setTimeout(function () {
+
                 $("#gameTypeSelector").hide();
-            },500);
+            }, 500);
             $("#gameTypeText").hide();
             $("#gameStart").hide().removeClass('hide').fadeIn();
-            
+
         }
         /**
         function go handle the go back item
         */
-        function getMainMenu(){
-            setTimeout(function(){
+        function getMainMenu() {
+            setTimeout(function () {
                 $("#gameTypeSelector").removeClass('animated rotateOutUpRight');
                 $("#gameTypeText").hide().remove('slow').fadeIn();
                 $("#gameTypeSelector").hide().removeClass('hide').fadeIn();
-            },500);
+            }, 500);
             $("#gameStart").hide();
 
         }
+        /**
+        function to iniate the cpu play
+        */
+        function cpuInitiateGame(){
+            var tmpPlay= preferedPlays[getRandomPoint(0,preferedPlays.length)];
+            $("$"+tmpPlay).text(currentPlayer.Marker);
+            gameMoves.push(
+                {
+                    player:currentPlayer.Marker,
+                    cell:data
+                }
+            );
+            changePlayer();
 
+        }
+
+
+        /**
+        stub function to randomize the game board coordinates
+        @param minValue bottom value of the interval
+        @param maxValue top value of the interval
+        @return random integer between the arguments
+        */
+        function getRandomPoint(minValue,maxValue){
+            return Math.random()*(maxValue-minValue)+minValue;
+        }
+
+
+        
+        /**
+        function to randomize the play
+        */
+        function randomizePlay(){
+            var isValid=false;
+
+            while(isValid===false){
+                var tmpRow= getRandomPoint(0,3);
+                var tmpCol= getRandomPoint(0,3);
+                if (canPlayHouse('r'+tmpRow+'c'+tmpCol)){
+                    $("#r"+tmpRow+'c'+tmpCol).text(currentPlayer.Marker);
+                    isValid=true;
+                }
+                
+            }
+        }
+
+        /**
+        function for cpu "smart" play
+        */
+        function cpuPlay(){
+
+        }
         /**
         function to set the first player and show the game board
         @param value set the first player to iniate
         */
-        function setInitPlayer(value){
+        function setInitPlayer(value) {
 
             $("#gameStart").addClass('animated rotateOutUpRight');
-            setTimeout(function(){
+            $("#textBi").hide().removeClass('hidden').fadeIn();
+            setTimeout(function () {
+                $("#textBi").hide();
                 $("#gameBoard").hide().removeClass('hidden').fadeIn();
-            },5000);
-
+            }, 5000);
             $("#gamestart").hide();
+            $("#gameBoard").hide().removeClass('hidden').fadeIn('');
+
+            if (gameType==='skynet' && value==='X'){
+                Players[0].Marker='X';
+                Players[1].Marker='O';
+                Players[1].isHuman=true;
+                currentPlayer=Players[0];
+                cpuInitiateGame();
+            }
+            
+        }
+
+        /**
+        function to switch player
+        */
+        function changePlayer(){
+             //change player
+             for (var i = 0; i < Players.length; i++) {
+                if (Players[i].Marker !== currentPlayer.Marker) {
+                    currentPlayer = Players[i];
+                }
+             }
+            //
         }
         /**
         function to handle the cell click
         */
         function handleClick(data) {
+            if(!currentPlayer.isHuman){
+                return;
+            }
             if (canPlayHouse(data)) {
                 //$("#"+data).text(currentPlayer.Marker);
                 $("#" + data).text(currentPlayer.Marker);
             }
-            gameMoves.push(data);
+            gameMoves.push(
+                {
+                    player:currentPlayer.Marker,
+                    cell:data
+                }
+            );
+
             if (checkWin()) {
                 //$("#")
 
                 return;
             }
+            changePlayer();
+           
 
-
-            for (var i = 0; i < Players.length; i++) {
-                if (Players[i].Marker !== currentPlayer.Marker) {
-                    currentPlayer = Players[i];
-                }
-            }
         }
     </script>
     <div class="container-fluid" id="projectContainer">
@@ -253,10 +420,12 @@
                 </div>
                 <div id="optionsGame" class="row gameOptions">
                     <div id="gameTypeSelector">
-                        <div class="col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" onclick="gameSelect('humans');">
+                        <div class="col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" 
+                        onclick="gameSelect('humans');">
                             <span>Puny Human Vs Puny Human</span>
                         </div>
-                        <div class="col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" onclick="gameSelect('skynet');">
+                        <div class="col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" 
+                        onclick="gameSelect('skynet');">
                             <span>Puny Human Vs Kickass A.I</span>
                         </div>
                     </div>
@@ -264,30 +433,35 @@
                         <div class="col-xs-6 col-sm-4 col-xs-offset-4 gameMenu">
                             <span>How you want to play it out cupcake?</span>
                         </div>
-                        <div class="col-xs-6 col-sm-4 col-xs-offset-4 gameInputOptions" onclick="setInitPlayer('');">
+                        <div class="col-xs-6 col-sm-4 col-xs-offset-4 gameInputOptions" 
+                        onclick="setInitPlayer('X');">
                             <span>I want the X</span>
                         </div>
-                        <div class="col-xs-6 col-sm-4 col-xs-offset-4 gameInputOptions" onclick="setInitPlayer('');">
+                        <div class="col-xs-6 col-sm-4 col-xs-offset-4 gameInputOptions" 
+                        onclick="setInitPlayer('O');">
                             <span>Take the X cupcake, i want the O</span>
                         </div>
-
                         <div class="col-xs-6 col-sm-4 gameInputOptions" onclick="getMainMenu();">
                             <span>&lt;- Back</span>
                         </div>
                     </div>
                     <div id="textBi" hidden>
-                        <span>Hope you're ready cupcake..cause it's on.....</span>
+                        <span>Hope you're ready cupcake..cause it's on..... It's on like Donkey Kong</span>
                     </div>
                 </div>
             </div>
             <div id="gameBoard" hidden>
-                <div>
-                    <span>Cupcake</span>
+                <div class="row col-xs-offset-5">
+                    Supercalifragilistic Tic Tac Toe
                 </div>
+                <div>
+                    <span id="Results">Cupcake</span>
+                </div>
+                
                 <div class="row col-xs-offset-4" id="row0">
-                    <div class="col-xs-6 col-md-4 cell" id="r0c0">1</div>
+                    <div class="col-xs-6 col-md-4 cell " id="r0c0">1</div>
                     <div class="col-xs-6 col-md-4 cell" id="r0c1">2</div>
-                    <div class="col-xs-6 col-md-4 cell" id="roc2">3</div>
+                    <div class="col-xs-6 col-md-4 cell" id="r0c2">3</div>
                 </div>
                 <div class="row col-xs-offset-4" id="row1">
                     <div class="col-xs-6 col-md-4 cell" id="r1c0">4</div>
@@ -299,6 +473,9 @@
                     <div class="col-xs-6 col-md-4 cell" id="r2c1">8</div>
                     <div class="col-xs-6 col-md-4 cell" id="r2c2">9</div>
                 </div>
+                <div id="hRule" class="vertical-line"/>
+                    
+                
                 <div id="divWinner" class="col-xs-offset-6">
                     <span>textDummy</span>
                 </div>
