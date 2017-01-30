@@ -3,28 +3,36 @@
 
 
 This repository contains the implementation of the frontend challenges for freecodecamp.
-The challenges are the following
-  - Timestamp Microservice
-  - Request Header Parser Microservice
-  - URL Shortener Microservice
-  - Image Search Abstraction Layer
-  - File Metadata Microservice
+The challenges are the following:
+  - Random Quote Machine
+  - Show the Local Weather
+  - Wikipedia Viewer
+  - Twitch Api
+  - Javascript Calculator
+  - Pomodoro Clock
+  - Tic Tac Toe Game
+  - Simon Says Game
 
 # Methodology used
-Instead of creating a single repo for each challenge and as i'm familiar with github i condensed the api challenges in one package/repo.
+Instead of creating a single repo for each challenge and as i'm familiar with github i condensed the front end challenges in one package/repo.
 As it's not in direct contradiction of the rules and/or objective.
 In terms of development methodology i used the following:
-  - /Challenges/
+  - /calculator/
     - This folder contains the logic bits for the challenges that required some extra logic used.
-  - /src/
+  - /pomochallenge/
     - this folder contains all the view implementation and also the routing logic used. 
-  - /src/components
+  - /quotesChallenge/
     - Inside this folder are the components i.e views used for the challenges
-  - /dist/
+  - /simonsays/
     - This folder contains the release(aka build files).
-  - /uploads/
+  - /tictac/
     - This folder contains the placeholder for the File Metadata challenge upload info
-
+  - /twitchchallenge/
+    - This folder contains the implementation of the twitch api challenge
+  - /weatherChallenge/
+    - This folder contains the implementation of the show the local weather challenge
+  - /wikiviewer/
+    - This folder contains the implementation of the wikipedia viewer challenge
 
 
 ### Tech
@@ -54,7 +62,7 @@ Install the dependencies and devDependencies and start the server.
 ```sh
 $ cd folder to contain the app
 $ npm install 
-$ npm start
+$ npm run dev
 
 Open url http://localhost:5000
 ```
