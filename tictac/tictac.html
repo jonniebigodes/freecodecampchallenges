@@ -12,7 +12,7 @@
     <!--<script src=".././node_modules/mattboldt.typed.js/js/typed.js"></script>-->
     <link href=".././node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <link href=".././node_modules/animate.css/animate.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|Pangolin" rel="stylesheet">
     <style>
         .voffset {
             margin-top: 2px;
@@ -67,8 +67,13 @@
             font-size: 32px;
             align-items: center;
             justify-content: center;
+            font-family: 'Press Start 2P',cursive;
         }
-        
+        .projectTitle{
+            font-size:26px;
+            font-family:'Press Start 2P',cursive;
+            text-align:center;
+        }
         .gameMenu {
             font-size: 32px;
             font-family: 'Press Start 2P', cursive;
@@ -112,6 +117,24 @@
             top: 80px;
             
         }
+        .winnerText{
+            font-family: 'Pangolin', cursive;
+            font-size: 24px;
+            border-radius: 15px;
+            border: 1px solid darkslateblue;
+            padding: 20px;
+            width: 200px;
+            height: 50px;
+            
+        }
+        .gameResetInformation{
+            font-family: 'Pangolin', cursive;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .sup{
+            line-height: 80%;
+        }
     </style>
 </head>
 
@@ -131,11 +154,8 @@
         }];
         var gameMoves = [];
         var Players = [];
-        var currentPlayer = {
-            Marker: '',
-            isHuman: false
-        };
-
+        var currentPlayer = {Marker:"",isHuman: false};
+        var numMoves=0;
         /**
         mock function to iterate the WinningMoves
         */
@@ -156,12 +176,23 @@
         function to reset the game board and show the main menu
         */
         function gameReset(){
+            //clears game moves array
+            while(gameMoves.length>0){
+                gameMoves.pop();
+            }
+            //
+            while(Players.length>0){
+                Players.pop();
+            }
+
             for (var i=0;i<3;i++){
                 for (var x=0;x<3;x++){
                     $("#r"+i+"c"+x).text('');
                 }
             }
-
+            numMoves=0;
+            currentPlayer.Marker="";
+            currentPlayer.isHuman=false;
 
         }
         /**
@@ -182,28 +213,36 @@
         @return the cell is empty
         **/
         function canPlayHouse(value) {
-            //console.log("value cell has content:" + $("#" + value).text().trim() !== '');
-            console.log("value cell has content:" + $("#" + value).text().trim() === '');
-            return $("#"+value).text().trim()==='';
+            
+            //console.log("canPlayHouse value cell has content:" + $("#" + value).text().trim() === '');
+            //return $("#"+value).text().trim()==='';
+            var cellcontent= $("#" + value).text().trim();
+            console.log("cell content: "+cellcontent);
+            if(cellcontent=='X'||cellcontent=='O'){
+                return false;
+            }
+            return true;
+            
+            
         }
 
         /**
         auxiliary function to check the board for winning conditions (check horizontal lines)
         @return if the content of the cells is empty
         */
-        function winHorizontal() {
-            if ($("#r0c0").text() === currentPlayer.Marker && $("#r0c1").text() === currentPlayer.Marker && $("#r0c2").text() ===
-                currentPlayer.Marker) {
+        function winHorizontal(value) {
+            if ($("#r0c0").text() === value && $("#r0c1").text() === value && $("#r0c2").text() ===
+                value) {
                 return true;
             }
 
-            if ($("#r1c0").text() === currentPlayer.Marker && $("#r1c1").text() === currentPlayer.Marker && $("#r1c2").text() ===
-                currentPlayer.Marker) {
+            if ($("#r1c0").text() === value && $("#r1c1").text() === value && $("#r1c2").text() ===
+                value) {
                 return true;
             }
 
-            if ($("#r2c0").text() === currentPlayer.Marker && $("#r2c1").text() === currentPlayer.Marker && $("#r2c2").text() ===
-                currentPlayer.Marker) {
+            if ($("#r2c0").text() === value && $("#r2c1").text() === value && $("#r2c2").text() ===
+                value) {
                 return true;
             }
             return false;
@@ -213,19 +252,19 @@
         auxiliary function to check the board for winning conditions (checks vertical lines)
         @return if the content of the cells is empty
         */
-        function winVertical() {
-            if ($("#r0c0").text() === currentPlayer.Marker && $("#r1c0").text() === currentPlayer.Marker && $("#r2c0").text() ===
-                currentPlayer.Marker) {
+        function winVertical(value) {
+            if ($("#r0c0").text() === value && $("#r1c0").text() === value && $("#r2c0").text() ===
+                value) {
                 return true;
             }
 
-            if ($("#r0c1").text() === currentPlayer.Marker && $("#r1c1").text() === currentPlayer.Marker && $("#r2c1").text() ===
-                currentPlayer.Marker) {
+            if ($("#r0c1").text() === value && $("#r1c1").text() === value && $("#r2c1").text() ===
+                value) {
                 return true;
             }
 
-            if ($("#r0c2").text() === currentPlayer.Marker && $("#r1c2").text() === currentPlayer.Marker && $("#r2c2").text() ===
-                currentPlayer.Marker) {
+            if ($("#r0c2").text() === value && $("#r1c2").text() === value && $("#r2c2").text() ===
+                value) {
                 return true;
             }
             return false;
@@ -234,14 +273,13 @@
         auxiliary function to check the board for winning conditions (check diagonal lines)
         @return if the content of the cells is empty
         */
-        function winDiagonal() {
-            if ($("#r0c0").text() === currentPlayer.Marker && $("#r1c1").text() === currentPlayer.Marker && $("#r2c2").text() ===
-                currentPlayer.Marker) {
+        function winDiagonal(value) {
+            
+            if ($("#r0c0").text() === value && $("#r1c1").text() === value && $("#r2c2").text() ===value) {
                 return true;
             }
-
-            if ($("#r0c2").text() === currentPlayer.Marker && $("#r1c1").text() === currentPlayer.Marker && $("#r2c0").text() ===
-                currentPlayer.Marker) {
+            
+            if ($("#r0c2").text() === value && $("#r1c1").text() === value && $("#r2c0").text() ===value) {
                 return true;
             }
             return false;
@@ -251,16 +289,33 @@
         @return the result of the cell verifications according with the rules of the game
         */
         function checkWin() {
-            if (winHorizontal()) {
-                return true;
+            var result={winner:"NOK"};
+            if (numMoves<3){
+                return result;
             }
-            if (winVertical()) {
-                return true;
+            
+            for (var i=0;i<Players.length;i++){
+
+                if (winHorizontal(Players[i].Marker)) {
+                    result.winner=Players[i].Marker;
+                    return result;
+                    
+                }
+                if (winVertical(Players[i].Marker)) {
+                    result.winner=Players[i].Marker;
+                    return result;
+                    
+                }
+                if (winDiagonal(Players[i].Marker)) {
+                    result.winner=Players[i].Marker;
+                    return result;
+                }
             }
-            if (winDiagonal()) {
-                return true;
+            if (numMoves>=9){
+                result.winner="DRAW";
+                return result
             }
-            return false;
+            return result;
         }
 
         /**
@@ -274,11 +329,11 @@
 
             $("#gameTypeSelector").addClass("animated rotateOutUpRight");
             setTimeout(function () {
-
                 $("#gameTypeSelector").hide();
             }, 500);
             $("#gameTypeText").hide();
-            $("#gameStart").hide().removeClass('hide').fadeIn();
+            //$("#gameStart").hide().removeClass('hidden').fadeIn();
+            $("#gameStart").hide().remove('slow').fadeIn();
 
         }
         /**
@@ -288,7 +343,7 @@
             setTimeout(function () {
                 $("#gameTypeSelector").removeClass('animated rotateOutUpRight');
                 $("#gameTypeText").hide().remove('slow').fadeIn();
-                $("#gameTypeSelector").hide().removeClass('hide').fadeIn();
+                $("#gameTypeSelector").hide().removeClass('hidden').fadeIn();
             }, 500);
             $("#gameStart").hide();
 
@@ -351,14 +406,15 @@
         */
         function setInitPlayer(value) {
 
+            $("#gameSelector").hide();
             $("#gameStart").addClass('animated rotateOutUpRight');
             $("#textBi").hide().removeClass('hidden').fadeIn();
             setTimeout(function () {
                 $("#textBi").hide();
-                $("#gameBoard").hide().removeClass('hidden').fadeIn();
-            }, 5000);
-            $("#gamestart").hide();
-            $("#gameBoard").hide().removeClass('hidden').fadeIn('');
+                $("#gameBoard").hide().removeClass('hidden').fadeIn('slow');
+            }, 2000);
+            $("#gameStart").hide();
+            
 
             if (gameType==='skynet' && value==='X'){
                 Players[0].Marker='X';
@@ -367,45 +423,110 @@
                 currentPlayer=Players[0];
                 cpuInitiateGame();
             }
+            else{
+                if (gameType==='humans' && value==='X'){
+                    Players.push({Marker: 'X',isHuman: true});
+                    Players.push({Marker:'O',isHuman:true});
+                    currentPlayer= Players[0];
+                }
+                else{
+                    Players.push({Marker: 'X',isHuman: true});
+                    Players.push({Marker:'O',isHuman:true});
+                    currentPlayer= Players[1];
+                }
+                
+            }
+            
+
+           
+        }
+        function resetGameUI(){
+            $("#gameSelector").hide().removeClass('hidden').fadeIn('slow');
+            $("#gameTypeText").hide().removeClass('hidden').fadeIn('slow');
+            $("#gameTypeSelector").removeClass('animated rotateOutUpRight');
+            $("#gameStart").removeClass('animated rotateOutUpRight');
+            $("#gameTypeSelector").hide().removeClass('hidden').fadeIn('slow');
+            
+            
+            /*
+           
+            $("#gameTypeSelector").removeClass('animated rotateOutUpRight');
+            $("#gameStart").removeClass('animated rotateOutUpRight');
+            $("#gameTypeSelector").hide().removeClass('hidden').fadeIn();
+            */
             
         }
-
         /**
         function to switch player
         */
         function changePlayer(){
              //change player
-             for (var i = 0; i < Players.length; i++) {
-                if (Players[i].Marker !== currentPlayer.Marker) {
-                    currentPlayer = Players[i];
-                }
-             }
+             console.log("currentplayer before change: "+ currentPlayer.Marker);
+             var changeditem= Players.find((item)=>item.Marker.toLowerCase()!=currentPlayer.Marker.toLowerCase());
+             console.log("item found: "+ changeditem.Marker+" "+changeditem.isHuman);
+             currentPlayer= changeditem;
+             return;
+             
+             
             //
         }
         /**
         function to handle the cell click
         */
         function handleClick(data) {
+            console.log("DATA: "+ data+" marker: "+ currentPlayer.Marker);
             if(!currentPlayer.isHuman){
                 return;
             }
-            if (canPlayHouse(data)) {
-                //$("#"+data).text(currentPlayer.Marker);
-                $("#" + data).text(currentPlayer.Marker);
-            }
-            gameMoves.push(
-                {
-                    player:currentPlayer.Marker,
-                    cell:data
-                }
-            );
 
-            if (checkWin()) {
-                //$("#")
-
+            if (canPlayHouse(data)===false) {
                 return;
             }
+            $("#" + data).text(currentPlayer.Marker);
+            // gonna save only the winning moves or not...denpends 
+            gameMoves.push({player:currentPlayer.Marker,celldata:data});
+            //
+            numMoves++;
+            if (numMoves>=3){
+                var item= checkWin();
+                console.log("checkwin result:"+item.winner);
+                if (item.winner==="DRAW" ||item.winner==="X" || item.winner==="O") {
+                
+                    console.log("winner"+ item.winner);
+
+                   
+                    $("#divWinner").empty();
+                    $("#divWinner").hide().removeClass('hidden').fadeIn();
+                    if (item.winner==='DRAW'){
+                        $("#divWinner").addClass('col-xs-offset-3');
+                        $("#divWinner").append("<span><sup>Better luck next time cupcake cause someone outsmarted you and you could not win!!!!</sup></span>");
+                    }
+                    else{
+                        $("#divWinner").addClass('col-xs-offset-6');
+                        $("#divWinner").append("<span><sup>Winner is: "+item.winner+"</sup></span>");
+                    }
+                    $("#GameResetInfo").hide().removeClass('hidden').fadeIn();
+                    $("#GameResetInfo").addClass('animated fadeInUp');
+                   
+                    
+                    setTimeout(function(){
+
+                        gameReset();
+                        $("#divWinner").hide();
+                        $("#gameBoard").hide();
+                        $("#GameResetInfo").removeClass('animated fadeInUp');
+                        $("#GameResetInfo").hide();
+                        resetGameUI();
+                        
+                    },10000);
+
+                    
+                    return;
+                }
+            }
+           
             changePlayer();
+            
            
 
         }
@@ -441,46 +562,54 @@
                         onclick="setInitPlayer('O');">
                             <span>Take the X cupcake, i want the O</span>
                         </div>
-                        <div class="col-xs-6 col-sm-4 gameInputOptions" onclick="getMainMenu();">
+                        <div class="row col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" onclick="getMainMenu();">
                             <span>&lt;- Back</span>
                         </div>
                     </div>
-                    <div id="textBi" hidden>
-                        <span>Hope you're ready cupcake..cause it's on..... It's on like Donkey Kong</span>
-                    </div>
+                    
                 </div>
+                </div>
+            <div id="textBi" class="col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" hidden> 
+                Hope you're ready cupcake..cause it's on..... It's on like Donkey Kong
+            </div>
+            <div id="Score">
+                banana
             </div>
             <div id="gameBoard" hidden>
-                <div class="row col-xs-offset-5">
+                
+                <div class="row projectTitle">
                     Supercalifragilistic Tic Tac Toe
                 </div>
-                <div>
-                    <span id="Results">Cupcake</span>
-                </div>
                 
-                <div class="row col-xs-offset-4" id="row0">
-                    <div class="col-xs-6 col-md-4 cell " id="r0c0">1</div>
-                    <div class="col-xs-6 col-md-4 cell" id="r0c1">2</div>
-                    <div class="col-xs-6 col-md-4 cell" id="r0c2">3</div>
+                    
+               
+                <!--gameboard-->
+                <div id="GameResetInfo" class="voffset5 gameResetInformation  col-xs-6 col-md-4 col-xs-offset-4 " hidden>
+                    The game will be reset in 10 seconds....
+                </div>
+                <div class="voffset7 row col-xs-offset-4" id="row0">
+                    <div class="col-xs-6 col-md-4 cell" id="r0c0"></div>
+                    <div class="col-xs-6 col-md-4 cell" id="r0c1"></div>
+                    <div class="col-xs-6 col-md-4 cell" id="r0c2"></div>
                 </div>
                 <div class="row col-xs-offset-4" id="row1">
-                    <div class="col-xs-6 col-md-4 cell" id="r1c0">4</div>
-                    <div class="col-xs-6 col-md-4 cell" id="r1c1">5</div>
-                    <div class="col-xs-6 col-md-4 cell" id="r1c2">6</div>
+                    <div class="col-xs-6 col-md-4 cell" id="r1c0"></div>
+                    <div class="col-xs-6 col-md-4 cell" id="r1c1"></div>
+                    <div class="col-xs-6 col-md-4 cell" id="r1c2"></div>
                 </div>
                 <div class="row col-xs-offset-4" id="row2">
-                    <div class="col-xs-6 col-md-4 cell" id="r2c0">7</div>
-                    <div class="col-xs-6 col-md-4 cell" id="r2c1">8</div>
-                    <div class="col-xs-6 col-md-4 cell" id="r2c2">9</div>
+                    <div class="col-xs-6 col-md-4 cell" id="r2c0"></div>
+                    <div class="col-xs-6 col-md-4 cell" id="r2c1"></div>
+                    <div class="col-xs-6 col-md-4 cell" id="r2c2"></div>
                 </div>
-                <div id="hRule" class="vertical-line"/>
+                <!-- -->
                     
                 
-                <div id="divWinner" class="col-xs-offset-6">
-                    <span>textDummy</span>
-                </div>
             </div>
+            <div id="divWinner" class="col-xs-6 col-md-4 col-xs-offset-4 winnerText" hidden></div>
+            
         </div>
+        
     </div>
     <hr>
     <div class="footer footerInfo">Made by: <a href="http://codepen.io/jonniebigodes/" target="_blank">Jonniebigodes</a></div>
