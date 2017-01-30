@@ -38,13 +38,14 @@ In terms of development methodology i used the following:
 ### Tech
 
 this set of challenges uses a number of open source projects to work properly:
-* [React] - Great Javascript library for Building user interfaces
-* [node.js] - evented I/O for the backend
-* [Express] - fast node.js network app framework 
-* [Webpack] - fast packaging framework for deployment
-* [Mongodb] - Best of relational with the innovations of NOSQL
-* [Unirest] - Simple http request package
-* [Async] - Async pattern package
+*  HTML - markup language for creating web pages and web applications
+* [Node.js] - evented I/O JavaScript runtime
+* [JQuery] - A fast, small, and feature-rich JavaScript library
+* [Pug] - robust, elegant, feature rich template engine for Node.js
+* [Typed.js] - A jQuery typing animation script
+* [Bootstrap] - Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive, mobile first projects on the web
+* [Animate.css] - A cross-browser library of CSS animations
+* [lite-server]- Small fast lightweigh node.js development server
 
 
 
@@ -64,7 +65,6 @@ $ cd folder to contain the app
 $ npm install 
 $ npm run dev
 
-Open url http://localhost:5000
 ```
 
 
@@ -81,11 +81,12 @@ MIT
 
    
    [git-repo-url]: <https://github.com/jonniebigodes/freecodecampApiChallenges.git>
+   
    [node.js]: <http://nodejs.org>
-   [express]: <http://expressjs.com>
-   [React]: <https://facebook.github.io/react/>
-   [Webpack]: <https://webpack.github.io/>
-   [Mongodb]: <https://www.mongodb.com/>
+   [JQuery]: <https://jquery.com/>
+   [Pug]: <https://github.com/pugjs/pug>
+   [Typed.js]: <https://github.com/mattboldt/typed.js/>
+   [Bootstrap]: <https://getbootstrap.com/>
    [PlGh]:  <https://github.com/jonniebigodes/freecodecampApiChallenges/tree/master/plugins/github/readme.md>
-   [Unirest]: <http://unirest.io/nodejs.html>
-   [Async]: <https://github.com/caolan/async>
+   [Animate.css]: <https://github.com/daneden/animate.css>
+   [lite-server]: <https://github.com/johnpapa/lite-server>
