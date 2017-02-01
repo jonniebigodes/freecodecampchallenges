@@ -1,4 +1,4 @@
-# freecodecampFrontEndChallenges
+# freecodecamp Front End Challenges
 
 
 
@@ -18,27 +18,27 @@ Instead of creating a single repo for each challenge and as i'm familiar with gi
 As it's not in direct contradiction of the rules and/or objective.
 In terms of development methodology i used the following:
   - /calculator/
-    - This folder contains the logic bits for the challenges that required some extra logic used.
+    - This folder contains the implementation of the calculator challenge.
   - /pomochallenge/
-    - this folder contains all the view implementation and also the routing logic used. 
+    - this folder contains the implementation of the pomodoro challenge. 
   - /quotesChallenge/
-    - Inside this folder are the components i.e views used for the challenges
+    - this folder contains the implementation of the Random quote machine.
   - /simonsays/
-    - This folder contains the release(aka build files).
+    - This folder contains the implementation of the Simon Says game.
   - /tictac/
-    - This folder contains the placeholder for the File Metadata challenge upload info
+    - This folder contains the implementation of the tic tac toe game.
   - /twitchchallenge/
-    - This folder contains the implementation of the twitch api challenge
+    - This folder contains the implementation of the twitch api challenge.
   - /weatherChallenge/
-    - This folder contains the implementation of the show the local weather challenge
+    - This folder contains the implementation of the show the local weather challenge.
   - /wikiviewer/
-    - This folder contains the implementation of the wikipedia viewer challenge
+    - This folder contains the implementation of the wikipedia viewer challenge.
 
 
 ### Tech
 
 this set of challenges uses a number of open source projects to work properly:
-*  HTML - markup language for creating web pages and web applications
+* HTML - markup language for creating web pages and web applications
 * [Node.js] - evented I/O JavaScript runtime
 * [JQuery] - A fast, small, and feature-rich JavaScript library
 * [Pug] - robust, elegant, feature rich template engine for Node.js
@@ -54,9 +54,9 @@ And of course the implementation of the challenges themselves are open source wi
 
 ### Installation from source
 
-freecodecamp api  requires [Node.js](https://nodejs.org/) v4+ to run.
+freecodecamp front end requires [Node.js](https://nodejs.org/) v4+ to run.
 
-Download and extract the [latest pre-built release](https://github.com/jonniebigodes/freecodecampApiChallenges/releases).
+Download and extract the [latest pre-built release](https://github.com/jonniebigodes/freecodecampchallenges/releases).
 
 Install the dependencies and devDependencies and start the server.
 
@@ -80,13 +80,12 @@ MIT
 
 
    
-   [git-repo-url]: <https://github.com/jonniebigodes/freecodecampApiChallenges.git>
-   
+   [git-repo-url]: <https://github.com/jonniebigodes/freecodecampchallenges.git>
    [node.js]: <http://nodejs.org>
    [JQuery]: <https://jquery.com/>
    [Pug]: <https://github.com/pugjs/pug>
    [Typed.js]: <https://github.com/mattboldt/typed.js/>
    [Bootstrap]: <https://getbootstrap.com/>
-   [PlGh]:  <https://github.com/jonniebigodes/freecodecampApiChallenges/tree/master/plugins/github/readme.md>
+   [PlGh]:  <https://github.com/jonniebigodes/freecodecampchallenges/tree/master/plugins/github/readme.md>
    [Animate.css]: <https://github.com/daneden/animate.css>
    [lite-server]: <https://github.com/johnpapa/lite-server>

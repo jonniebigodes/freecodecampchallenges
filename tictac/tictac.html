@@ -352,12 +352,16 @@
         function to iniate the cpu play
         */
         function cpuInitiateGame(){
-            var tmpPlay= preferedPlays[getRandomPoint(0,preferedPlays.length)];
-            $("$"+tmpPlay).text(currentPlayer.Marker);
+
+            var tmpPlay= preferedPlays[getRandomPoint(0,8)];
+            console.log("board position:" +tmpPlay);
+            console.log("current player: "+ currentPlayer.Marker+" is human"+ currentPlayer.isHuman);
+           
+            $("#"+tmpPlay).text(currentPlayer.Marker);
             gameMoves.push(
                 {
                     player:currentPlayer.Marker,
-                    cell:data
+                    celldata:tmpPlay
                 }
             );
             changePlayer();
@@ -372,7 +376,9 @@
         @return random integer between the arguments
         */
         function getRandomPoint(minValue,maxValue){
-            return Math.random()*(maxValue-minValue)+minValue;
+            var randomvalue=Math.floor(Math.random()*(maxValue-minValue+1)+1);
+            console.log("RANDOMPOINT:\n"+ randomvalue);
+            return randomvalue;
         }
 
 
@@ -415,13 +421,29 @@
             }, 2000);
             $("#gameStart").hide();
             
+            console.log("value chosen:"+value);
+            if (gameType==='skynet'){
 
-            if (gameType==='skynet' && value==='X'){
+             //&& value==='X'){
+
+                if (value==='O'){
+                    Players.push({Marker:'X',isHuman:false});
+                    Players.push({Marker:'O',isHuman:true});
+                    currentPlayer= Players[0];
+                    cpuInitiateGame();
+                }
+                else{
+                    Players.push({Marker:'X',isHuman:true});
+                    Players.push({Marker:'O',isHuman:false});
+                    currentPlayer= Players[0];
+                }
+                
+                /*
                 Players[0].Marker='X';
                 Players[1].Marker='O';
                 Players[1].isHuman=true;
                 currentPlayer=Players[0];
-                cpuInitiateGame();
+                */
             }
             else{
                 if (gameType==='humans' && value==='X'){
@@ -448,12 +470,7 @@
             $("#gameTypeSelector").hide().removeClass('hidden').fadeIn('slow');
             
             
-            /*
            
-            $("#gameTypeSelector").removeClass('animated rotateOutUpRight');
-            $("#gameStart").removeClass('animated rotateOutUpRight');
-            $("#gameTypeSelector").hide().removeClass('hidden').fadeIn();
-            */
             
         }
         /**
@@ -465,7 +482,9 @@
              var changeditem= Players.find((item)=>item.Marker.toLowerCase()!=currentPlayer.Marker.toLowerCase());
              console.log("item found: "+ changeditem.Marker+" "+changeditem.isHuman);
              currentPlayer= changeditem;
-             return;
+             if (currentPlayer.isHuman===false){
+                 cpuPlay();
+             }
              
              
             //
@@ -482,6 +501,7 @@
             if (canPlayHouse(data)===false) {
                 return;
             }
+
             $("#" + data).text(currentPlayer.Marker);
             // gonna save only the winning moves or not...denpends 
             gameMoves.push({player:currentPlayer.Marker,celldata:data});
