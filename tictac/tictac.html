@@ -67,23 +67,32 @@
             align-items: center;
             justify-content: center;
             font-family: 'Press Start 2P',cursive;
-            margin: 10px 10px 10px 10px
+            margin: 10px 10px 10px 10px;
+            background-color: #4286f4;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         .projectTitle{
             font-size:26px;
             font-family:'Press Start 2P',cursive;
             text-align:center;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         .gameMenu {
             font-size: 32px;
             font-family: 'Press Start 2P', cursive;
             text-align: center;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .gameOptions {
             font-family: 'Press Start 2P', cursive;
             font-size: 14px;
             text-align: center;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .gameInputOptions:hover {
@@ -96,6 +105,8 @@
             font-family: 'Press Start 2P', cursive;
             font-size: 11px;
             text-align: center;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .textCell {
@@ -112,7 +123,8 @@
             border: 2px ridge indianred ;
             border-radius: 2px;
             z-index: 1;
-            
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
             position: fixed;
             top: 80px;
             
@@ -125,12 +137,16 @@
             padding: 20px;
             width: 200px;
             height: 50px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
             
         }
         .gameResetInformation{
             font-family: 'Pangolin', cursive;
             font-size: 16px;
             font-weight: bold;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         .sup{
             line-height: 80%;
@@ -185,6 +201,11 @@
             numMoves=0;
             currentPlayer.Marker="";
             currentPlayer.isHuman=false;
+            for (var i=0;i<3;i++){
+                for (var x=0;x<3;i++){
+                    $("#r"+i+"c"+x).css('background-color','#4286f4');
+                }
+            }
 
         }
         /**
@@ -197,6 +218,17 @@
                 console.log(this.id);
                 handleClick(this.id);
             });
+            $("div.cell").mouseover(function(e){
+                e.preventDefault();
+                console.log("mouse over: " +this.id);
+                $("#"+this.id).css('background-color',currentPlayer.bcColor);
+
+            });
+            $("div.cell").mouseleave(function(e){
+                e.preventDefault();
+                console.log("mouse leave: "+this.id);
+                $("#"+this.id).css('background-color',"#4286f4");
+            });
             //MockWinMoves();
         });
         /**
@@ -205,9 +237,6 @@
         @return the cell is empty
         **/
         function canPlayHouse(value) {
-            
-            //console.log("canPlayHouse value cell has content:" + $("#" + value).text().trim() === '');
-            //return $("#"+value).text().trim()==='';
             var cellcontent= $("#" + value).text().trim();
             console.log("cell content: "+cellcontent);
             if(cellcontent=='X'||cellcontent=='O'){
@@ -287,7 +316,7 @@
             }
             
             for (var i=0;i<Players.length;i++){
-
+                console.log("CHECK WIN MARKER:"+ Players[i].Marker+" human:"+ Players[i].isHuman);
                 if (winHorizontal(Players[i].Marker)) {
                     result.winner=Players[i].Marker;
                     return result;
@@ -351,18 +380,15 @@
         function cpuInitiateGame(){
 
             var tmpPlay= preferedPlays[getRandomPoint(0,7)];
+            // to delete
             console.log("board position:" +tmpPlay);
             console.log("cpuInitiateGame current player: "+ currentPlayer.Marker+" is human"+ currentPlayer.isHuman);
-           
+           //
             $("#"+tmpPlay).text(currentPlayer.Marker);
             gameMoves.push({player:currentPlayer.Marker,celldata:tmpPlay});
             getGameMoves();
-            
             numMoves++;
             changePlayer();
-
-
-
         }
 
 
@@ -422,14 +448,14 @@
             //
             //center line
             if ($("#r1c0").text()==value&&$("#r1c1").text()==value&&$("#r1c2").text()==''){
-                $("#$r1c2").text(value);
+                $("#r1c2").text(value);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r1c2'});
                 return true;
 
             }
             if ($("#r1c0").text()==value&&$("#r1c1").text()==''&&$("#r1c2").text()==value){
-                $("#$r1c1").text(value);
+                $("#r1c1").text(value);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r1c1'});
                 return true;
@@ -438,14 +464,14 @@
             //
             //bottom line
             if ($("#r2c0").text()==value&&$("#r2c1").text()==value&&$("#r2c2").text()==''){
-                $("#$r2c2").text(value);
+                $("#r2c2").text(value);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r2c2'});
                 return true;
 
             }
             if ($("#r2c0").text()==value&&$("#r2c1").text()==''&&$("#r2c2").text()==value){
-                $("#$r2c1").text(value);
+                $("#r2c1").text(value);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r2c1'});
                 return true;
@@ -533,14 +559,17 @@
             if(checkHorizontalLine(currentPlayer.Marker)){
                 return true;
             }
-            if (checkVerticalLine(value)){
+            if (checkVerticalLine(currentPlayer.Marker)){
                 return true;
             }
-            if (checkDiagonalLine(value)){
+            if (checkDiagonalLine(currentPlayer.Marker)){
                 return true;
             }
             return false;
         }
+        /**
+        funtion to get a free cell on the board
+        **/
         function getFreeCell(){
             for (var i=0;i<3;i++){
                 for (var x=0;x<3;x++){
@@ -560,6 +589,7 @@
         function cpuPlay(){
             console.log("\ncpu play moves:"+ numMoves);
             if (numMoves>=2){
+              
                 if (cpuPlaytoWin()){
 
                 }
@@ -570,29 +600,30 @@
             else{
                 randomizePlay();
             }
-
-            if (numMoves>=2){
-                console.log("cpu play"+ numMoves);
-                playToWin();
+            if(numMoves>=3){
+                var item=checkWin();
+                console.log("cpu play: check win result"+ item.winner);
+                if (item.winner==="DRAW" ||item.winner==="X" || item.winner==="O") {
+                    setWinState(item);
+                    return;
+                }
             }
-            else{
-                smartPlay();
-            }
-            
         }
-
+        /**
+        function to handle the color of the cell on the ui of the player
+        **/
         function setColor(){
             var tmpItemFColor= getRandomPoint(1,100);
             var tmpItemSColor= getRandomPoint(1,100);
             if(tmpItemFColor>tmpItemSColor){
-                Players[0].bcColor
-                Players[1].bcColor
+                Players[0].bcColor=itemColors[0];
+                Players[1].bcColor=itemColors[1];
             }
             else{
-                Players[0].bcColor
-                Players[1].bcColor
+                Players[0].bcColor=itemColors[1];
+                Players[1].bcColor=itemColors[0];
             }
-            currentPlayer= Players[0];
+            console.log("SETCOLOR: fcolor: "+ tmpItemFColor+" sec color: "+ tmpItemSColor+"\n Array Item 0 color:"+Players[0].bcColor+"\nArray item 1 color: "+ Players[1].bcColor);
         }
         /**
         function to set the first player and show the game board
@@ -606,6 +637,7 @@
             setTimeout(function () {
                 $("#textBi").hide();
                 $("#gameBoard").hide().removeClass('hidden').fadeIn('slow');
+                
             }, 2000);
             $("#gameStart").hide();
             
@@ -620,11 +652,13 @@
                     Players.push({Marker:'X',isHuman:false});
                     Players.push({Marker:'O',isHuman:true});
                     currentPlayer= Players[0];
+                    setColor();
                     cpuInitiateGame();
                 }
                 else{
                     Players.push({Marker:'X',isHuman:true});
                     Players.push({Marker:'O',isHuman:false});
+                    setColor();
                     currentPlayer= Players[0];
                 }
                 
@@ -641,22 +675,21 @@
                     Players.push({Marker:'O',isHuman:true});
                     currentPlayer= Players[1];
                 }
-                
+                setColor();
             }
             
 
            
         }
+        /**
+        function to handle the game board and ui reset
+        **/
         function resetGameUI(){
             $("#gameSelector").hide().removeClass('hidden').fadeIn('slow');
             $("#gameTypeText").hide().removeClass('hidden').fadeIn('slow');
             $("#gameTypeSelector").removeClass('animated rotateOutUpRight');
             $("#gameStart").removeClass('animated rotateOutUpRight');
             $("#gameTypeSelector").hide().removeClass('hidden').fadeIn('slow');
-            
-            
-           
-            
         }
         /**
         function to switch player
@@ -674,8 +707,35 @@
              
             //
         }
+        /** function to handle the winning state of the game
+        **/
+        function setWinState(item){
+            //console.log("winner"+ item.winner);
+            $("#divWinner").empty();
+            $("#divWinner").hide().removeClass('hidden').fadeIn();
+            if (item.winner==='DRAW'){
+                $("#divWinner").addClass('col-xs-offset-3');
+                $("#divWinner").append("<span><sup>Better luck next time cupcake cause someone outsmarted you and you could not win!!!!</sup></span>");
+            }
+            else{
+                $("#divWinner").addClass('col-xs-offset-6');
+                $("#divWinner").append("<span><sup>Winner is: "+item.winner+"</sup></span>");
+            }
+            $("#GameResetInfo").hide().removeClass('hidden').fadeIn();
+            $("#GameResetInfo").addClass('animated fadeInUp');
+            setTimeout(function(){
+                gameReset();
+                $("#divWinner").hide();
+                $("#gameBoard").hide();
+                $("#GameResetInfo").removeClass('animated fadeInUp');
+                $("#GameResetInfo").hide();
+                resetGameUI();
+                        
+            },10000);
+        }
         /**
         function to handle the cell click
+        @param data the object containing the information
         */
         function handleClick(data) {
             
@@ -690,6 +750,7 @@
             }
 
             $("#" + data).text(currentPlayer.Marker);
+            $("#"+data).css('background-color',currentPlayer.bcColor);
             // gonna save only the winning moves or not...denpends 
             gameMoves.push({player:currentPlayer.Marker,celldata:data});
             //
@@ -699,43 +760,12 @@
                 console.log("checkwin result:"+item.winner);
                 if (item.winner==="DRAW" ||item.winner==="X" || item.winner==="O") {
                 
-                    console.log("winner"+ item.winner);
-
-                   
-                    $("#divWinner").empty();
-                    $("#divWinner").hide().removeClass('hidden').fadeIn();
-                    if (item.winner==='DRAW'){
-                        $("#divWinner").addClass('col-xs-offset-3');
-                        $("#divWinner").append("<span><sup>Better luck next time cupcake cause someone outsmarted you and you could not win!!!!</sup></span>");
-                    }
-                    else{
-                        $("#divWinner").addClass('col-xs-offset-6');
-                        $("#divWinner").append("<span><sup>Winner is: "+item.winner+"</sup></span>");
-                    }
-                    $("#GameResetInfo").hide().removeClass('hidden').fadeIn();
-                    $("#GameResetInfo").addClass('animated fadeInUp');
-                   
-                    
-                    setTimeout(function(){
-
-                        gameReset();
-                        $("#divWinner").hide();
-                        $("#gameBoard").hide();
-                        $("#GameResetInfo").removeClass('animated fadeInUp');
-                        $("#GameResetInfo").hide();
-                        resetGameUI();
-                        
-                    },10000);
-
-                    
+                    setWinState(item);
                     return;
                 }
             }
             getGameMoves();
             changePlayer();
-            
-           
-
         }
     </script>
     <div class="container-fluid" id="projectContainer">
@@ -779,9 +809,9 @@
             <div id="textBi" class="col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" hidden> 
                 Hope you're ready cupcake..cause it's on..... It's on like Donkey Kong
             </div>
-            <div id="Score">
+            <!--<div id="Score">
                 banana
-            </div>
+            </div>-->
             <div id="gameBoard" hidden>
                 
                 <div class="row projectTitle">
