@@ -9,7 +9,6 @@
     <meta description="freecodecamp calculator">
     <script src=".././node_modules/jquery/dist/jquery.js"></script>
     <script src=".././node_modules/bootstrap/dist/js/bootstrap.js"></script>
-    <!--<script src=".././node_modules/mattboldt.typed.js/js/typed.js"></script>-->
     <link href=".././node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <link href=".././node_modules/animate.css/animate.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|Pangolin" rel="stylesheet">
@@ -68,6 +67,7 @@
             align-items: center;
             justify-content: center;
             font-family: 'Press Start 2P',cursive;
+            margin: 10px 10px 10px 10px
         }
         .projectTitle{
             font-size:26px;
@@ -140,21 +140,13 @@
 
 <body>
     <script>
+        var itemColors=["#D44E3D","#EBAA13"];
         var gameType;
         var preferedPlays=['r1c1','r0c0','r0c2','r2c0','r2c2','r0c1','r1c0','r1c2','r2c1'];
-        var winningMoves = [{
-            orientation: "horizontal",
-            coordinates: ['r0c0', 'r0c1', 'r0c2', 'r1c0', 'r1c1', 'r1c2', 'r2c0', 'r2c1', 'r2c2']
-        }, {
-            orientation: "vertical",
-            coordinates: ['r0c0', 'r1c0', 'r2c0', 'r0c1', 'r1c1', 'r2c1', 'r0c2', 'r1c2', 'r2c2']
-        }, {
-            orientation: "diagonal",
-            coordinates: ['r0c0', 'r1c1', 'r2c2', 'r0c2', 'r1c1', 'r2c0']
-        }];
+       
         var gameMoves = [];
         var Players = [];
-        var currentPlayer = {Marker:"",isHuman: false};
+        var currentPlayer = {Marker:"",isHuman: false,bcColor:""};
         var numMoves=0;
         /**
         mock function to iterate the WinningMoves
@@ -348,23 +340,28 @@
             $("#gameStart").hide();
 
         }
+        function getGameMoves(){
+            gameMoves.forEach(function(element){
+                console.log("getGameMoves\nmarker: "+element.player+" pos: "+ element.celldata);
+            });
+        }
         /**
         function to iniate the cpu play
         */
         function cpuInitiateGame(){
 
-            var tmpPlay= preferedPlays[getRandomPoint(0,8)];
+            var tmpPlay= preferedPlays[getRandomPoint(0,7)];
             console.log("board position:" +tmpPlay);
-            console.log("current player: "+ currentPlayer.Marker+" is human"+ currentPlayer.isHuman);
+            console.log("cpuInitiateGame current player: "+ currentPlayer.Marker+" is human"+ currentPlayer.isHuman);
            
             $("#"+tmpPlay).text(currentPlayer.Marker);
-            gameMoves.push(
-                {
-                    player:currentPlayer.Marker,
-                    celldata:tmpPlay
-                }
-            );
+            gameMoves.push({player:currentPlayer.Marker,celldata:tmpPlay});
+            getGameMoves();
+            
+            numMoves++;
             changePlayer();
+
+
 
         }
 
@@ -381,7 +378,7 @@
             return randomvalue;
         }
 
-
+        
         
         /**
         function to randomize the play
@@ -390,21 +387,212 @@
             var isValid=false;
 
             while(isValid===false){
-                var tmpRow= getRandomPoint(0,3);
-                var tmpCol= getRandomPoint(0,3);
+                var tmpRow= getRandomPoint(0,2);
+                var tmpCol= getRandomPoint(0,2);
                 if (canPlayHouse('r'+tmpRow+'c'+tmpCol)){
                     $("#r"+tmpRow+'c'+tmpCol).text(currentPlayer.Marker);
+                    gameMoves.push({player:currentPlayer.Marker,celldata:"r"+tmpRow+"c"+tmpCol});
+                    numMoves++;
+                    changePlayer();
                     isValid=true;
                 }
                 
             }
+            
+        }
+        
+
+        /**
+        function to check if the horizontal lines can be played(smart play)
+        */
+        function checkHorizontalLine(value){
+            // top line
+            if ($("#r0c0").text()==value&& $("#r0c1").text()==value&& $("#r0c2").text==''){
+                $("#r0c2").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r0c2'});
+                return true;
+            }
+            if ($("#r0c0").text()==value&& $("#r0c1").text()==''&& $("#r0c2").text==value){
+                $("#r0c1").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r1c1'});
+                return true;
+            }
+            //
+            //center line
+            if ($("#r1c0").text()==value&&$("#r1c1").text()==value&&$("#r1c2").text()==''){
+                $("#$r1c2").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r1c2'});
+                return true;
+
+            }
+            if ($("#r1c0").text()==value&&$("#r1c1").text()==''&&$("#r1c2").text()==value){
+                $("#$r1c1").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r1c1'});
+                return true;
+
+            }
+            //
+            //bottom line
+            if ($("#r2c0").text()==value&&$("#r2c1").text()==value&&$("#r2c2").text()==''){
+                $("#$r2c2").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r2c2'});
+                return true;
+
+            }
+            if ($("#r2c0").text()==value&&$("#r2c1").text()==''&&$("#r2c2").text()==value){
+                $("#$r2c1").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r2c1'});
+                return true;
+
+            }
+            //
+        }
+        function checkVerticalLine(value){
+            //left column
+            if ($("#r0c0").text()==value&&$("#r1c0").text()==value&&$("#r2c0").text()==''){
+                $("#r2c0").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r2c0'});
+                return true;
+            }
+            if ($("#r0c0").text()==value&&$("#r1c0").text()==''&&$("#r2c0").text()==value){
+                $("#r1c0").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r1c0'});
+                return true;
+            }
+            //
+            //mid column
+            if ($("#r0c1").text()==value&&$("#r1c1").text()==value&&$("#r2c1").text()==''){
+                $("#r2c1").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r2c1'});
+                return true;
+            }
+            if ($("#r0c1").text()==value&&$("#r1c1").text()==''&&$("#r2c1").text()==value){
+                $("#r1c1").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r1c1'});
+                return true;
+            }
+            //
+            //right column
+            if ($("#r0c2").text()==value&&$("#r1c2").text()==value&&$("#r2c2").text()==''){
+                $("#r2c2").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r2c2'});
+                return true;
+            }
+            if ($("#r0c2").text()==value&&$("#r1c2").text()==''&&$("#r2c2").text()==value){
+                $("#r1c2").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r1c2'});
+                return true;
+            }
+            //
+
         }
 
+        function checkDiagonalLine(value){
+            //left
+            if ($("#r0c0").text()==value&&$("#r1c1").text()==value&&$("#r2c2").text()==''){
+                $("#r2c2").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r2c2'});
+                return true;
+            }
+            if ($("#r0c0").text()==value&&$("#r1c1").text()==''&&$("#r2c2").text()==value){
+                $("#r1c1").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r1c1'});
+                return true;
+            }
+            //
+            //right
+            if ($("#r0c2").text()==value&&$("#r1c1").text()==value&&$("#r2c0").text()==''){
+                $("#r2c0").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r2c0'});
+                return true;
+            }
+            if ($("#r0c2").text()==value&&$("#r1c1").text()==''&&$("#r2c0").text()==value){
+                $("#r1c1").text(value);
+                numMoves++;
+                gameMoves.push({player:value,celldata:'r1c1'});
+                return true;
+            }
+            //
+        }
+        function cpuPlaytoWin(){
+            if(checkHorizontalLine(currentPlayer.Marker)){
+                return true;
+            }
+            if (checkVerticalLine(value)){
+                return true;
+            }
+            if (checkDiagonalLine(value)){
+                return true;
+            }
+            return false;
+        }
+        function getFreeCell(){
+            for (var i=0;i<3;i++){
+                for (var x=0;x<3;x++){
+                    if (canPlayHouse("r"+i+"c"+x)){
+                        $("#r"+i+"c"+x).text(currentPlayer.Marker);
+                        numMoves++;
+                        gameMoves.push({player:currentPlayer.Marker,celldata:"r"+i+"c"+x});
+                        changePlayer();
+                        return;
+                    }
+                }
+            }
+        }
         /**
         function for cpu "smart" play
         */
         function cpuPlay(){
+            console.log("\ncpu play moves:"+ numMoves);
+            if (numMoves>=2){
+                if (cpuPlaytoWin()){
 
+                }
+                else{
+                    getFreeCell();
+                }
+            }
+            else{
+                randomizePlay();
+            }
+
+            if (numMoves>=2){
+                console.log("cpu play"+ numMoves);
+                playToWin();
+            }
+            else{
+                smartPlay();
+            }
+            
+        }
+
+        function setColor(){
+            var tmpItemFColor= getRandomPoint(1,100);
+            var tmpItemSColor= getRandomPoint(1,100);
+            if(tmpItemFColor>tmpItemSColor){
+                Players[0].bcColor
+                Players[1].bcColor
+            }
+            else{
+                Players[0].bcColor
+                Players[1].bcColor
+            }
+            currentPlayer= Players[0];
         }
         /**
         function to set the first player and show the game board
@@ -422,6 +610,8 @@
             $("#gameStart").hide();
             
             console.log("value chosen:"+value);
+
+            
             if (gameType==='skynet'){
 
              //&& value==='X'){
@@ -438,12 +628,7 @@
                     currentPlayer= Players[0];
                 }
                 
-                /*
-                Players[0].Marker='X';
-                Players[1].Marker='O';
-                Players[1].isHuman=true;
-                currentPlayer=Players[0];
-                */
+                
             }
             else{
                 if (gameType==='humans' && value==='X'){
@@ -478,9 +663,9 @@
         */
         function changePlayer(){
              //change player
-             console.log("currentplayer before change: "+ currentPlayer.Marker);
+             //console.log("currentplayer before change: "+ currentPlayer.Marker);
              var changeditem= Players.find((item)=>item.Marker.toLowerCase()!=currentPlayer.Marker.toLowerCase());
-             console.log("item found: "+ changeditem.Marker+" "+changeditem.isHuman);
+             //console.log("item found: "+ changeditem.Marker+" "+changeditem.isHuman);
              currentPlayer= changeditem;
              if (currentPlayer.isHuman===false){
                  cpuPlay();
@@ -493,7 +678,9 @@
         function to handle the cell click
         */
         function handleClick(data) {
+            
             console.log("DATA: "+ data+" marker: "+ currentPlayer.Marker);
+
             if(!currentPlayer.isHuman){
                 return;
             }
@@ -544,7 +731,7 @@
                     return;
                 }
             }
-           
+            getGameMoves();
             changePlayer();
             
            
