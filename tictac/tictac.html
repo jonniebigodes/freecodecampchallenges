@@ -61,16 +61,24 @@
             display: flex;
             width: 150px;
             height: 150px;
-            border: 1px solid darkslateblue;
+            border: 1px solid #9A8297;
             text-align: center;
             font-size: 32px;
             align-items: center;
             justify-content: center;
             font-family: 'Press Start 2P',cursive;
             margin: 10px 10px 10px 10px;
-            background-color: #4286f4;
+            background-color: #9A8297;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+        }
+        .donkeykong{
+            font-family: 'Press Start 2P',cursive;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-size: 14px;
+            text-align: center;
+
         }
         .projectTitle{
             font-size:26px;
@@ -131,14 +139,17 @@
         }
         .winnerText{
             font-family: 'Pangolin', cursive;
-            font-size: 24px;
+            font-size: 18px;
+            font-weight: bold;
+            word-wrap: break-word;
             border-radius: 15px;
             border: 1px solid darkslateblue;
             padding: 20px;
-            width: 200px;
+            width: 500px;
             height: 50px;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+             
             
         }
         .gameResetInformation{
@@ -156,30 +167,14 @@
 
 <body>
     <script>
-        var itemColors=["#D44E3D","#EBAA13"];
+        var itemColors=["#D44E3D","#EBAA13","#c5d5cb","#9fa8a3","#b3c2bf","#e9ece5","#edd9c0","#9068be","#3fb0ac","#173e43"];
         var gameType;
         var preferedPlays=['r1c1','r0c0','r0c2','r2c0','r2c2','r0c1','r1c0','r1c2','r2c1'];
-       
+        var numMoves=0;
         var gameMoves = [];
         var Players = [];
         var currentPlayer = {Marker:"",isHuman: false,bcColor:""};
-        var numMoves=0;
-        /**
-        mock function to iterate the WinningMoves
-        */
-        function MockWinMoves() {
-            console.log("entered mock win\n");
-            winningMoves.forEach(function (element) {
-                console.log("element: " + element.orientation);
-                element.coordinates.forEach(function (data) {
-                    console.log("coordinates:\n" + data);
-                });
-
-
-            });
-        }
-
-
+        var gameEnded=false;
         /**
         function to reset the game board and show the main menu
         */
@@ -196,23 +191,22 @@
             for (var i=0;i<3;i++){
                 for (var x=0;x<3;x++){
                     $("#r"+i+"c"+x).text('');
+                    $("#r"+i+"c"+x).css('background-color','#9A8297');
                 }
             }
             numMoves=0;
             currentPlayer.Marker="";
             currentPlayer.isHuman=false;
-            for (var i=0;i<3;i++){
-                for (var x=0;x<3;i++){
-                    $("#r"+i+"c"+x).css('background-color','#4286f4');
-                }
-            }
-
+           
         }
         /**
         function to handle the document load
         */
         $(function () {
-
+            var jumboColor= getRandomPoint(2,itemColors.length-1);
+            $("#containerJumbo").css('background-color',itemColors[jumboColor]);
+            $('#projectContainer').css('background-color',itemColors[jumboColor]);
+            $('body').css('background-color',itemColors[jumboColor]);
             $("div.cell").on('click', function (e) {
                 e.preventDefault();
                 console.log(this.id);
@@ -221,13 +215,19 @@
             $("div.cell").mouseover(function(e){
                 e.preventDefault();
                 console.log("mouse over: " +this.id);
-                $("#"+this.id).css('background-color',currentPlayer.bcColor);
+                if ($("#"+this.id).text()==''){
+                    $("#"+this.id).css('background-color',currentPlayer.bcColor);
+                }
+                
 
             });
             $("div.cell").mouseleave(function(e){
                 e.preventDefault();
                 console.log("mouse leave: "+this.id);
-                $("#"+this.id).css('background-color',"#4286f4");
+                if ($("#"+this.id).text()==''){
+                    $("#"+this.id).css('background-color',"#9A8297");
+                }
+                
             });
             //MockWinMoves();
         });
@@ -385,6 +385,7 @@
             console.log("cpuInitiateGame current player: "+ currentPlayer.Marker+" is human"+ currentPlayer.isHuman);
            //
             $("#"+tmpPlay).text(currentPlayer.Marker);
+            $("#"+ tmpPlay).css('background-color',currentPlayer.bcColor);
             gameMoves.push({player:currentPlayer.Marker,celldata:tmpPlay});
             getGameMoves();
             numMoves++;
@@ -413,10 +414,12 @@
             var isValid=false;
 
             while(isValid===false){
-                var tmpRow= getRandomPoint(0,2);
-                var tmpCol= getRandomPoint(0,2);
+                var tmpRow= getRandomPoint(0,1);
+                var tmpCol= getRandomPoint(0,1);
+                console.log("randomizePlay row: "+tmpRow+" col:"+tmpCol);
                 if (canPlayHouse('r'+tmpRow+'c'+tmpCol)){
                     $("#r"+tmpRow+'c'+tmpCol).text(currentPlayer.Marker);
+                    $("#r"+tmpRow+'c'+tmpCol).css('background-color',currentPlayer.bcColor);
                     gameMoves.push({player:currentPlayer.Marker,celldata:"r"+tmpRow+"c"+tmpCol});
                     numMoves++;
                     changePlayer();
@@ -435,12 +438,14 @@
             // top line
             if ($("#r0c0").text()==value&& $("#r0c1").text()==value&& $("#r0c2").text==''){
                 $("#r0c2").text(value);
+                $("#r0c2").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r0c2'});
                 return true;
             }
             if ($("#r0c0").text()==value&& $("#r0c1").text()==''&& $("#r0c2").text==value){
                 $("#r0c1").text(value);
+                $("#r0c1").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r1c1'});
                 return true;
@@ -449,6 +454,7 @@
             //center line
             if ($("#r1c0").text()==value&&$("#r1c1").text()==value&&$("#r1c2").text()==''){
                 $("#r1c2").text(value);
+                $("#r1c2").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r1c2'});
                 return true;
@@ -456,6 +462,7 @@
             }
             if ($("#r1c0").text()==value&&$("#r1c1").text()==''&&$("#r1c2").text()==value){
                 $("#r1c1").text(value);
+                $("#r1c1").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r1c1'});
                 return true;
@@ -465,6 +472,7 @@
             //bottom line
             if ($("#r2c0").text()==value&&$("#r2c1").text()==value&&$("#r2c2").text()==''){
                 $("#r2c2").text(value);
+                $("#r2c2").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r2c2'});
                 return true;
@@ -472,6 +480,7 @@
             }
             if ($("#r2c0").text()==value&&$("#r2c1").text()==''&&$("#r2c2").text()==value){
                 $("#r2c1").text(value);
+                $("#r2c1").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r2c1'});
                 return true;
@@ -483,12 +492,14 @@
             //left column
             if ($("#r0c0").text()==value&&$("#r1c0").text()==value&&$("#r2c0").text()==''){
                 $("#r2c0").text(value);
+                $("#r2c0").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r2c0'});
                 return true;
             }
             if ($("#r0c0").text()==value&&$("#r1c0").text()==''&&$("#r2c0").text()==value){
                 $("#r1c0").text(value);
+                $("#r1c0").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r1c0'});
                 return true;
@@ -497,12 +508,14 @@
             //mid column
             if ($("#r0c1").text()==value&&$("#r1c1").text()==value&&$("#r2c1").text()==''){
                 $("#r2c1").text(value);
+                $("#r2c1").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r2c1'});
                 return true;
             }
             if ($("#r0c1").text()==value&&$("#r1c1").text()==''&&$("#r2c1").text()==value){
                 $("#r1c1").text(value);
+                $("#r1c1").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r1c1'});
                 return true;
@@ -511,12 +524,14 @@
             //right column
             if ($("#r0c2").text()==value&&$("#r1c2").text()==value&&$("#r2c2").text()==''){
                 $("#r2c2").text(value);
+                $("#r2c2").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r2c2'});
                 return true;
             }
             if ($("#r0c2").text()==value&&$("#r1c2").text()==''&&$("#r2c2").text()==value){
                 $("#r1c2").text(value);
+                $("#r1c2").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r1c2'});
                 return true;
@@ -529,12 +544,14 @@
             //left
             if ($("#r0c0").text()==value&&$("#r1c1").text()==value&&$("#r2c2").text()==''){
                 $("#r2c2").text(value);
+                $("#r2c2").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r2c2'});
                 return true;
             }
             if ($("#r0c0").text()==value&&$("#r1c1").text()==''&&$("#r2c2").text()==value){
                 $("#r1c1").text(value);
+                $("#r1c1").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r1c1'});
                 return true;
@@ -543,12 +560,14 @@
             //right
             if ($("#r0c2").text()==value&&$("#r1c1").text()==value&&$("#r2c0").text()==''){
                 $("#r2c0").text(value);
+                $("#r2c0").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r2c0'});
                 return true;
             }
             if ($("#r0c2").text()==value&&$("#r1c1").text()==''&&$("#r2c0").text()==value){
                 $("#r1c1").text(value);
+                $("#r1c1").css('background-color',currentPlayer.bcColor);
                 numMoves++;
                 gameMoves.push({player:value,celldata:'r1c1'});
                 return true;
@@ -575,6 +594,7 @@
                 for (var x=0;x<3;x++){
                     if (canPlayHouse("r"+i+"c"+x)){
                         $("#r"+i+"c"+x).text(currentPlayer.Marker);
+                        $("#r"+i+"c"+x).css('background-color',currentPlayer.bcColor);
                         numMoves++;
                         gameMoves.push({player:currentPlayer.Marker,celldata:"r"+i+"c"+x});
                         changePlayer();
@@ -600,10 +620,12 @@
             else{
                 randomizePlay();
             }
+
             if(numMoves>=3){
                 var item=checkWin();
                 console.log("cpu play: check win result"+ item.winner);
                 if (item.winner==="DRAW" ||item.winner==="X" || item.winner==="O") {
+                    gameEnded=true;
                     setWinState(item);
                     return;
                 }
@@ -623,6 +645,8 @@
                 Players[0].bcColor=itemColors[1];
                 Players[1].bcColor=itemColors[0];
             }
+            
+
             console.log("SETCOLOR: fcolor: "+ tmpItemFColor+" sec color: "+ tmpItemSColor+"\n Array Item 0 color:"+Players[0].bcColor+"\nArray item 1 color: "+ Players[1].bcColor);
         }
         /**
@@ -690,6 +714,7 @@
             $("#gameTypeSelector").removeClass('animated rotateOutUpRight');
             $("#gameStart").removeClass('animated rotateOutUpRight');
             $("#gameTypeSelector").hide().removeClass('hidden').fadeIn('slow');
+            gameEnded=false;
         }
         /**
         function to switch player
@@ -697,10 +722,17 @@
         function changePlayer(){
              //change player
              //console.log("currentplayer before change: "+ currentPlayer.Marker);
-             var changeditem= Players.find((item)=>item.Marker.toLowerCase()!=currentPlayer.Marker.toLowerCase());
+             //var changeditem= Players.find((item)=>item.Marker.toLowerCase()!=currentPlayer.Marker.toLowerCase());
+             if (currentPlayer.Marker.toLowerCase()===Players[0].Marker.toLowerCase()){
+                 currentPlayer= Players[1];
+             }
+             else{
+                 currentPlayer=Players[0];
+             }
+             console.log("currentplayer changePlayer: "+ currentPlayer.Marker+ " is human:"+ currentPlayer.isHuman);
              //console.log("item found: "+ changeditem.Marker+" "+changeditem.isHuman);
-             currentPlayer= changeditem;
-             if (currentPlayer.isHuman===false){
+             //currentPlayer= changeditem;
+             if (currentPlayer.isHuman==false){
                  cpuPlay();
              }
              
@@ -714,7 +746,7 @@
             $("#divWinner").empty();
             $("#divWinner").hide().removeClass('hidden').fadeIn();
             if (item.winner==='DRAW'){
-                $("#divWinner").addClass('col-xs-offset-3');
+                $("#divWinner").addClass('col-xs-offset-5');
                 $("#divWinner").append("<span><sup>Better luck next time cupcake cause someone outsmarted you and you could not win!!!!</sup></span>");
             }
             else{
@@ -740,7 +772,9 @@
         function handleClick(data) {
             
             console.log("DATA: "+ data+" marker: "+ currentPlayer.Marker);
-
+            if (gameEnded){
+                return;
+            }
             if(!currentPlayer.isHuman){
                 return;
             }
@@ -759,17 +793,18 @@
                 var item= checkWin();
                 console.log("checkwin result:"+item.winner);
                 if (item.winner==="DRAW" ||item.winner==="X" || item.winner==="O") {
-                
+                    gameEnded=true;
                     setWinState(item);
                     return;
                 }
             }
-            getGameMoves();
             changePlayer();
+            //getGameMoves();
+            
         }
     </script>
     <div class="container-fluid" id="projectContainer">
-        <div class="jumbotron">
+        <div class="jumbotron" id="containerJumbo">
             <div id="gameSelector" class="row gameMenu">
                 <div id="gameTypeText">
                     <span>
@@ -806,15 +841,15 @@
                     
                 </div>
                 </div>
-            <div id="textBi" class="col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" hidden> 
-                Hope you're ready cupcake..cause it's on..... It's on like Donkey Kong
+            <div id="textBi" class="donkeykong col-xs-6 col-md-4 col-xs-offset-4" hidden> 
+                <span>Hope you're ready cupcake..cause it's on..... It's on like Donkey Kong</span>
             </div>
             <!--<div id="Score">
                 banana
             </div>-->
             <div id="gameBoard" hidden>
                 
-                <div class="row projectTitle">
+                <div class="row projectTitle col-xs-offset-1">
                     Supercalifragilistic Tic Tac Toe
                 </div>
                 
@@ -843,7 +878,7 @@
                     
                 
             </div>
-            <div id="divWinner" class="col-xs-6 col-md-4 col-xs-offset-4 winnerText" hidden></div>
+            <div id="divWinner" class="winnerText col-xs-6 col-md-4 col-xs-offset-4" hidden></div>
             
         </div>
         
