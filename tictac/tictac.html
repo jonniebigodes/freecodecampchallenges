@@ -803,88 +803,81 @@
             
         }
     </script>
-    <div class="container-fluid" id="projectContainer">
-        <div class="jumbotron" id="containerJumbo">
-            <div id="gameSelector" class="row gameMenu">
-                <div id="gameTypeText">
-                    <span>
-                        Choose how you want to go down...cupcake
-                    </span>
-                </div>
-                <div id="optionsGame" class="row gameOptions">
-                    <div id="gameTypeSelector">
-                        <div class="col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" 
-                        onclick="gameSelect('humans');">
-                            <span>Puny Human Vs Puny Human</span>
-                        </div>
-                        <div class="col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" 
-                        onclick="gameSelect('skynet');">
-                            <span>Puny Human Vs Kickass A.I</span>
-                        </div>
-                    </div>
-                    <div id="gameStart" hidden>
-                        <div class="col-xs-6 col-sm-4 col-xs-offset-4 gameMenu">
-                            <span>How you want to play it out cupcake?</span>
-                        </div>
-                        <div class="col-xs-6 col-sm-4 col-xs-offset-4 gameInputOptions" 
-                        onclick="setInitPlayer('X');">
-                            <span>I want the X</span>
-                        </div>
-                        <div class="col-xs-6 col-sm-4 col-xs-offset-4 gameInputOptions" 
-                        onclick="setInitPlayer('O');">
-                            <span>Take the X cupcake, i want the O</span>
-                        </div>
-                        <div class="row col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" onclick="getMainMenu();">
-                            <span>&lt;- Back</span>
-                        </div>
-                    </div>
-                    
-                </div>
-                </div>
-            <div id="textBi" class="donkeykong col-xs-6 col-md-4 col-xs-offset-4" hidden> 
-                <span>Hope you're ready cupcake..cause it's on..... It's on like Donkey Kong</span>
-            </div>
-            <!--<div id="Score">
+<div class="container-fluid" id="projectContainer">
+  <div class="jumbotron" id="containerJumbo">
+    <div id="gameSelector" class="row gameMenu">
+      <div id="gameTypeText">
+        <span>Choose how you want to go down...cupcake</span>
+      </div>
+      <div id="optionsGame" class="row gameOptions">
+        <div id="gameTypeSelector">
+          <div class="col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" onclick="gameSelect('humans');">
+            <span>Puny Human Vs Puny Human</span>
+          </div>
+          <div class="col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" onclick="gameSelect('skynet');">
+            <span>Puny Human Vs Kickass A.I</span>
+          </div>
+        </div>
+        <div id="gameStart" hidden>
+          <div class="col-xs-6 col-sm-4 col-xs-offset-4 gameMenu">
+            <span>How you want to play it out cupcake?</span>
+          </div>
+          <div class="col-xs-6 col-sm-4 col-xs-offset-4 gameInputOptions" onclick="setInitPlayer('X');">
+            <span>I want the X</span>
+          </div>
+          <div class="col-xs-6 col-sm-4 col-xs-offset-4 gameInputOptions" onclick="setInitPlayer('O');">
+            <span>Take the X cupcake, i want the O</span>
+          </div>
+          <div class="row col-xs-6 col-md-4 col-xs-offset-4 gameInputOptions" onclick="getMainMenu();">
+            <span>&lt;- Back</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div id="textBi" class="donkeykong col-xs-6 col-md-4 col-xs-offset-4" hidden>
+      <span>Hope you're ready cupcake..cause it's on..... It's on like Donkey Kong</span>
+    </div>
+    <!--<div id="Score">
                 banana
             </div>-->
-            <div id="gameBoard" hidden>
-                
-                <div class="row projectTitle col-xs-offset-1">
-                    Supercalifragilistic Tic Tac Toe
-                </div>
-                
-                    
-               
-                <!--gameboard-->
-                <div id="GameResetInfo" class="voffset5 gameResetInformation  col-xs-6 col-md-4 col-xs-offset-4 " hidden>
-                    The game will be reset in 10 seconds....
-                </div>
-                <div class="voffset7 row col-xs-offset-4" id="row0">
-                    <div class="col-xs-6 col-md-4 cell" id="r0c0"></div>
-                    <div class="col-xs-6 col-md-4 cell" id="r0c1"></div>
-                    <div class="col-xs-6 col-md-4 cell" id="r0c2"></div>
-                </div>
-                <div class="row col-xs-offset-4" id="row1">
-                    <div class="col-xs-6 col-md-4 cell" id="r1c0"></div>
-                    <div class="col-xs-6 col-md-4 cell" id="r1c1"></div>
-                    <div class="col-xs-6 col-md-4 cell" id="r1c2"></div>
-                </div>
-                <div class="row col-xs-offset-4" id="row2">
-                    <div class="col-xs-6 col-md-4 cell" id="r2c0"></div>
-                    <div class="col-xs-6 col-md-4 cell" id="r2c1"></div>
-                    <div class="col-xs-6 col-md-4 cell" id="r2c2"></div>
-                </div>
-                <!-- -->
-                    
-                
-            </div>
-            <div id="divWinner" class="winnerText col-xs-6 col-md-4 col-xs-offset-4" hidden></div>
-            
-        </div>
-        
+    <div id="gameBoard" hidden>
+
+      <div class="row projectTitle col-xs-offset-1">
+        Supercalifragilistic Tic Tac Toe
+      </div>
+
+
+      <!--gameboard-->
+      <div id="GameResetInfo" class="voffset5 gameResetInformation  col-xs-6 col-md-4 col-xs-offset-4 " hidden>
+        The game will be reset in 10 seconds....
+      </div>
+      <div class="voffset7 row col-xs-offset-4" id="row0">
+        <div class="col-xs-6 col-md-4 cell" id="r0c0"></div>
+        <div class="col-xs-6 col-md-4 cell" id="r0c1"></div>
+        <div class="col-xs-6 col-md-4 cell" id="r0c2"></div>
+      </div>
+      <div class="row col-xs-offset-4" id="row1">
+        <div class="col-xs-6 col-md-4 cell" id="r1c0"></div>
+        <div class="col-xs-6 col-md-4 cell" id="r1c1"></div>
+        <div class="col-xs-6 col-md-4 cell" id="r1c2"></div>
+      </div>
+      <div class="row col-xs-offset-4" id="row2">
+        <div class="col-xs-6 col-md-4 cell" id="r2c0"></div>
+        <div class="col-xs-6 col-md-4 cell" id="r2c1"></div>
+        <div class="col-xs-6 col-md-4 cell" id="r2c2"></div>
+      </div>
+      <!-- -->
+
+
     </div>
-    <hr>
-    <div class="footer footerInfo">Made by: <a href="http://codepen.io/jonniebigodes/" target="_blank">Jonniebigodes</a></div>
+    <div id="divWinner" class="winnerText col-xs-6 col-md-4 col-xs-offset-4" hidden></div>
+
+  </div>
+
+</div>
+<hr>
+<div class="footer footerInfo">Made by: <a href="http://codepen.io/jonniebigodes/" target="_blank">Jonniebigodes</a></div>
 </body>
 
 </html>

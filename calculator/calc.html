@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 <html>
 
 <head>
@@ -8,25 +10,193 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
     <meta description="freecodecamp calculator">
     <script src=".././node_modules/jquery/dist/jquery.js"></script>
-    <script src=".././node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <link href=".././node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <!--<script src=".././node_modules/bootstrap/dist/js/bootstrap.js"></script>
     <script src=".././node_modules/mattboldt.typed.js/js/typed.js"></script>
     <link href=".././node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-    <link href=".././node_modules/animate.css/animate.css" rel="stylesheet">
+    <link href=".././node_modules/animate.css/animate.css" rel="stylesheet">-->
     <style>
-    
+    .voffset {
+            margin-top: 2px;
+        }
+        
+        .voffset1 {
+            margin-top: 5px;
+        }
+        
+        .voffset2 {
+            margin-top: 10px;
+        }
+        
+        .voffset3 {
+            margin-top: 15px;
+        }
+        
+        .voffset4 {
+            margin-top: 30px;
+        }
+        
+        .voffset5 {
+            margin-top: 40px;
+        }
+        
+        .voffset6 {
+            margin-top: 60px;
+        }
+        
+        .voffset7 {
+            margin-top: 80px;
+        }
+        
+        .voffset8 {
+            margin-top: 100px;
+        }
+        
+        .voffset9 {
+            margin-top: 150px;
+        }
+        .titleProject{
+            text-align: center;
+            font-size: 32px;
+        }
+        .cell{
+            display: flex;
+            width: 32px;
+            height: 32px;
+            border: 1px solid #9A8297;
+            text-align: center;
+            font-size: 14px;
+            align-items: center;
+            justify-content: center;
+            
+            margin: 10px 10px 10px 10px;
+            background-color: #9A8297;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            box-shadow: 0px 3px 0px 0px #9A8297, inset -1px -3px 10px 1px #515151;
+        }
+        .celldisabled{
+            display: flex;
+            width: 32px;
+            height: 32px;
+            border: 1px solid #9A8297;
+            text-align: center;
+            font-size: 14px;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 10px 10px 10px 10px;
+            background-color: #9A8297;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            opacity: 0.4;
+        }
+       .equalSign{
+           display: flex;
+            width: 32px;
+            height: 64px;
+            border: 1px solid #9A8297;
+            text-align: center;
+            font-size: 14px;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 10px 10px 10px 10px;
+            background-color: #9A8297;
+            box-shadow: 0px 3px 0px 0px #9A8297, inset -1px -3px 10px 1px #515151;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            
+       }
+        .resultInfo{
+            border: 1px solid darkgreen;
+            
+        }
+        .historyContainer{
+            border: 1px solid lightblue;
+            opacity: 0.7;
+           
+        }
+        .containerCalculator{
+            border: 4px solid #9A8297;
+            box-shadow: 0px 3px 0px 0px #9A8297, inset -1px -3px 10px 1px #515151;
+            width: 480px;
+            height: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 10%;
+        }
     </style>
 </head>
 <body>
     <script>
-        $(function(){
-           
-          
-           
+        $(function(){ 
+            $("div.cell").on('click',function(e){
+            });     
        });
     </script>
-
-    <div>
+    <div class="container-fluid" id="projectContainer">
+        <div class="jumbotron voffset8">
+            <div class="voffset2 titleProject">
+                Supercalifragilistic calculator
+            </div>
+            <div class="containerCalculator" id="calculatorContainer">
+                <div class="resultInfo voffset4" id="resultContainer">
+                    <span>banana</span>
+                    <div class="historyContainer" id="tmpContainer">
+                        <span>banana</span>
+                    </div>
+                </div>
+                <div id="numbersCon" class="col-xs-6 col-sm-4">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-4 cell" id="r0c0">CE</div>
+                        <div class="col-xs-6 col-sm-4 cell" id="r0c1">C</div>    
+                        <div class="col-xs-6 col-sm-4 cell" id="r0c2">&lt;-</div>
+                    </div>
+                    <div class="row" id="row0">
+                        <div class="col-xs-6 col-sm-4 cell" id="r0c0">7</div>
+                        <div class="col-xs-6 col-sm-4 cell" id="r0c1">8</div>
+                        <div class="col-xs-6 col-sm-4 cell" id="r0c2">9</div>
+                    </div>
+                    <div class="row" id="row1">
+                        <div class="col-xs-6 col-sm-4 cell" id="r1c0">4</div>
+                        <div class="col-xs-6 col-sm-4 cell" id="r1c1">5</div>
+                        <div class="col-xs-6 col-sm-4 cell" id="r1c2">6</div>
+                    </div>
+                    <div class="row" id="row2">
+                        <div class="col-xs-6 col-sm-4 cell" id="r2c0">1</div>
+                        <div class="col-xs-6 col-sm-4 cell" id="r2c1">2</div>
+                        <div class="col-xs-6 col-sm-4 cell" id="r2c2">3</div>
+                    </div>
+                    <div class="row" id="row3">
+                        <div id="r2c1" class="col-xs-6 col-md-4 cell">0</div>
+                        <div class="col-xs-6 col-sm-4 cell" id="r2c2">,</div>
+                        <div class="col-xs-6 col-sm-4 celldisabled" id="r2c0" disabled></div>
+                    </div>
+                </div>
+                <div id="opscontainer" class="col-xs-6 col-sm-4">
+                    <div class="row"  id="ops">
+                        <div id="r1c0" class="cell">/</div>
+                        <div id="r1c1" class="cell voffset4">*</div>
+                        <div id="r1c2" class="cell voffset4">-</div>
+                        <div id="r1c2" class="cell voffset4">+</div>
+                        <div id="r1c2" class="equalSign">=</div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4" hidden>
+                    <div class="row col-xs-offset-5">
+                        <div class="cell">a</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+           
         
+    </div>
+    
+    <hr>
+    <div class="footer footerInfo">
+        Made by: <a href="http://codepen.io/jonniebigodes/" target="_blank">Jonniebigodes</a>
     </div>
 </body>
 </html>

@@ -145,7 +145,8 @@
         }; 
         
 
-        var urlApi="https://wind-bow.hyperdev.space/twitch-api/";
+        //var urlApi="https://wind-bow.hyperdev.space/twitch-api/";
+        var urlApi= "https://wind-bow.gomix.me/twitch-api/";
         var urltwitch="https://www.twitch.tv/";
         var onlineItems=0;
         var offlineItems=0;
@@ -619,8 +620,6 @@
                 var tmpItem= streamDataResult[i];
                 if (tmpItem.streaming){
                     onlineItems++;
-                   
-                    
                     $("#tabOnlineStreams").append("<div class=\"col-md-4\"><div class=\"panel panel-default\" id=\"hOnline"
                     +i+"\"><div class=\"panel-heading\">"
                     +tmpItem.username+"</div><div class=\"panel-body\"><h4>Currently streaming: <p>"
