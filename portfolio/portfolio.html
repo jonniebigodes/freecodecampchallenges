@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Freecodecamp portfolio</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css" />-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="https://cdn.muicss.com/mui-0.9.12/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.muicss.com/mui-0.9.12/js/mui.min.js"></script>
+    <style>
+        #sectionAbout {
+            padding-top: 50px;
+            height: 60vh;
+            color: #fff;
+            background-color: #2B2B2B;
+            width: 100%;
+        }
+
+        #sectionProjects {
+            padding-top: 50px;
+            height: 500px;
+            width: 100%;
+            color: #F6F6F6;
+            background-color: #2B2B2B;
+        }
+
+        #sectionContacts {
+            padding-top: 50px;
+            height: 80vh;
+            width: 100%;
+            color: #fff;
+            background-color: #F6F6F6;
+        }
+        .formContent{
+            color: black;
+        }
+        .well {
+            width: 95% !important;
+            margin-left: 6vh;
+            background-color: rgb(246, 246, 246)!important;
+        }
+
+        body {
+            background-color: rgb(246, 246, 246);
+        }
+
+        .voffset {
+            margin-top: 2px;
+        }
+
+        .voffset1 {
+            margin-top: 5px;
+        }
+
+        .voffset2 {
+            margin-top: 10px;
+        }
+
+        .voffset3 {
+            margin-top: 15px;
+        }
+
+        .voffset4 {
+            margin-top: 30px;
+        }
+
+        .voffset5 {
+            margin-top: 40px;
+        }
+
+        .voffset6 {
+            margin-top: 60px;
+        }
+
+        .voffset7 {
+            margin-top: 80px;
+        }
+
+        .voffset8 {
+            margin-top: 100px;
+        }
+
+        .voffset9 {
+            margin-top: 150px;
+        }
+        .btnSocial{
+            height: 8vh;
+            width: 8vh;
+        }
+        .projectCardContainer {
+            cursor: pointer;
+
+            perspective: 600;
+            position: relative;
+        }
+
+        .splitter {
+            background-color: #DE1B1B;
+            height: 2vh;
+        }
+
+        .card {
+            transform-style: preserve-3d;
+            transition: all 1s ease-in-out;
+            width: 100%;
+            margin-bottom: 1vh;
+            margin-left: 1vh;
+            margin-top: 2vh;
+        }
+
+        .card:hover {
+            transform: rotateY(180deg);
+        }
+
+        .card .front {
+            backface-visibility: hidden;
+            border-radius: 6px;
+            height: 100%;
+            position: absolute;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .card .back {
+            background: #eaeaed;
+            color: #0087cc;
+            line-height: 150px;
+            text-align: center;
+            transform: rotateY(180deg);
+        }
+        .portfooter{
+            color: black;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+    
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button>
+                <a class="navbar-brand" href="#">Portfolio</a>
+            </div>
+            <div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#sectionAbout">About me</a></li>
+                        
+                        <li><a href="#sectionContacts">Where to find me</a></li>
+                        <li><a href="#sectionProjects">Portfolio</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="voffset6" />
+    <div class="well">
+        <div id="sectionAbout" class="container-fluid">
+            <h1 style="margin-left: 2vh">About me</h1>
+            <div class="mui-container-fluid">
+                <div class="mui-row">
+                    <div class="mui-col-xs-6">
+                        <p>I'm a 35 year old self taught software developer.</p>
+                            <p>Currently attending Universidade de Évora to get my degree.</p>
+                            <p>I started coding when i was 18. As soon as touched a keyboard,</p>
+                            <p>the spark awakened in me and never could let go.</p>
+                            <p>Certified geek in all aspects.<br/> And when i'm not in front of the keyboard, mostly i'm either watching some
+                                show or having a cup of coffee in a plaza reading a book.
+                    </div>
+                    <div class="mui-col-xs-6">xs-6</div>
+                </div>
+                
+            </div>
+            
+        </div>
+        <hr class="splitter"/>
+        <div id="sectionContacts" class="container-fluid">
+            <div class="mui-container-fluid">
+                 <div class="mui-row">
+                    <div class="mui-col-xs-6">
+                        <form class="mui-form">
+                            <legend><h4>Send me a line if you want to talk about game of thrones or other show.
+                                <p/>Or you can look me up around the web with using those buttons on the right</h4></legend>
+                            <div class="mui-textfield">
+                                <input type="text" required>
+                                <label>Required Name </label>
+                            </div>
+                            <div class="mui-textfield mui-textfield--float-label">
+                                <input type="email" required class="formContent">
+                                <label>Required Email Address</label>
+                            </div>
+                            <div class="mui-textfield mui-textfield--float-label">
+                                <textarea class="formContent"></textarea>
+                                <label>Message</label>
+                            </div>
+                           
+                            <button type="submit" class="mui-btn mui-btn--raised">Submit</button>
+                        </form>
+                    </div>
+                    <div class="mui-col-xs-6">
+                        <div>
+                            <a class="mui-btn mui-btn--fab" href="https://github.com/jonniebigodes/" target="_blank">
+                                <img class="btnSocial" src="https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-512.png" alt="github-512"/>
+                            </a>
+                            <a class="mui-btn mui-btn--fab" href="https://www.linkedin.com/in/joaoferreiracardoso/" target="_blank">
+                                <img class="btnSocial" src="http://www.cairnsmorenursery.co.uk/wp-content/uploads/2016/12/20151104_563964389a49e.png" alt="linkedin"/>
+                            </a>
+                            <a class="mui-btn mui-btn--fab" href="https://twitter.com/xapaxa" target="_blank">
+                                <img class="btnSocial" src="https://image.freepik.com/icones-gratis/logotipo-do-twitter_318-50476.jpg" alt="socialtwitter"/>
+                            </a>
+                            <!--<button class="mui-btn mui-btn--fab">+</button>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="splitter" />
+        <div id="sectionProjects" class="container-fluid">
+            <h1 style="margin-left: 3vh">Portfolio</h1>
+            <div class="voffset4" />
+            <div class="mui-container-fluid">
+                <div class="mui-row">
+                    <div class="mui-col-xs-6 mui-col-md-4">
+                        <div class="card">
+                            <div class="content">
+                                <div class="front">
+                                    <img src="https://www.invisionapp.com/assets/img/home/animations/new/mockup-2.png" alt="mockup 1" />
+                                </div>
+                                <div class="back">
+                                    Mock Project Placeholder
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mui-col-xs-6 mui-col-md-4">
+                        <div class="card">
+                            <div class="content">
+                                <div class="front">
+                                    <img src="https://progressiveweb.solutions/progressive7theme/wp-content/uploads/sites/20/2016/11/UX-UI-Mock-ups.jpg" alt="mockup 2"
+                                    />
+                                </div>
+                                <div class="back">
+                                    Mock Project Placeholder
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mui-col-xs-6 mui-col-md-4">
+                        <div class="card">
+                            <div class="content">
+                                <div class="front">
+                                    <img src="http://transmissionproject.org/sites/transmissionproject.org/files/DIYproductions_website.jpg" alt="mockup-3" />
+                                </div>
+                                <div class="back">
+                                    Mock Project Placeholder
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mui-row">
+                    <div class="mui-col-xs-6 mui-col-md-4">
+                        <div class="card">
+                            <div class="content">
+                                <div class="front">
+                                    <img src="http://s3.gomedia.us/wp-content/uploads/2015/06/ShirtMockup.com-Upload-your-art.-Mock-it-up.-Download-your-image-for-FREE--720x370.png"
+                                        alt="mockup 4" />
+                                </div>
+                                <div class="back">
+                                    Mock Project Placeholder
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mui-col-xs-6 mui-col-md-4">
+                        <div class="card">
+                            <div class="content">
+                                <div class="front">
+                                    <img src="http://articles.centennialarts.com/wp-content/uploads/2012/06/Coffee_Shop_Website_Mockup_by_dhrandy-800x522.jpg"
+                                        alt="mockup 5" />
+                                </div>
+                                <div class="back">
+                                    Mock Project Placeholder
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mui-col-xs-6 mui-col-md-4">
+                        <div class="card">
+                            <div class="content">
+                                <div class="front">
+                                    <img src="http://articles.centennialarts.com/wp-content/uploads/2012/06/mockup7_big.jpg" alt="mockup-6" />
+                                </div>
+                                <div class="back">
+                                    Mock Project Placeholder
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mui-row voffset9">
+                <div class="portfooter">
+                    Made by <a href="#" target="_blank">Jonniebigodes</a>
+                </div>
+         </div>
+
+
+    </div>
+    
+</div>
+
+</body>
+
+</html>
