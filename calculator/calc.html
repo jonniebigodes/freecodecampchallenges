@@ -110,18 +110,27 @@
             z-index: 2;
 
         }
-        .textErrorsDivide0{
+        .errorMessageDivideZero{
             font-size: 6rem;
             text-align: center;
             z-index: 2;
+            margin-top: 10vh;
+            margin-left: 20vh;
+        }
+        .errorMessageFull{
+            font-size: 6rem;
+            text-align: center;
+            z-index: 2;
+            margin-top: 10vh;
+            margin-left: 20vh;
         }
     </style>
 </head>
 
 <body>
     <script>
-        
-
+        var itemColors=["#D44E3D","#EBAA13","#c5d5cb","#9fa8a3","#b3c2bf","#e9ece5","#edd9c0","#9068be","#3fb0ac","#173e43"];
+        var opCompleted=false;
         var fullOpString="";
         var currentOpValue="0";
         /**
@@ -139,8 +148,9 @@
         method to clear the inputs
         **/
         function clearInput(){
-            fullOpString="0";
+            fullOpString="";
             currentOpValue="0";
+            opCompleted=false;
             $("#displayNumber").text(currentOpValue);
             $("#displayAllOperation").text(fullOpString);
         }
@@ -160,6 +170,7 @@
                     fullOpString+=currentOpValue;
                     $("#displayAllOperation").text(fullOpString);
                     $("#displayNumber").text(eval(fullOpString));
+                    opCompleted=true;
                 }
                 else{
                     // again show another div or something like that 
@@ -180,6 +191,30 @@
             
         }
         /**
+        function to parse some operations cause yeah...x!=*
+        @param item the value to be parsed
+        @return the parsed item
+        **/
+        function parseOps(item){
+            if (item==="x"){
+                return "*";
+            }
+            return item;
+        }
+
+
+        /**
+        stub function to randomize the game board coordinates
+        @param minValue bottom value of the interval
+        @param maxValue top value of the interval
+        @return random integer between the arguments
+        */
+        function getRandomPoint(minValue,maxValue){
+            var randomvalue=Math.floor(Math.random()*(maxValue-minValue+1)+1);
+            console.log("RANDOMPOINT:\n"+ randomvalue);
+            return randomvalue;
+        }
+        /**
         function to add the value to the calculated
         @ param (value) content of button
         **/
@@ -187,7 +222,7 @@
             //console.log(item);
             //return;
             let itemToAdd= $(item).text();
-            console.log("item to add,",itemToAdd);
+            //console.log("item to add,",itemToAdd);
             if (currentOpValue==="0"){
                 if (isNum(itemToAdd)){
                     $("#answerContainer").hide().removeClass('hidden').fadeIn();
@@ -208,10 +243,21 @@
             }
             else{
                 if (isNum($(item).text())){
-                    currentOpValue+=$(item).text();
+                    if (opCompleted){
+                        currentOpValue=$(item).text();
+                        opCompleted=false;
+                        fullOpString="";
+                    }
+                    else{
+                        currentOpValue+=$(item).text();
+                    }
+                    
                 }
                 else{
-                    fullOpString+=(currentOpValue+$(item).text());
+                    itemToAdd= parseOps($(item).text());
+                    console.log("item operation",itemToAdd);
+                    //fullOpString+=parseOps($(item).text());
+                    fullOpString+=currentOpValue+itemToAdd;
                     $("#displayAllOperation").text(fullOpString);
                     currentOpValue="0";
                 }
@@ -224,7 +270,7 @@
             else{
                 //show div animated
                 //no no no too big of a number to calculate on yer potato
-                console.log("BOOM SHAKALAKA");
+                //console.log("BOOM SHAKALAKA");
                 $("#messageFullSized").hide().removeClass('hidden').fadeIn('slow');
                     $("#messageFullSized").addClass('animated tada');
                     setTimeout(function(){
@@ -238,17 +284,22 @@
         $(function () {
             $("#displayNumber").text(currentOpValue);
             $("#displayAllOperation").text(fullOpString);
-            
+
+            var itemColor= getRandomPoint(1,itemColors.length-1);
+            $('projectContainer').css('background-color',itemColors[itemColor]);
+            $('#projectHead').css('background-color',itemColors[itemColor] );
+            $('body').css('background-color',itemColors[itemColor]);
+            $('#calculatorContainer').css('background-color',itemColors[itemColor]);
         });
     </script>
     <div class="container-fluid" id="projectContainer">
-        <div class="" hidden id="messageFullSized">
+        <div class="errorMessageFull" hidden id="messageFullSized">
             No way Jose, not if you want to meet our new flight attendant Negan!!!!
         </div>
-        <div class="" hidden id="messageCalculateZero">
+        <div class="errorMessageDivideZero" hidden id="messageCalculateZero">
             Didn't they teach you that divide by 0 leads to crashes?
         </div>
-        <div class="well">
+        <div class="well" id="projectHead">
             <div class="titleProject">Supercalifragilistic Calculator</div>
         </div>
         
@@ -257,7 +308,7 @@
             <div class="containerCurrentops" id="displayNumber"></div>
             <div class="containerFullops" id="displayAllOperation">0</div>
         </div>
-        <div class="mui-panel containerCalc">
+        <div class="mui-panel containerCalc" id="calculatorContainer">
             <div class="mui-row">
                 <div class="buttonContainer">
                     <button class="mui-btn mui-btn--fab" onclick="clearInput()">AC</button>
