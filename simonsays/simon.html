@@ -6,10 +6,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css" />-->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link href="https://cdn.muicss.com/mui-0.9.12/css/mui.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.muicss.com/mui-0.9.12/js/mui.min.js"></script>
     <link href=".././node_modules/animate.css/animate.css" rel="stylesheet" />
@@ -66,57 +66,69 @@
         }
 
         .brownItem {
-            border-radius: 2vh;
+            border-radius: 15vh;
             height: 30vh;
             width: 30vh;
-            background-color: brown;
+            background-color: white;
+            border: 2vh solid brown;
         }
 
         .greenItem {
-            border-radius: 2vh;
+            border-radius: 15vh;
             height: 30vh;
             width: 30vh;
-            background-color: green;
+            background-color: white;
+            border: 2vh solid green;
         }
 
         .blueItem {
-            border-radius: 2vh;
+            border-radius: 15vh;
             height: 30vh;
             width: 30vh;
-            background-color: darkblue;
-            margin-left: 30vh;
+            background-color: white;
+            border: 2vh solid darkblue;
+            
         }
 
         .purpleItem {
-            border-radius: 2vh;
+            border-radius: 15vh;
             height: 30vh;
             width: 30vh;
-            background-color: purple;
+            background-color:white;
+            border: 2vh solid purple;
         }
 
 
         .brownItem:hover {
             background-color: #f4a460;
+            border: 2vh solid #f4a460;
         }
 
         .greenItem:hover {
             background-color: #10cc99;
+            border: 2vh solid #10cc99;
         }
 
         .blueItem:hover {
             background-color: #1b6ae8;
+            border: 2vh solid #1b6ae8;
         }
 
         .purpleItem:hover {
             background-color: #b211d6;
+            border: 2vh solid #b211d6;
         }
-
+        .titleProject{
+            font-family: 'Palanquin Dark', sans-serif;
+            font-size:6vh;
+            text-align: center;
+        }
         .centerConsole {
             position: absolute;
             z-index: 1;
-            margin-top: 35vh;
-            margin-left: 55vh;
-            border: solid .6vh;
+            margin-top: 28vh;
+            margin-left: 21vh;
+            border: solid .6vh green;
             width: 12vh;
         }
 
@@ -125,25 +137,132 @@
             height: 80vh;
             margin-left: 35vh;
         }
-
+        
         .footerInfo {
             text-align: center;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 3vh;
+            color: white;
+           
+        }
+        .mui-appbar{
+            background-color: darkgrey!important;
+            width: 95% !important;
+
+        }
+        .mui-panel{
+            background-color: darkgrey!important;
+        }
+        body{
+            background-color: darkgrey;
         }
     </style>
 </head>
 
 <body>
     <script>
+
+        var strictGame= false;
+        var plays=[];
+        var gamePlays=[];
+        var currentPlay=0;
+        var canPlay=false;
+        /**
+        stub function to randomize the game board coordinates
+        @param minValue bottom value of the interval
+        @param maxValue top value of the interval
+        @return random integer between the arguments
+        */
+        function getRandomPoint(minValue,maxValue){
+            var randomvalue=Math.floor(Math.random()*(maxValue-minValue+1)+1);
+            //console.log("RANDOMPOINT:\n"+ randomvalue);
+            return randomvalue;
+        }
+        function getColor(value){
+            if (value<25){
+                return "brown";
+            }
+            if (value<50){
+                return "green";
+            }
+            if (value<75){
+                return "blue";
+            }
+            return "purple";
+        }
+        function printPlays(){
+            plays.forEach(function (element){
+                console.log("elemento: ", element.item,element.color);
+            });
+        }
+        function generateFirstPlays(){
+            for (var i=0;i<5000;i++){
+                var numberPlay=getRandomPoint(1,100);
+                plays.push({item:numberPlay,color:getColor(numberPlay)});
+            }
+            console.log("array len:", plays.length);
+            //printPlays();
+        }
+        function generateGameMoves(){
+
+        }
+        $(function () {
+            generateFirstPlays();
+            generateGameMoves();
+
+            
+        });
     </script>
-    <div class="container-fluid">
-        <div class="well">
+    <div class="mui-container-fluid">
+        <div class="mui-appbar">
             <div class="titleProject">Supercalifragilistic Simon says</div>
         </div>
-        <div class="mui-panel containerGame">
-            <div class="centerConsole">
-                Z
+        <div class="voffset5"/>
+        <div class="mui-container-fluid">
+            <div class="mui-row">
+                <div class="mui-col-xs-6">
+                    <div class="mui-panel ">
+                        <div class="centerConsole">
+                            Z
+                        </div>
+                        <div class="mui-row">
+                            <div class="mui-col-xs-6 brownItem">
+                                b
+                            </div>
+                            <div class="mui-col-xs-6 greenItem">
+                                g
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="mui-row">
+                            
+                            <div class="mui-col-xs-6 blueItem">
+                                b
+                            </div>
+                            <div class="mui-col-xs-6 purpleItem">
+                                p
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mui-col-xs-6">
+                    <div class="mui-panel">
+                        <div class="mui-row">
+                            <button class="mui-btn mui-btn--fab" onclick="addValue(this)">0</button>
+                            <button class="mui-btn mui-btn--fab" onclick="addValue(this)">,</button>
+                            <button class="mui-btn mui-btn--fab" onclick="calculateValue()">=</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="mui-row itemsPosTop">
+        </div>
+        <!--<div class="mui-col-md-6">
+            <div class="mui-panel containerGame">
+                <div class="centerConsole">
+                    Z
+                </div>
+                <div class="mui-row itemsPosTop">
                 <div class="mui-col-md-6 brownItem">
                     b
                 </div>
@@ -161,7 +280,18 @@
                 </div>
             </div>
         </div>
-    </div>
+        
+        <div class="mui-col-md-6">
+            <div class="mui-panel">
+                <div class="mui-row">
+                    <button class="mui-btn mui-btn--fab" onclick="addValue(this)">0</button>
+                    <button class="mui-btn mui-btn--fab" onclick="addValue(this)">,</button>
+                    <button class="mui-btn mui-btn--fab" onclick="calculateValue()">=</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>-->
     <hr>
     <div class="footer footerInfo">
         Made by: <a href="http://codepen.io/jonniebigodes/" target="_blank">Jonniebigodes</a>
