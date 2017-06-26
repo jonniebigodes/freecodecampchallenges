@@ -5,6 +5,7 @@ node_modules/
 
 #buildfiles
 dist/bundle.js
+#bs-config.js
 
 # Local development
 *.env

@@ -13,7 +13,7 @@
     <link href="https://cdn.muicss.com/mui-0.9.12/css/mui.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.muicss.com/mui-0.9.12/js/mui.min.js"></script>
     <link href=".././node_modules/animate.css/animate.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Palanquin+Dark|Roboto+Condensed" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Palanquin+Dark|Roboto+Condensed|Indie+Flower" rel="stylesheet">
     <style>
         .voffset {
             margin-top: 2px;
@@ -55,51 +55,66 @@
             margin-top: 150px;
         }
 
-        .itemsPosTop {
-            margin-top: 6vh;
-            margin-left: 30vh;
-        }
-
-        .itemsPosBottom {
-            margin-top: 2vh;
-            margin-left: .2vh;
-        }
-
         .brownItem {
-            border-radius: 15vh;
-            height: 30vh;
-            width: 30vh;
-            background-color: white;
+            
+            border-radius: 6vh;
+            height: 18vh;
+            width: 18vh;
+            background-color: #464770;
             border: 2vh solid brown;
+            margin-left: 27vh;
+            
         }
 
         .greenItem {
-            border-radius: 15vh;
-            height: 30vh;
-            width: 30vh;
-            background-color: white;
+            border-radius: 6vh;
+            height: 18vh;
+            width: 18vh;
+            background-color: #464770;
             border: 2vh solid green;
+            margin-left: 27vh;
         }
 
         .blueItem {
-            border-radius: 15vh;
-            height: 30vh;
-            width: 30vh;
-            background-color: white;
+            border-radius: 6vh;
+            height: 18vh;
+            width: 18vh;
+            background-color: #464770;
             border: 2vh solid darkblue;
+            margin-left: 2vh;
             
         }
 
         .purpleItem {
-            border-radius: 15vh;
-            height: 30vh;
-            width: 30vh;
-            background-color:white;
+            border-radius: 6vh;
+            height: 18vh;
+            width: 18vh;
+            background-color:#464770;
             border: 2vh solid purple;
+            margin-right: 10vh;
         }
 
-
-        .brownItem:hover {
+        .brownItemActive
+        {
+            background-color: #f4a460;
+            border: 2vh solid #f4a460;
+        }
+        .greenItemActive
+        {
+            background-color: #10cc99;
+            border: 2vh solid #10cc99;
+        }
+        .blueItemActive
+        {
+            background-color: #1b6ae8;
+            border: 2vh solid #1b6ae8;
+        }
+        .purpleItemActive
+        {
+            background-color: #b211d6;
+            border: 2vh solid #b211d6;
+        }
+        /*.brownItem:hover {
             background-color: #f4a460;
             border: 2vh solid #f4a460;
         }
@@ -117,19 +132,23 @@
         .purpleItem:hover {
             background-color: #b211d6;
             border: 2vh solid #b211d6;
-        }
+        }*/
         .titleProject{
             font-family: 'Palanquin Dark', sans-serif;
             font-size:6vh;
             text-align: center;
         }
         .centerConsole {
-            position: absolute;
             z-index: 1;
-            margin-top: 28vh;
-            margin-left: 21vh;
             border: solid .6vh green;
-            width: 12vh;
+            width: 8vh;
+            height: 8vh;
+            margin-top: 6vh;
+            text-align: center;
+            font-family: 'Palanquin Dark', sans-serif;
+            font-size: 5vh;
+            border-radius: 3vh;
+            color: white;
         }
 
         .containerGame {
@@ -146,27 +165,100 @@
            
         }
         .mui-appbar{
-            background-color: darkgrey!important;
+            background-color: #464770 !important;
             width: 95% !important;
 
         }
-        .mui-panel{
-            background-color: darkgrey!important;
+        .panelGame{
+            background-color: #464770 !important;
+            
+            
         }
+       
+       
+       .midRow{
+           display: flex;
+           flex-direction: row;
+           justify-content: space-between;
+       }
+       
         body{
-            background-color: darkgrey;
+            /*background: linear-gradient(#464770, #477046, #967C89);
+            transition-duration: 1s;*/
+            background-color: #464770;
+        }
+        .textCupcake{
+           font-family: 'Palanquin Dark', sans-serif;
+           font-size: 4vh;
+           text-align: center;
+           color:white;
+        }
+        .winnerText{
+            font-family: 'Indie Flower' cursive;
+            font-size: 14vh;
+            text-align: center;
+            color:white;
+
+        }
+        /*
+            bigger ones
+        */
+        @media screen and (max-width: 1360px)and (min-width: 1360px) {
+            .brownItem {
+                border-radius: 6vh;
+                height: 25vh;
+                width: 25vh;
+                background-color: #464770;
+                border: 2vh solid brown;
+                margin-left: 32vh;
+            
+            }
+
+            .greenItem {
+                border-radius: 6vh;
+                height: 25vh;
+                width: 25vh;
+                background-color: #464770;
+                border: 2vh solid green;
+                margin-left: 32vh;
+            }
+
+            .blueItem {
+                border-radius: 6vh;
+                height: 25vh;
+                width: 25vh;
+                background-color: #464770;
+                border: 2vh solid darkblue;
+                margin-left: 4vh;
+                
+            }
+
+            .purpleItem {
+                border-radius: 6vh;
+                height: 25vh;
+                width: 25vh;
+                background-color:#464770;
+                border: 2vh solid purple;
+                margin-right: 4vh;
+            }
+        }
+        .buttonsMenu{
+            margin-left: 60vh;
         }
     </style>
 </head>
 
 <body>
     <script>
-
+        var audioContextGame=null;
+        var canPlayAudio=false;
         var strictGame= false;
         var plays=[];
         var gamePlays=[];
         var currentPlay=0;
+        var currentGameMove={};
         var canPlay=false;
+        var gameStarted=false;
         /**
         stub function to randomize the game board coordinates
         @param minValue bottom value of the interval
@@ -178,6 +270,11 @@
             //console.log("RANDOMPOINT:\n"+ randomvalue);
             return randomvalue;
         }
+        /**
+        function to return the color associated
+        @param value argument to get the color associated
+        @return the color associated
+        **/
         function getColor(value){
             if (value<25){
                 return "brown";
@@ -195,103 +292,458 @@
                 console.log("elemento: ", element.item,element.color);
             });
         }
-        function generateFirstPlays(){
-            for (var i=0;i<5000;i++){
-                var numberPlay=getRandomPoint(1,100);
-                plays.push({item:numberPlay,color:getColor(numberPlay)});
+        /**
+        function to obtain the sound associated
+        **/
+        function getSound(value){
+            
+            if (value<25){
+                return "https://s3.amazonaws.com/freecodecamp/simonSound1.mp3";
             }
-            console.log("array len:", plays.length);
+            if (value<50){
+                return "https://s3.amazonaws.com/freecodecamp/simonSound2.mp3";
+            }
+            if (value<75){
+                return "https://s3.amazonaws.com/freecodecamp/simonSound3.mp3";
+            }
+            return "https://s3.amazonaws.com/freecodecamp/simonSound4.mp3";
+            
+        }
+        /**
+        funtion to generate first 5000 colors
+        **/
+        function generateFirstPlays(){
+            for (var i=0;i<2000;i++){
+                var numberPlay=getRandomPoint(1,100);
+                //console.log("valor cor gerado: "+ numberPlay+"\n cor obtida:"+ getColor(numberPlay));
+                plays.push({item:numberPlay,color:getColor(numberPlay),soundItem:getSound(numberPlay)});
+            }
+            //console.log("array len:", plays.length);
             //printPlays();
         }
-        function generateGameMoves(){
+        
+        function iterateGameMoves(){
+            for (var i=0;i<gamePlays.length;i++){
+                var item= gamePlays[i];
+                console.log("Jogada: "+ item.numPlay+"\nlen array Moves: "+ item.moves.length+"\n");
+                for (var x=0;x<item.moves.length;x++){
+                    
+                    console.log("Move: "+ item.moves[x].item+" color: "+ item.moves[x].color+" sound: "+ item.moves[x].soundItem+"\n");
+                }
+            }
+        }
+
+        function clearNotificationsGame(item){
+            //to delete
+            //console.log("entrou clear notification"+ item);
+            //
+            try{
+                audioContextGame=null;
+                setTimeout(function(){
+                    switch (item) {
+                        case "brownItem":
+                            $("#brownItem").removeClass("brownItemActive");
+                            break;
+                        case "purpleItem":
+                            $("#purpleItem").removeClass("purpleItemActive");
+                            break;
+                        case "greenItem":
+                             $("#greenItem").removeClass("greenItemActive");
+                            break;
+                        default:
+                             $("#blueItem").removeClass("blueItemActive");
+                            break;
+                    }
+                },2000);
+            }
+            catch(e){
+                console.log("error clear notification:\n"+e);
+            }
+        }
+
+        /**
+        function to clear the board and assorted variables
+        **/
+        function ClearBoard(){
+            strictGame=false;
+            plays=[];
+            gamePlays=[];
+            canPlay=false;
+            currentPlay=0;
+            currentGameMove={};
+            audioContextGame=null;
 
         }
+        /**
+        function to show the current moves
+        **/
+        function playGame(){
+            try{
+                
+                currentGameMove= gamePlays[currentPlay];
+                //console.log("playGame:\n item:"+ currentGameMove.numPlay+" numMoves"+ currentGameMove.moves.length);
+                $("#centerConsole").text(currentGameMove.moves.length);
+
+
+
+                var tmpplayitem=setInterval(function(){
+                    //console.log("current move movePosition:item:"+ currentGameMove.movePosition+" numMoves"+ currentGameMove.moves.length);
+                    //console.log("got here!!!");
+                    if (currentGameMove.movePosition===currentGameMove.moves.length){
+                        //console.log("got here finally!!!");
+                        clearInterval(tmpplayitem);
+                        return;
+                    }
+                    switch (currentGameMove.moves[currentGameMove.movePosition].color) {
+                            case "brown":
+                                audioContextGame= new Audio(currentGameMove.moves[currentGameMove.movePosition].soundItem);
+                                audioContextGame.play();
+                                $("#brownItem").addClass("brownItemActive");
+                                clearNotificationsGame('brownItem');
+                                break;
+                            case "purple":
+                                audioContextGame= new Audio(currentGameMove.moves[currentGameMove.movePosition].soundItem);
+                                audioContextGame.play();
+                                $("#purpleItem").addClass("purpleItemActive");
+                                clearNotificationsGame('purpleItem');
+                                break;
+                            case "green":
+                                audioContextGame= new Audio(currentGameMove.moves[currentGameMove.movePosition].soundItem);
+                                audioContextGame.play();
+                                $("#greenItem").addClass("greenItemActive");
+                                clearNotificationsGame('greenItem');
+                                break;
+                            default:
+                                audioContextGame= new Audio(currentGameMove.moves[currentGameMove.movePosition].soundItem);
+                                audioContextGame.play();
+                                $("#blueItem").addClass("blueItemActive");
+                                clearNotificationsGame('blueItem');
+                                break;
+                    }
+                    currentGameMove.movePosition++;
+                },3000);
+                
+                if (currentPlay===20){
+                    $("#gameItems").hide();
+                    $("#winnerText").hide().removeClass('hidden').fadeIn('slow');
+                    ClearBoard();
+                    generateFirstPlays();
+                    generateGameMoves();
+                    
+                    setTimeout(function() {
+                       $("#winnerText").hide();
+                       $("#gameItems").hide().removeClass('hidden').fadeIn('slow');
+                       $("#buttonsMenu").hide().removeClass('hidden').fadeIn('slow'); 
+                    }, 5000);
+                }
+
+                
+        
+            }
+            catch(e){
+                console.log("Erro playgame:\n"+e);
+            }
+        }
+        /**
+        function to generate the first 20 moves of the game
+        **/
+        function generateGameMoves(){
+            for (var i=0;i<20;i++){
+                var randomValue= getRandomPoint(0,2000);
+                var tmpItem= plays[randomValue];
+                var tmpPlay={};
+                tmpPlay.numPlay=i;
+                tmpPlay.movePosition=0;
+                tmpPlay.userPlay=0;
+                tmpPlay.moves=[];
+                if (i===0){
+                  //console.log("item got generated:\nvalue:"+ tmpItem.item+" color: "+tmpItem.color+"\nsoundfile: "+ tmpItem.soundItem+"\n\n");
+                  
+                  tmpPlay.moves.push(tmpItem);
+                  
+                }
+                else{
+                  var tmpObj= gamePlays[i-1];
+                  
+                  tmpPlay.moves=tmpObj.moves.slice();
+                  tmpPlay.moves.push(tmpItem);
+                }
+                gamePlays.push(tmpPlay);
+            }
+            
+            
+            //iterateGameMoves();
+            
+        }
+        
+        function checkItemPlay(value){
+            try{
+                //console.log("checkItemPlay: "+ value);
+                //console.log("item checkplay: "+currentGameMove.movePosition);
+                //console.log("currentGameMove.userPlay: "+ currentGameMove.userPlay+" cor: "+currentGameMove.moves[currentGameMove.userPlay].color);
+                if (currentGameMove.moves[currentGameMove.userPlay].color===value){
+                    currentGameMove.userPlay++;
+                    if(currentGameMove.userPlay===currentGameMove.moves.length){
+                        currentPlay++;
+                        playGame();
+                    }
+                }
+                else{
+                   if(strictGame){
+                       $("#StrictModeErrorText").hide().removeClass('hidden').fadeIn('slow');
+                       $("#centerConsole").text("0");
+                       $("#gameBoard").hide();
+                       setTimeout(function() {
+                           ClearBoard();
+                           generateFirstPlays();
+                           generateGameMoves();
+                           $("#StrictModeErrorText").hide();
+                           $("#buttonsMenu").hide().removeClass('hidden').fadeIn('slow');
+                       }, 3000);
+                   } 
+                   else{
+                       $("#permissiveModeErrorText").hide().removeClass('hidden').fadeIn('slow');
+                       setTimeout(function() {
+                           $("#permissiveModeErrorText").hide();
+                           ShowMove();
+                       }, 2000);
+                       
+                   }
+                }
+            }
+            catch(e){
+                console.log("Erro checkitemplay\n"+e);
+            }
+        }
+        /**
+        function to check the item clicked 
+        **/
+        function itemClicked(itemBoard){
+            console.log("item clicked: "+ itemBoard)
+            try {
+                if (canPlay==false){
+                    return;
+                }
+                
+                switch (itemBoard) {
+                    case 'brown':
+                        $("#brownItem").addClass("brownItemActive");
+                        audioContextGame= new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3");
+                        setTimeout(function() {
+                            $("#brownItem").removeClass("brownItemActive");
+                        }, 1000);
+                        checkItemPlay('brown');
+                        break;
+                    case 'green':
+                        $("#greenItem").addClass("greenItemActive");
+                        audioContextGame= new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3");
+                        
+                        setTimeout(function() {
+                            $("#greenItem").removeClass("greenItemActive");
+                        }, 1000);
+                        checkItemPlay('green');
+                        break;
+                    case 'purple':
+                        $("#purpleItem").addClass("purpleItemActive");
+                        audioContextGame= new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3");
+                        setTimeout(function() {
+                            $("#purpleItem").removeClass("purpleItemActive");
+                        }, 1000);
+                        checkItemPlay('purple');
+                        break;
+                    default:
+                        $("#blueItem").addClass("blueItemActive");
+                        audioContextGame= new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3");
+                        setTimeout(function() {
+                            $("#blueItem").removeClass("blueItemActive");
+                        }, 1000);
+                        checkItemPlay('blue');
+                        break;
+                }
+
+
+
+            } catch (error) {
+                console.log("ERROR itemClicked: "+ e);
+            }
+        }
+
+
+        /**
+        function to replay the move while not on strict mode
+        **/
+        function ShowMove(){
+            try{
+
+                var replayMove=currentGameMove;
+                replayMove.movePosition=0;
+
+                var tmpplayitem=setInterval(function(){
+                    console.log("current ShowMove move movePosition:item:"+ replayMove.movePosition+" numMoves"+ replayMove.moves.length);
+                    console.log("got here!!!");
+                    if (replayMove.movePosition===replayMove.moves.length){
+                        console.log("got ShowMovehere finally!!!");
+                        clearInterval(tmpplayitem);
+                        return;
+                    }
+                    switch (replayMove.moves[replayMove.movePosition].color) {
+                            case "brown":
+                                audioContextGame= new Audio(replayMove.moves[replayMove.movePosition].soundItem);
+                                audioContextGame.play();
+                                $("#brownItem").addClass("brownItemActive");
+                                clearNotificationsGame('brownItem');
+                                break;
+                            case "purple":
+                                audioContextGame= new Audio(replayMove.moves[replayMove.movePosition].soundItem);
+                                audioContextGame.play();
+                                $("#purpleItem").addClass("purpleItemActive");
+                                clearNotificationsGame('purpleItem');
+                                break;
+                            case "green":
+                                audioContextGame= new Audio(replayMove.moves[replayMove.movePosition].soundItem);
+                                audioContextGame.play();
+                                $("#greenItem").addClass("greenItemActive");
+                                clearNotificationsGame('greenItem');
+                                break;
+                            default:
+                                audioContextGame= new Audio(replayMove.moves[replayMove.movePosition].soundItem);
+                                audioContextGame.play();
+                                $("#blueItem").addClass("blueItemActive");
+                                clearNotificationsGame('blueItem');
+                                break;
+                    }
+                    replayMove.movePosition++;
+                },4000);
+            }
+            catch(e){
+                console.log("ERROR ShowMove\n"+e);
+            }
+        }
+        
+        /**
+        setter function for strict mode
+        **/
+        function setStrict(){
+            
+            if (strictGame){
+                strictGame=false;
+
+                 $("#strictModeText").hide().removeClass('hidden').fadeIn('slow');
+                 var tmpText= "setting the game to strict mode? are you sure cupcake?";
+                 
+
+                 $("#strictModeText").text("OHHHHH cupcake is to afraid to play with the big boys.....");
+                 $("#strictModeText").addClass("animated zoomInLeft");
+                 setTimeout(function(){
+                   $("#strictModeText").removeClass("animated zoomInLeft");
+                   
+                   $("#strictModeText").hide();
+                   $("#strictModeText").text(tmpText);
+                   //console.log("TEXTO AFTER:\n"+ $("#strictModeText").text());
+               },3000);
+            }
+            else{
+               strictGame=true;
+               $("#strictModeText").hide().removeClass('hidden').fadeIn('slow');
+               $("#strictModeText").addClass("animated zoomInLeft");
+               setTimeout(function(){
+                   $("#strictModeText").removeClass("animated zoomInLeft");
+                   $("#strictModeText").hide();
+               },3000);
+            }
+
+            
+        }
+        /**
+        click handler for button to start the game
+        **/
+        function startGame(){
+            canPlay= true;
+            playGame();
+            $("#buttonsMenu").hide();
+            $("#gameBoard").hide().removeClass('hidden').fadeIn('fast');
+            $("#buttonsMenu").removeClass("buttonsMenu");
+        }
+        function DummyIterateMoves(){
+           /* currentPlay=0;
+            setInterval(function(){
+                currentPlay++;
+                playGame();
+            },10000);*/
+            
+            $("#gameItems").hide();
+            $("#winnerText").hide().removeClass('hidden').fadeIn('slow');
+
+        }
+        
+        /**
+        entry level function when the page loads to generate the first plays and moves
+        **/
         $(function () {
-            generateFirstPlays();
-            generateGameMoves();
+
+            try{
+                generateFirstPlays();
+                generateGameMoves();
+            }
+            catch(e){
+                console.log("ERROR ENTRY POINT:\n"+e);
+            }
+            
+           
 
             
         });
     </script>
-    <div class="mui-container-fluid">
+    <div class="mui-container-fluid" id="project">
         <div class="mui-appbar">
             <div class="titleProject">Supercalifragilistic Simon says</div>
         </div>
         <div class="voffset5"/>
         <div class="mui-container-fluid">
-            <div class="mui-row">
+            
+            <div class="mui-row" id="gameItems" >
                 <div class="mui-col-xs-6">
-                    <div class="mui-panel ">
-                        <div class="centerConsole">
-                            Z
+                    <div class="mui-panel panelGame" id="gameBoard" hidden>
+                        <div class="mui-row">
+                            <div class="brownItem" id="brownItem" onclick="itemClicked('brown');" ></div>
+                        </div>
+                        <div class="mui-row midRow">
+                            <div class="blueItem" id="blueItem" onclick="itemClicked('blue');"  ></div>
+                            <div class="centerConsole" id="centerConsole">
+                                0
+                            </div>
+                            <div class="purpleItem" id="purpleItem" onclick="itemClicked('purple');" ></div>
                         </div>
                         <div class="mui-row">
-                            <div class="mui-col-xs-6 brownItem">
-                                b
-                            </div>
-                            <div class="mui-col-xs-6 greenItem">
-                                g
-                            </div>
-                            
+                            <div class="greenItem" id="greenItem" onclick="itemClicked('green');"></div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="mui-col-xs-6 buttonsMenu">
+                    <div class="mui-row " id="buttonsMenu">
+                        <button class="mui-btn mui-btn--primary" onclick="setStrict();">Set Strict Mode</button>
+                        <button class="mui-btn mui-btn--primary" onclick="startGame();">Start Game</button>
+                        <!--<button class="mui-btn mui-btn--primary" onclick="DummyIterateMoves();">Dummy Play</button>-->
+                    </div>
+                    <div class="mui-row">
+                        <div class="textCupcake" id="strictModeText" hidden>
+                            setting the game to strict mode? are you sure cupcake?
+                        </div>
+                        <div class="textCupcake" id="StrictModeErrorText" hidden>
+                            hey cupcake?do you know how to press buttons?Looks like someone lost the game
+                        </div>
+                        <div class="textCupcake" id="permissiveModeErrorText" hidden>
+                            Let me play it again for you cupcake
                         </div>
                         
-                        <div class="mui-row">
-                            
-                            <div class="mui-col-xs-6 blueItem">
-                                b
-                            </div>
-                            <div class="mui-col-xs-6 purpleItem">
-                                p
-                            </div>
-                        </div>
                     </div>
                 </div>
-                <div class="mui-col-xs-6">
-                    <div class="mui-panel">
-                        <div class="mui-row">
-                            <button class="mui-btn mui-btn--fab" onclick="addValue(this)">0</button>
-                            <button class="mui-btn mui-btn--fab" onclick="addValue(this)">,</button>
-                            <button class="mui-btn mui-btn--fab" onclick="calculateValue()">=</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                  
         </div>
-        <!--<div class="mui-col-md-6">
-            <div class="mui-panel containerGame">
-                <div class="centerConsole">
-                    Z
-                </div>
-                <div class="mui-row itemsPosTop">
-                <div class="mui-col-md-6 brownItem">
-                    b
-                </div>
-                <div class="mui-col-md-6 greenItem">
-                    g
-                </div>
-            </div>
-
-            <div class="mui-row itemsPosBottom">
-                <div class="mui-col-md-6 blueItem">
-                    b
-                </div>
-                <div class="mui-col-md-6 purpleItem">
-                    p
-                </div>
-            </div>
-        </div>
-        
-        <div class="mui-col-md-6">
-            <div class="mui-panel">
-                <div class="mui-row">
-                    <button class="mui-btn mui-btn--fab" onclick="addValue(this)">0</button>
-                    <button class="mui-btn mui-btn--fab" onclick="addValue(this)">,</button>
-                    <button class="mui-btn mui-btn--fab" onclick="calculateValue()">=</button>
-                </div>
-            </div>
-        </div>
-        
-    </div>-->
+        <div class="winnerText" id="winnerText" hidden>
+                   Congratulations cupcake you won...Now get crackin and go claim your cake
+        </div> 
     <hr>
     <div class="footer footerInfo">
         Made by: <a href="http://codepen.io/jonniebigodes/" target="_blank">Jonniebigodes</a>
